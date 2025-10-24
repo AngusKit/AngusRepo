@@ -1,0 +1,18 @@
+# mkdir -p /opt/AngusRepo && cd /opt/AngusRepo
+# mkdir /opt/AngusRepo/{conf,data,logs,plugins,tmp}
+# docker compose -f repo.yml up -d
+services:
+  angusrepo:
+    image: xcancloud/angusrepo-enterprise:1.0.0
+    container_name: angusrepo
+    restart: unless-stopped
+    volumes:
+      - ./conf:/opt/AngusRepo/conf
+      - ./data:/opt/AngusRepo/data
+      - ./logs:/opt/AngusRepo/logs
+      - ./plugins:/opt/AngusRepo/plugins
+      - ./tmp:/opt/AngusRepo/tmp
+    ports:
+      - "2534:2534"
+    environment:
+      TZ: ${TIMEZONE:-UTC}
