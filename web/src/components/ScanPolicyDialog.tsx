@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { X, Settings, Target, Shield, AlertTriangle } from 'lucide-react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Separator } from './ui/separator';
-import { Switch } from './ui/switch';
-import { useLanguage } from './LanguageProvider';
+import { Button } from '@/components/ui/button';  
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { useLanguage } from '@/components/LanguageProvider';
 import { toast } from 'sonner';
 
 interface ScanPolicyDialogProps {

@@ -1,9 +1,9 @@
 import { Home, Package, FileSearch, Upload, ChevronDown, Check, Shield, BarChart3, Eraser, TrendingUp, Activity, Settings, UserCog, Server, UsersRound, Cog, Bell } from 'lucide-react';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
-import { useLanguage } from './LanguageProvider';
+import { useLanguage } from '@/components/LanguageProvider';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export function Sidebar() {

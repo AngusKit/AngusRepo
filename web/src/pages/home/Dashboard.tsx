@@ -4,15 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/components/LanguageProvider';
 import { Progress } from '@/components/ui/progress';
-
-interface DashboardProps {
-  onNavigate?: (page: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
 
 // Dashboard component with navigation support
-export function Dashboard({ onNavigate }: DashboardProps) {
+export function Dashboard() {
   const { t } = useLanguage();
-
+  const navigate = useNavigate();
+  const handleNavigate = (page: string) => {
+    navigate(`/${page}`);
+  };
   const stats = [
     {
       title: t('stats.totalRepositories'),
@@ -280,7 +280,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 <CardTitle>{t('dashboard.vulnerabilityStats')}</CardTitle>
                 <CardDescription>{t('dashboard.vulnerabilityStatsDesc')}</CardDescription>
               </div>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate?.('security')}>
+              <Button variant="ghost" size="sm" onClick={() => handleNavigate('security')}>
                 <Shield className="mr-2 size-4" />
                 {t('dashboard.viewAll')}
               </Button>
@@ -341,7 +341,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 <CardTitle>{t('dashboard.recentActivity')}</CardTitle>
                 <CardDescription>{t('dashboard.latestOperations')}</CardDescription>
               </div>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate?.('activity-log')}>
+              <Button variant="ghost" size="sm" onClick={() => handleNavigate('activity-log')}>
                 <Activity className="mr-2 size-4" />
                 {t('dashboard.viewAll')}
               </Button>

@@ -1,14 +1,14 @@
 import { Search, Bell, Plus, Sun, Moon, User, Settings, LogOut, Code2, GitPullRequest, MessageSquare, Check, Star, FolderPlus, Users, FileSearch, ClipboardCheck } from 'lucide-react';
-import { Button } from './ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Badge } from './ui/badge';
-import { Input } from './ui/input';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-import { useTheme } from './ThemeProvider';
-import { useLanguage } from './LanguageProvider';
-import { languages, Language } from '../lib/i18n';
+import { useTheme } from '@/components/ThemeProvider';
+import { useLanguage } from '@/components/LanguageProvider';
+import { languages, Language } from '@/lib/i18n';
 import { useNavigate } from 'react-router-dom';
 
 

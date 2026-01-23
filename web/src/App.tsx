@@ -1,9 +1,9 @@
-import { ThemeProvider } from './components/ThemeProvider';
-import { LanguageProvider } from './components/LanguageProvider';
-import { Toaster } from './components/ui/sonner';
-import { Sidebar } from './components/Sidebar';
-import { Header } from './components/Header';
-import { AppRoutes } from './routes/AppRoutes';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import { LanguageProvider } from '@/components/LanguageProvider';
+import { Toaster } from '@/components/ui/sonner';
+import { Sidebar } from '@/components/Sidebar';
+import { Header } from '@/components/Header';
+import { AppRoutes } from '@/routes/AppRoutes';
 
 
 export default function App() {

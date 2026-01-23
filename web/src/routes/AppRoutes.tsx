@@ -1,23 +1,23 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Dashboard } from '@/pages/Dashboard';
-import { Repositories } from '@/pages/Repositories';
-import { CreateRepository } from '@/pages/CreateRepository';
-import { ConfigureRepository } from '@/pages/ConfigureRepository';
-import { RepositoryDetail } from '@/pages/RepositoryDetail';
-import { ArtifactBrowser } from '@/pages/ArtifactBrowser';
-import { Upload } from '@/pages/Upload';
-import { Security } from '@/pages/Security';
-import { Analytics } from '@/pages/Analytics';
-import { ActivityLog } from '@/pages/ActivityLog';
+import { Dashboard } from '@/pages/home/Dashboard';
+import { Repositories } from '@/pages/repositories/Repositories';
+import { CreateRepository } from '@/pages/repositories/CreateRepository';
+import { ConfigureRepository } from '@/pages/repositories/ConfigureRepository';
+import { RepositoryDetail } from '@/pages/repositories/RepositoryDetail';
+import { ArtifactBrowser } from '@/pages/artifacts/ArtifactBrowser';
+import { Upload } from '@/pages/upload/Upload';
+import { Security } from '@/pages/security/Security';
+import { Analytics } from '@/pages/analytics/Analytics';
+import { ActivityLog } from '@/pages/activityLog/ActivityLog';
 import { ArtifactUpload } from '@/pages/ArtifactUpload';
 import { SecurityScan } from '@/pages/SecurityScan';
-import { CleanupPolicy } from '@/pages/CleanupPolicy';
-import { Trending } from '@/pages/Trending';
-import { ProfileSettings } from '@/pages/ProfileSettings';
-import { RepositorySettings } from '@/pages/RepositorySettings';
-import { TeamManagement } from '@/pages/TeamManagement';
-import { SystemSettings } from '@/pages/SystemSettings';
-import { NotificationsPage } from '@/pages/NotificationsPage';
+import { CleanupPolicy } from '@/pages/cleanup/CleanupPolicy';
+import { Trending } from '@/pages/trending/Trending';
+import { ProfileSettings } from '@/pages/profileSettings/ProfileSettings';
+import { RepositorySettings } from '@/pages/repositorySettings/RepositorySettings';
+import { TeamManagement } from '@/pages/teamManagement/TeamManagement';
+import { SystemSettings } from '@/pages/systemSettings/SystemSettings';
+import { NotificationsPage } from '@/pages/notifications/NotificationsPage';
 
 
 export const AppRoutes = () => {
