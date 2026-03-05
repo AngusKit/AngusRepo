@@ -11,6 +11,8 @@ public enum ArtifactFormat {
   NUGET("nuget"),
   APT("apt"),
   YUM("yum"),
+  HELM("helm"),
+  GO("go"),
   RAW("raw");
 
   private final String value;
