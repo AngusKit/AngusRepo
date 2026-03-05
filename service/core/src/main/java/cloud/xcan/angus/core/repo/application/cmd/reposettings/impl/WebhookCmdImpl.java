@@ -114,8 +114,8 @@ public class WebhookCmdImpl extends CommCmd<Webhook, Long> implements WebhookCmd
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Webhook test(Long id) {
-    return new BizTemplate<Webhook>() {
+  public WebhookLog test(Long id) {
+    return new BizTemplate<WebhookLog>() {
       Webhook existing;
 
       @Override
@@ -125,7 +125,7 @@ public class WebhookCmdImpl extends CommCmd<Webhook, Long> implements WebhookCmd
       }
 
       @Override
-      protected Webhook process() {
+      protected WebhookLog process() {
         WebhookLog log = new WebhookLog();
         log.setWebhookId(id);
         log.setEvent("TEST");
@@ -148,7 +148,7 @@ public class WebhookCmdImpl extends CommCmd<Webhook, Long> implements WebhookCmd
         webhookLogRepo.save(log);
         existing.setLastTriggerTime(LocalDateTime.now());
         webhookRepo.save(existing);
-        return existing;
+        return log;
       }
     }.execute();
   }

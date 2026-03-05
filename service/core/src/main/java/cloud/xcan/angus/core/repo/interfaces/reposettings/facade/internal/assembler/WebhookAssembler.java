@@ -74,12 +74,12 @@ public class WebhookAssembler {
     return vo;
   }
 
-  public static WebhookTestResultVo toTestResultVo(Webhook webhook) {
+  public static WebhookTestResultVo toTestResultVo(WebhookLog log) {
     WebhookTestResultVo vo = new WebhookTestResultVo();
-    vo.setSuccess(true);
-    vo.setStatusCode(200);
-    vo.setResponseTime(100L);
-    vo.setResponse("{\"status\":\"ok\"}");
+    vo.setSuccess(log.getSuccess());
+    vo.setStatusCode(log.getStatusCode());
+    vo.setResponseTime(log.getResponseTime());
+    vo.setResponse(log.getResponse());
     return vo;
   }
 

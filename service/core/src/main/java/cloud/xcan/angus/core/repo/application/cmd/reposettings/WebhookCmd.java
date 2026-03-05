@@ -1,6 +1,7 @@
 package cloud.xcan.angus.core.repo.application.cmd.reposettings;
 
 import cloud.xcan.angus.core.repo.domain.reposettings.Webhook;
+import cloud.xcan.angus.core.repo.domain.reposettings.WebhookLog;
 
 public interface WebhookCmd {
 
@@ -12,5 +13,5 @@ public interface WebhookCmd {
 
   void delete(Long id);
 
-  Webhook test(Long id);
+  WebhookLog test(Long id);
 }

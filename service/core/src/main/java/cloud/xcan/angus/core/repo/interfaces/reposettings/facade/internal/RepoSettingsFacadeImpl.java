@@ -47,7 +47,7 @@ public class RepoSettingsFacadeImpl implements RepoSettingsFacade {
   @Override
   public GlobalSettingsVo getSettings() {
     return repoSettingsQuery.getSettings()
-        .map(RepoSettingsFacadeImpl::toVo)
+        .map(settings -> toSettingsVo(settings))
         .orElseGet(GlobalSettingsVo::new);
   }
 
@@ -97,17 +97,13 @@ public class RepoSettingsFacadeImpl implements RepoSettingsFacade {
 
   @Override
   public WebhookTestResultVo testWebhook(Long id) {
-    Webhook webhook = webhookCmd.test(id);
-    return toTestResultVo(webhook);
+    WebhookLog log = webhookCmd.test(id);
+    return toTestResultVo(log);
   }
 
   @Override
   public List<WebhookLogVo> getWebhookLogs(Long id) {
     List<WebhookLog> logs = repoSettingsQuery.getWebhookLogs(id);
     return logs.stream().map(WebhookAssembler::toWebhookLogVo).toList();
-  }
-
-  private static GlobalSettingsVo toVo(RepositoryGlobalSettings entity) {
-    return toSettingsVo(entity);
   }
 }
