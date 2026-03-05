@@ -59,13 +59,13 @@ public class MavenMetadataEntity extends TenantEntity<MavenMetadataEntity, Long>
   @Column(name = "pom_content", columnDefinition = "TEXT")
   private String pomContent;
 
-  @Column(name = "created_by", nullable = false)
+  @Column(name = "created_by")
   private Long createdBy;
 
   @Column(name = "created_date", nullable = false, updatable = false)
   private LocalDateTime createdDate;
 
-  @Column(name = "modified_by", nullable = false)
+  @Column(name = "modified_by")
   private Long modifiedBy;
 
   @Column(name = "modified_date")

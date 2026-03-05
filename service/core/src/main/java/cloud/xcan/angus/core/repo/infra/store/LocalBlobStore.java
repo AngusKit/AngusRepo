@@ -1,5 +1,6 @@
 package cloud.xcan.angus.core.repo.infra.store;
 
+import cloud.xcan.angus.core.repo.domain.format.store.BlobStorageException;
 import cloud.xcan.angus.core.repo.domain.format.store.BlobStore;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +38,7 @@ public class LocalBlobStore implements BlobStore {
       Files.createDirectories(targetPath.getParent());
       Files.copy(data, targetPath, StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
-      throw new RuntimeException("Failed to store blob at: " + targetPath, e);
+      throw new BlobStorageException("Failed to store blob at: " + targetPath, e);
     }
     return path;
   }
@@ -49,7 +50,7 @@ public class LocalBlobStore implements BlobStore {
     try {
       return Files.newInputStream(targetPath);
     } catch (IOException e) {
-      throw new RuntimeException("Failed to retrieve blob from: " + targetPath, e);
+      throw new BlobStorageException("Failed to retrieve blob from: " + targetPath, e);
     }
   }
 
@@ -60,7 +61,7 @@ public class LocalBlobStore implements BlobStore {
     try {
       Files.deleteIfExists(targetPath);
     } catch (IOException e) {
-      throw new RuntimeException("Failed to delete blob at: " + targetPath, e);
+      throw new BlobStorageException("Failed to delete blob at: " + targetPath, e);
     }
   }
 
@@ -76,7 +77,7 @@ public class LocalBlobStore implements BlobStore {
     try {
       return Files.size(targetPath);
     } catch (IOException e) {
-      throw new RuntimeException("Failed to get size of blob at: " + targetPath, e);
+      throw new BlobStorageException("Failed to get size of blob at: " + targetPath, e);
     }
   }
 

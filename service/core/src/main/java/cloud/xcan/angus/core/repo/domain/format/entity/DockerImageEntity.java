@@ -62,13 +62,13 @@ public class DockerImageEntity extends TenantEntity<DockerImageEntity, Long> {
   @Column(name = "labels", columnDefinition = "JSON")
   private String labels;
 
-  @Column(name = "created_by", nullable = false)
+  @Column(name = "created_by")
   private Long createdBy;
 
   @Column(name = "created_date", nullable = false, updatable = false)
   private LocalDateTime createdDate;
 
-  @Column(name = "modified_by", nullable = false)
+  @Column(name = "modified_by")
   private Long modifiedBy;
 
   @Column(name = "modified_date")
