@@ -41,7 +41,7 @@ public class DockerImageEntity extends TenantEntity<DockerImageEntity, Long> {
   @Column(name = "manifest_media_type", length = 255)
   private String manifestMediaType;
 
-  @Column(name = "manifest_content", columnDefinition = "MEDIUMTEXT")
+  @Column(name = "manifest_content", columnDefinition = "TEXT")
   private String manifestContent;
 
   @Column(name = "config_digest", length = 255)
