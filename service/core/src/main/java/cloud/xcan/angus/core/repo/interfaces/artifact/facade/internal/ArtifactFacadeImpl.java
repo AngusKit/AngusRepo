@@ -96,6 +96,7 @@ public class ArtifactFacadeImpl implements ArtifactFacade {
     if (artifact.getSizeBytes() != null) {
       response.setContentLengthLong(artifact.getSizeBytes());
     }
+    // TODO: Read artifact file from blob storage and write to response.getOutputStream()
   }
 
   @Override

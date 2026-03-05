@@ -10,6 +10,7 @@ import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactStatisti
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactVersionVo;
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import cloud.xcan.angus.remote.PageResult;
+import cloud.xcan.angus.spec.principal.PrincipalContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -145,8 +146,8 @@ public class ArtifactRest {
   })
   @PutMapping("/{id}/star")
   public ApiLocaleResult<?> addStar(@PathVariable Long id) {
-    // userId would typically come from security context
-    artifactFacade.addStar(id, null);
+    Long userId = PrincipalContext.getUserId();
+    artifactFacade.addStar(id, userId);
     return ApiLocaleResult.success();
   }
 
@@ -157,8 +158,8 @@ public class ArtifactRest {
   })
   @DeleteMapping("/{id}/star")
   public ApiLocaleResult<?> removeStar(@PathVariable Long id) {
-    // userId would typically come from security context
-    artifactFacade.removeStar(id, null);
+    Long userId = PrincipalContext.getUserId();
+    artifactFacade.removeStar(id, userId);
     return ApiLocaleResult.success();
   }
 
