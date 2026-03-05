@@ -41,9 +41,7 @@ public class RepositoryAssembler {
     }
     RepositoryDetailVo vo = new RepositoryDetailVo();
     vo.setId(entity.getId());
-    if (entity.getTenantId() != null) {
-      vo.setTenantId(entity.getTenantId());
-    }
+    vo.setTenantId(entity.getTenantId());
     vo.setName(entity.getName());
     vo.setFormat(entity.getFormat());
     vo.setType(entity.getType());

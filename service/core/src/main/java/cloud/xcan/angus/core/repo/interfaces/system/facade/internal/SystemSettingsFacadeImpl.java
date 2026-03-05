@@ -175,6 +175,7 @@ public class SystemSettingsFacadeImpl implements SystemSettingsFacade {
     ConnectionTestResultVo result = new ConnectionTestResultVo();
     long startTime = System.currentTimeMillis();
     try {
+      // TODO 根据dto.getType()实现具体的连接测试逻辑（LDAP/SAML/S3/SLACK/SMTP）
       result.setSuccess(true);
       result.setMessage("连接测试成功");
     } catch (Exception e) {
