@@ -79,7 +79,7 @@ public class GoFormatHandler implements ArtifactFormatHandler {
         + "export GONOSUMCHECK=your.private.module/*\n\n"
         + "# Configure authentication via .netrc\n"
         + "echo \"machine %s login {username} password %s\" >> ~/.netrc",
-        repoUrl, repoUrl.replaceFirst("https?://", "").split("/")[0],
+        repoUrl, extractHostname(repoUrl),
         authToken != null ? authToken : "{token}");
 
     SetupGuide guide = new SetupGuide(FORMAT_NAME, repoUrl, config);
@@ -109,5 +109,14 @@ public class GoFormatHandler implements ArtifactFormatHandler {
       }
     }
     return encoded.toString();
+  }
+
+  /**
+   * Safely extract hostname from a URL string.
+   */
+  private String extractHostname(String url) {
+    String withoutProtocol = url.replaceFirst("https?://", "");
+    String[] parts = withoutProtocol.split("/");
+    return parts.length > 0 ? parts[0] : withoutProtocol;
   }
 }

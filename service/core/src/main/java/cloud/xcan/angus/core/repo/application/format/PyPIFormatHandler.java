@@ -115,8 +115,9 @@ public class PyPIFormatHandler implements ArtifactFormatHandler {
 
   private String extractPythonVersionFromWheel(String fileName) {
     // Wheel filename format: {name}-{version}(-{build})?-{python}-{abi}-{platform}.whl
+    // Minimum parts without build tag: name-version-python-abi-platform (5 parts)
     String[] parts = fileName.replace(".whl", "").split("-");
-    if (parts.length >= 4) {
+    if (parts.length >= 5) {
       return parts[parts.length - 3];
     }
     return null;
