@@ -71,8 +71,10 @@ public class AccessQueryImpl implements AccessQuery {
   public boolean checkPermission(Long repositoryId, Long userId, String permission, String path) {
     List<AccessRule> rules = accessRuleRepo.findByRepositoryIdAndEnabled(repositoryId, true);
     for (AccessRule rule : rules) {
-      if (rule.getPermissions() != null && rule.getPermissions().contains(permission)) {
-        if (path == null || rule.getPaths() == null || rule.getPaths().contains(path)) {
+      if (rule.getPermissions() != null
+          && rule.getPermissions().contains("\"" + permission + "\"")) {
+        if (path == null || rule.getPaths() == null
+            || rule.getPaths().contains("\"" + path + "\"")) {
           return true;
         }
       }
