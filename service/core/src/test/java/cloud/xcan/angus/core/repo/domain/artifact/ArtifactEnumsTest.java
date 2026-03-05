@@ -13,7 +13,7 @@ public class ArtifactEnumsTest {
         // Given & When
         ArtifactFormat[] values = ArtifactFormat.values();
 
-        // Then: all 8 values exist
+        // Then: all 10 values exist
         assertThat(values).containsExactlyInAnyOrder(
             ArtifactFormat.MAVEN,
             ArtifactFormat.DOCKER,
@@ -22,6 +22,8 @@ public class ArtifactEnumsTest {
             ArtifactFormat.NUGET,
             ArtifactFormat.APT,
             ArtifactFormat.YUM,
+            ArtifactFormat.HELM,
+            ArtifactFormat.GO,
             ArtifactFormat.RAW
         );
     }
@@ -36,6 +38,8 @@ public class ArtifactEnumsTest {
         assertThat(ArtifactFormat.NUGET.getValue()).isEqualTo("nuget");
         assertThat(ArtifactFormat.APT.getValue()).isEqualTo("apt");
         assertThat(ArtifactFormat.YUM.getValue()).isEqualTo("yum");
+        assertThat(ArtifactFormat.HELM.getValue()).isEqualTo("helm");
+        assertThat(ArtifactFormat.GO.getValue()).isEqualTo("go");
         assertThat(ArtifactFormat.RAW.getValue()).isEqualTo("raw");
     }
 
@@ -49,12 +53,14 @@ public class ArtifactEnumsTest {
         assertThat(ArtifactFormat.valueOf("NUGET")).isEqualTo(ArtifactFormat.NUGET);
         assertThat(ArtifactFormat.valueOf("APT")).isEqualTo(ArtifactFormat.APT);
         assertThat(ArtifactFormat.valueOf("YUM")).isEqualTo(ArtifactFormat.YUM);
+        assertThat(ArtifactFormat.valueOf("HELM")).isEqualTo(ArtifactFormat.HELM);
+        assertThat(ArtifactFormat.valueOf("GO")).isEqualTo(ArtifactFormat.GO);
         assertThat(ArtifactFormat.valueOf("RAW")).isEqualTo(ArtifactFormat.RAW);
     }
 
     @Test
     void testCount() {
-        // Given & When & Then: exactly 8 values
-        assertThat(ArtifactFormat.values()).hasSize(8);
+        // Given & When & Then: exactly 10 values
+        assertThat(ArtifactFormat.values()).hasSize(10);
     }
 }
