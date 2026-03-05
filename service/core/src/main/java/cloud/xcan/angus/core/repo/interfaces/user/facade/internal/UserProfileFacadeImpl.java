@@ -6,6 +6,7 @@ import static cloud.xcan.angus.core.repo.interfaces.user.facade.internal.assembl
 import static cloud.xcan.angus.core.repo.interfaces.user.facade.internal.assembler.UserProfileAssembler.toUpdateEntity;
 
 import cloud.xcan.angus.core.repo.application.cmd.user.UserProfileCmd;
+import cloud.xcan.angus.core.repo.interfaces.user.facade.internal.assembler.UserProfileAssembler;
 import cloud.xcan.angus.core.repo.application.query.user.UserProfileQuery;
 import cloud.xcan.angus.core.repo.domain.user.UserApiToken;
 import cloud.xcan.angus.core.repo.domain.user.UserProfile;
@@ -22,6 +23,9 @@ import cloud.xcan.angus.core.repo.interfaces.user.facade.vo.UserProfileVo;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -108,7 +112,7 @@ public class UserProfileFacadeImpl implements UserProfileFacade {
   public ApiTokenVo createApiToken(ApiTokenCreateDto dto) {
     Long userId = PrincipalContext.getUserId();
     String rawToken = UUID.randomUUID().toString().replace("-", "");
-    String tokenHash = rawToken;
+    String tokenHash = sha256(rawToken);
     UserApiToken token = toTokenEntity(dto, userId, tokenHash);
     UserApiToken created = userProfileCmd.createApiToken(token);
     ApiTokenVo vo = toTokenVo(created);
@@ -120,7 +124,7 @@ public class UserProfileFacadeImpl implements UserProfileFacade {
   public List<ApiTokenVo> listApiTokens() {
     Long userId = PrincipalContext.getUserId();
     List<UserApiToken> tokens = userProfileQuery.findTokensByUserId(userId);
-    return tokens.stream().map(t -> toTokenVo(t)).collect(Collectors.toList());
+    return tokens.stream().map(UserProfileAssembler::toTokenVo).collect(Collectors.toList());
   }
 
   @Override
@@ -131,12 +135,27 @@ public class UserProfileFacadeImpl implements UserProfileFacade {
   @Override
   public AvatarUploadResultVo uploadAvatar(String fileName, byte[] content) {
     Long userId = PrincipalContext.getUserId();
-    String avatarUrl = "/avatars/" + userId + "/" + fileName;
+    String sanitized = fileName.replaceAll("[^a-zA-Z0-9._-]", "_");
+    String avatarUrl = "/avatars/" + userId + "/" + sanitized;
     userProfileCmd.updateAvatar(userId, avatarUrl);
 
     AvatarUploadResultVo result = new AvatarUploadResultVo();
     result.setAvatarUrl(avatarUrl);
     result.setSuccess(true);
     return result;
+  }
+
+  private static String sha256(String input) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+      StringBuilder hex = new StringBuilder();
+      for (byte b : hash) {
+        hex.append(String.format("%02x", b));
+      }
+      return hex.toString();
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException("SHA-256 not available", e);
+    }
   }
 }
