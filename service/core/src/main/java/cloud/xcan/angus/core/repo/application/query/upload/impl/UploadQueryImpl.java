@@ -47,12 +47,9 @@ public class UploadQueryImpl implements UploadQuery {
       protected UploadStatisticsVo process() {
         UploadStatisticsVo stats = new UploadStatisticsVo();
         stats.setTotalTasks(uploadTaskRepo.count());
-        stats.setPendingTasks(
-            (long) uploadTaskRepo.findByStatus(UploadStatus.PENDING).size());
-        stats.setCompletedTasks(
-            (long) uploadTaskRepo.findByStatus(UploadStatus.COMPLETED).size());
-        stats.setFailedTasks(
-            (long) uploadTaskRepo.findByStatus(UploadStatus.FAILED).size());
+        stats.setPendingTasks(uploadTaskRepo.countByStatus(UploadStatus.PENDING));
+        stats.setCompletedTasks(uploadTaskRepo.countByStatus(UploadStatus.COMPLETED));
+        stats.setFailedTasks(uploadTaskRepo.countByStatus(UploadStatus.FAILED));
         return stats;
       }
     }.execute();

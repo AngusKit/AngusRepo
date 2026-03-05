@@ -17,6 +17,8 @@ public interface UploadTaskRepo extends BaseRepository<UploadTask, Long> {
 
   List<UploadTask> findByStatus(UploadStatus status);
 
+  long countByStatus(UploadStatus status);
+
   @Query("SELECT COUNT(ut) FROM UploadTask ut WHERE ut.repositoryId = :repositoryId "
       + "AND ut.status = :status")
   long countByRepositoryIdAndStatus(@Param("repositoryId") Long repositoryId,

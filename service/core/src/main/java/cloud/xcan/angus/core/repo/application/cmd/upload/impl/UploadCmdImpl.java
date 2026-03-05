@@ -58,8 +58,8 @@ public class UploadCmdImpl extends CommCmd<UploadTask, Long> implements UploadCm
         }
         if (Boolean.TRUE.equals(task.getEnableChunked()) && task.getFileSize() > 0
             && task.getTotalChunks() == 0) {
-          long chunkSize = task.getFileSize();
-          task.setTotalChunks((int) Math.ceil((double) task.getFileSize() / chunkSize));
+          // Default to single chunk when chunk count not pre-calculated
+          task.setTotalChunks(1);
         }
         insert0(task);
         return task;

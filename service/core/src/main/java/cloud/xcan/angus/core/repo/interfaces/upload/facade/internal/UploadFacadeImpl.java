@@ -46,7 +46,9 @@ public class UploadFacadeImpl implements UploadFacade {
     UploadChunk chunk = new UploadChunk();
     chunk.setChunkIndex(0);
     chunk.setChunkSize(file.getSize());
+    chunk.setChecksum(null);
     uploadCmd.uploadChunk(taskId, chunk);
+    // Actual file persistence is delegated to the storage layer
   }
 
   @Override

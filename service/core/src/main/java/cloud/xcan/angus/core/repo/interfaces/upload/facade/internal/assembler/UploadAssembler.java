@@ -61,6 +61,7 @@ public class UploadAssembler {
     vo.setVersion(entity.getVersion());
     vo.setStatus(entity.getStatus());
     vo.setUploadToken(entity.getUploadToken());
+    vo.setUploadUrl("/api/v1/uploads/" + entity.getId() + "/file");
     vo.setExpires(entity.getExpires());
     vo.setEnableChunked(entity.getEnableChunked());
     vo.setTotalChunks(entity.getTotalChunks());
