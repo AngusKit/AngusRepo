@@ -223,16 +223,6 @@ public class NuGetProtocolRest {
 
   // ===== Helper methods =====
 
-  private String extractPath(HttpServletRequest request, String repositoryName) {
-    String uri = request.getRequestURI();
-    String prefix = "/nuget/" + repositoryName + "/";
-    int idx = uri.indexOf(prefix);
-    if (idx >= 0) {
-      return uri.substring(idx + prefix.length());
-    }
-    return uri;
-  }
-
   private void validateFormat(RepoEntity repository, RepositoryFormat expectedFormat) {
     if (repository.getFormat() != expectedFormat) {
       throw new IllegalArgumentException(

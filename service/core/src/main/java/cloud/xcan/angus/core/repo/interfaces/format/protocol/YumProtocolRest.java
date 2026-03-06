@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import org.springframework.http.HttpStatus;
@@ -201,16 +200,6 @@ public class YumProtocolRest {
   }
 
   // ===== Helper methods =====
-
-  private String extractPath(HttpServletRequest request, String repositoryName) {
-    String uri = request.getRequestURI();
-    String prefix = "/yum/" + repositoryName + "/";
-    int idx = uri.indexOf(prefix);
-    if (idx >= 0) {
-      return uri.substring(idx + prefix.length());
-    }
-    return uri;
-  }
 
   private void validateFormat(RepoEntity repository, RepositoryFormat expectedFormat) {
     if (repository.getFormat() != expectedFormat) {

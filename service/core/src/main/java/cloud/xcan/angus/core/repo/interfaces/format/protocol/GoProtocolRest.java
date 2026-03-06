@@ -6,7 +6,6 @@ import cloud.xcan.angus.core.repo.domain.format.FormatHandlerRegistry;
 import cloud.xcan.angus.core.repo.domain.format.store.BlobStore;
 import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
-import cloud.xcan.angus.core.repo.domain.repository.RepositoryType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -199,16 +198,6 @@ public class GoProtocolRest {
     return remainder;
   }
 
-  private String extractPath(HttpServletRequest request, String repositoryName) {
-    String uri = request.getRequestURI();
-    String prefix = "/go/" + repositoryName + "/";
-    int idx = uri.indexOf(prefix);
-    if (idx >= 0) {
-      return uri.substring(idx + prefix.length());
-    }
-    return uri;
-  }
-
   private void validateFormat(RepoEntity repository, RepositoryFormat expectedFormat) {
     if (repository.getFormat() != expectedFormat) {
       throw new IllegalArgumentException(
@@ -217,10 +206,4 @@ public class GoProtocolRest {
     }
   }
 
-  private void validateHosted(RepoEntity repository) {
-    if (repository.getType() != RepositoryType.HOSTED) {
-      throw new IllegalStateException(
-          "Upload/delete operations are only allowed on hosted repositories");
-    }
-  }
 }
