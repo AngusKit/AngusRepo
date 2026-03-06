@@ -1,8 +1,6 @@
 package cloud.xcan.angus.core.repo.interfaces.format.protocol;
 
-import cloud.xcan.angus.core.repo.application.cmd.artifact.ArtifactCmd;
 import cloud.xcan.angus.core.repo.application.query.repository.RepositoryQuery;
-import cloud.xcan.angus.core.repo.domain.artifact.ArtifactMetadata;
 import cloud.xcan.angus.core.repo.domain.format.ArtifactFormatHandler;
 import cloud.xcan.angus.core.repo.domain.format.FormatHandlerRegistry;
 import cloud.xcan.angus.core.repo.domain.format.ValidationResult;
@@ -50,7 +48,7 @@ public class MavenProtocolRest {
   @Resource
   private RepositoryQuery repositoryQuery;
 
-  @Resource(name = "localBlobStore")
+  @Resource
   private BlobStore blobStore;
 
   @Operation(summary = "下载Maven制品", description = "下载Maven制品文件，支持.jar/.pom/.war/.ear/.xml/.sha1/.md5等",

@@ -53,6 +53,12 @@ public class RepositoryQueryImpl implements RepositoryQuery {
   }
 
   @Override
+  public RepoEntity findByNameAndCheck(String name) {
+    return repoEntityRepo.findByName(name)
+        .orElseThrow(() -> new RuntimeException("仓库不存在: " + name));
+  }
+
+  @Override
   public RepositoryStatisticsVo getStatistics() {
     return new BizTemplate<RepositoryStatisticsVo>() {
       @Override

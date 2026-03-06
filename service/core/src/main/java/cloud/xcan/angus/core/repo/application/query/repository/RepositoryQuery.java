@@ -16,5 +16,7 @@ public interface RepositoryQuery {
 
   RepoEntity findAndCheck(Long id);
 
+  RepoEntity findByNameAndCheck(String name);
+
   RepositoryStatisticsVo getStatistics();
 }
