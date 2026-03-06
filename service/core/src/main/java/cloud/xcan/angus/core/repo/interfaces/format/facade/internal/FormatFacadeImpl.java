@@ -19,6 +19,7 @@ import cloud.xcan.angus.core.repo.application.query.format.FormatMetadataQuery;
 import cloud.xcan.angus.core.repo.domain.format.ArtifactFormatHandler;
 import cloud.xcan.angus.core.repo.domain.format.FormatHandlerRegistry;
 import cloud.xcan.angus.core.repo.domain.format.SetupGuide;
+import cloud.xcan.angus.core.repo.domain.format.UnsupportedFormatException;
 import cloud.xcan.angus.core.repo.domain.format.ValidationResult;
 import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
@@ -71,6 +72,7 @@ public class FormatFacadeImpl implements FormatFacade {
   @Override
   public FormatValidationResultVo validateArtifact(FormatValidateDto dto) {
     ArtifactFormatHandler handler = formatHandlerRegistry.getHandler(dto.getFormat());
+    // InputStream is null for filename-only validation; content validation requires file upload
     ValidationResult result = handler.validateArtifact(null, dto.getFileName());
     return toValidationResultVo(result);
   }
@@ -157,7 +159,7 @@ public class FormatFacadeImpl implements FormatFacade {
         formatMetadataCmd.deleteGoModule(id);
         break;
       default:
-        throw new RuntimeException("Unsupported format: " + format);
+        throw new UnsupportedFormatException("Unsupported format: " + format);
     }
   }
 }

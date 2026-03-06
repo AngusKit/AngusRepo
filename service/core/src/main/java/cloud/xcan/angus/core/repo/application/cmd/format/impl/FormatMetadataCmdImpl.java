@@ -82,11 +82,6 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   public MavenMetadataEntity createMavenMetadata(MavenMetadataEntity entity) {
     return new BizTemplate<MavenMetadataEntity>() {
       @Override
-      protected void checkParams() {
-        // Validate required fields
-      }
-
-      @Override
       protected MavenMetadataEntity process() {
         entity.setCreatedDate(LocalDateTime.now());
         entity.setModifiedDate(LocalDateTime.now());
@@ -107,11 +102,6 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Transactional(rollbackFor = Exception.class)
   public DockerImageEntity createDockerImage(DockerImageEntity entity) {
     return new BizTemplate<DockerImageEntity>() {
-      @Override
-      protected void checkParams() {
-        // Validate required fields
-      }
-
       @Override
       protected DockerImageEntity process() {
         entity.setCreatedDate(LocalDateTime.now());
