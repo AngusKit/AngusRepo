@@ -12,8 +12,10 @@ import jakarta.annotation.Resource;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 @Biz
+@Transactional(readOnly = true)
 public class ScanPolicyQueryImpl implements ScanPolicyQuery {
 
   @Resource

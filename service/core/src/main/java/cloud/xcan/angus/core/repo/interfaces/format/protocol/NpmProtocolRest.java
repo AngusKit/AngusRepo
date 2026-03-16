@@ -6,6 +6,7 @@ import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,8 +53,8 @@ public class NpmProtocolRest {
       @ApiResponse(responseCode = "404", description = "包不存在")
   })
   @GetMapping(value = "/{repositoryName}/{packageName}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getPackageDocument(@PathVariable String repositoryName,
-      @PathVariable String packageName) {
+  public ResponseEntity<?> getPackageDocument(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NPM);
 
@@ -78,8 +79,8 @@ public class NpmProtocolRest {
       @ApiResponse(responseCode = "404", description = "版本不存在")
   })
   @GetMapping(value = "/{repositoryName}/{packageName}/{version}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getPackageVersion(@PathVariable String repositoryName,
-      @PathVariable String packageName, @PathVariable String version) {
+  public ResponseEntity<?> getPackageVersion(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, @Parameter(name = "version", description = "version") @PathVariable String version) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NPM);
 
@@ -104,8 +105,8 @@ public class NpmProtocolRest {
       @ApiResponse(responseCode = "404", description = "文件不存在")
   })
   @GetMapping(value = "/{repositoryName}/{packageName}/-/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-  public ResponseEntity<?> downloadTarball(@PathVariable String repositoryName,
-      @PathVariable String packageName, @PathVariable String filename) {
+  public ResponseEntity<?> downloadTarball(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, @Parameter(name = "filename", description = "filename") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NPM);
 
@@ -131,8 +132,8 @@ public class NpmProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持发布")
   })
   @PutMapping(value = "/{repositoryName}/{packageName}", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> publish(@PathVariable String repositoryName,
-      @PathVariable String packageName, HttpServletRequest request) throws IOException {
+  public ResponseEntity<?> publish(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NPM);
     validateHosted(repository);
@@ -154,8 +155,8 @@ public class NpmProtocolRest {
       @ApiResponse(responseCode = "404", description = "包不存在")
   })
   @DeleteMapping("/{repositoryName}/{packageName}/-rev/{rev}")
-  public ResponseEntity<?> unpublish(@PathVariable String repositoryName,
-      @PathVariable String packageName, @PathVariable String rev) {
+  public ResponseEntity<?> unpublish(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, @Parameter(name = "rev", description = "rev") @PathVariable String rev) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NPM);
     validateHosted(repository);
@@ -179,8 +180,8 @@ public class NpmProtocolRest {
   })
   @PutMapping(value = "/{repositoryName}/-/package/{packageName}/dist-tags/{tag}",
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> setDistTag(@PathVariable String repositoryName,
-      @PathVariable String packageName, @PathVariable String tag,
+  public ResponseEntity<?> setDistTag(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, @Parameter(name = "tag", description = "tag") @PathVariable String tag,
       HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NPM);
@@ -201,7 +202,7 @@ public class NpmProtocolRest {
       @ApiResponse(responseCode = "200", description = "返回搜索结果JSON")
   })
   @GetMapping(value = "/{repositoryName}/-/v1/search", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> search(@PathVariable String repositoryName,
+  public ResponseEntity<?> search(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
       @RequestParam(value = "text", required = false, defaultValue = "") String text,
       @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);

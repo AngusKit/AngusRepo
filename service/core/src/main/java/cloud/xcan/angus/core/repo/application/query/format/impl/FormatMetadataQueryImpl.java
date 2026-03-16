@@ -32,8 +32,10 @@ import cloud.xcan.angus.core.repo.domain.format.entity.RpmPackageEntityRepo;
 import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Biz
+@Transactional(readOnly = true)
 public class FormatMetadataQueryImpl implements FormatMetadataQuery {
 
   @Resource

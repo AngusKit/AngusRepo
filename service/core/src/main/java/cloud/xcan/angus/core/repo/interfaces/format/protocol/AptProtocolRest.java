@@ -9,6 +9,7 @@ import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,8 +60,8 @@ public class AptProtocolRest {
       @ApiResponse(responseCode = "404", description = "发行版不存在")
   })
   @GetMapping("/{repositoryName}/dists/{distribution}/Release")
-  public ResponseEntity<?> release(@PathVariable String repositoryName,
-      @PathVariable String distribution) {
+  public ResponseEntity<?> release(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "distribution", description = "distribution") @PathVariable String distribution) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.APT);
 
@@ -85,8 +86,8 @@ public class AptProtocolRest {
       @ApiResponse(responseCode = "404", description = "发行版不存在")
   })
   @GetMapping("/{repositoryName}/dists/{distribution}/InRelease")
-  public ResponseEntity<?> inRelease(@PathVariable String repositoryName,
-      @PathVariable String distribution) {
+  public ResponseEntity<?> inRelease(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "distribution", description = "distribution") @PathVariable String distribution) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.APT);
 
@@ -111,9 +112,9 @@ public class AptProtocolRest {
       @ApiResponse(responseCode = "404", description = "索引不存在")
   })
   @GetMapping("/{repositoryName}/dists/{distribution}/{component}/binary-{arch}/Packages")
-  public ResponseEntity<?> packages(@PathVariable String repositoryName,
-      @PathVariable String distribution, @PathVariable String component,
-      @PathVariable String arch) {
+  public ResponseEntity<?> packages(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "distribution", description = "distribution") @PathVariable String distribution, @Parameter(name = "component", description = "component") @PathVariable String component,
+      @Parameter(name = "arch", description = "arch") @PathVariable String arch) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.APT);
 
@@ -139,9 +140,9 @@ public class AptProtocolRest {
       @ApiResponse(responseCode = "404", description = "索引不存在")
   })
   @GetMapping("/{repositoryName}/dists/{distribution}/{component}/binary-{arch}/Packages.gz")
-  public ResponseEntity<?> packagesGz(@PathVariable String repositoryName,
-      @PathVariable String distribution, @PathVariable String component,
-      @PathVariable String arch) {
+  public ResponseEntity<?> packagesGz(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "distribution", description = "distribution") @PathVariable String distribution, @Parameter(name = "component", description = "component") @PathVariable String component,
+      @Parameter(name = "arch", description = "arch") @PathVariable String arch) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.APT);
 
@@ -167,9 +168,9 @@ public class AptProtocolRest {
       @ApiResponse(responseCode = "404", description = "软件包不存在")
   })
   @GetMapping("/{repositoryName}/pool/{component}/{prefix}/{packageName}/{filename}")
-  public ResponseEntity<?> downloadDeb(@PathVariable String repositoryName,
-      @PathVariable String component, @PathVariable String prefix,
-      @PathVariable String packageName, @PathVariable String filename) {
+  public ResponseEntity<?> downloadDeb(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "component", description = "component") @PathVariable String component, @Parameter(name = "prefix", description = "prefix") @PathVariable String prefix,
+      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, @Parameter(name = "filename", description = "filename") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.APT);
 
@@ -196,8 +197,8 @@ public class AptProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持上传")
   })
   @PutMapping("/{repositoryName}/pool/{filename}")
-  public ResponseEntity<?> uploadDeb(@PathVariable String repositoryName,
-      @PathVariable String filename, HttpServletRequest request) throws IOException {
+  public ResponseEntity<?> uploadDeb(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "filename", description = "filename") @PathVariable String filename, HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.APT);
     validateHosted(repository);

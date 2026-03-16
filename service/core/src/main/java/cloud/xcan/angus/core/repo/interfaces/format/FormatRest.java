@@ -11,6 +11,7 @@ import cloud.xcan.angus.core.repo.interfaces.format.facade.vo.FormatSupportedVo;
 import cloud.xcan.angus.core.repo.interfaces.format.facade.vo.FormatValidationResultVo;
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -89,7 +90,7 @@ public class FormatRest {
       @ApiResponse(responseCode = "200", description = "获取成功")
   })
   @GetMapping("/repositories/{repositoryId}/index")
-  public ResponseEntity<byte[]> getIndex(@PathVariable Long repositoryId) {
+  public ResponseEntity<byte[]> getIndex(@Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId) {
     byte[] index = formatFacade.getIndex(repositoryId);
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -104,7 +105,7 @@ public class FormatRest {
   })
   @DeleteMapping("/metadata/{format}/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteMetadata(@PathVariable RepositoryFormat format, @PathVariable Long id) {
+  public void deleteMetadata(@Parameter(name = "format", description = "format") @PathVariable RepositoryFormat format, @Parameter(name = "id", description = "id") @PathVariable Long id) {
     formatFacade.deleteMetadata(format, id);
   }
 }

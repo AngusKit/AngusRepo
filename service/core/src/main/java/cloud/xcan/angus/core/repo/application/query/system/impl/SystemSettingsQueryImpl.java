@@ -9,8 +9,10 @@ import cloud.xcan.angus.core.repo.domain.system.SystemSettingsRepo;
 import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Biz
+@Transactional(readOnly = true)
 public class SystemSettingsQueryImpl implements SystemSettingsQuery {
 
   @Resource

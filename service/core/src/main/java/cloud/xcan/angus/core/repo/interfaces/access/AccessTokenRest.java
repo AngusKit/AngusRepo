@@ -5,6 +5,7 @@ import cloud.xcan.angus.core.repo.interfaces.access.facade.dto.AccessTokenCreate
 import cloud.xcan.angus.core.repo.interfaces.access.facade.vo.AccessTokenVo;
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class AccessTokenRest {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ApiLocaleResult<AccessTokenVo> create(
-      @PathVariable Long repositoryId,
+      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
       @Valid @RequestBody AccessTokenCreateDto dto) {
     return ApiLocaleResult.success(accessFacade.createToken(repositoryId, dto));
   }
@@ -52,8 +53,8 @@ public class AccessTokenRest {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void revoke(
-      @PathVariable Long repositoryId,
-      @PathVariable Long id) {
+      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
+      @Parameter(name = "id", description = "id") @PathVariable Long id) {
     accessFacade.revokeToken(repositoryId, id);
   }
 
@@ -64,7 +65,7 @@ public class AccessTokenRest {
   })
   @GetMapping
   public ApiLocaleResult<List<AccessTokenVo>> list(
-      @PathVariable Long repositoryId) {
+      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId) {
     return ApiLocaleResult.success(accessFacade.listTokens(repositoryId));
   }
 }

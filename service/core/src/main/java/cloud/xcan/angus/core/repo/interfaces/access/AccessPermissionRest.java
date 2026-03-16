@@ -7,6 +7,7 @@ import cloud.xcan.angus.core.repo.interfaces.access.facade.vo.PermissionCheckRes
 import cloud.xcan.angus.core.repo.interfaces.access.facade.vo.UserPermissionVo;
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +37,7 @@ public class AccessPermissionRest {
   })
   @PostMapping("/check-permission")
   public ApiLocaleResult<PermissionCheckResultVo> checkPermission(
-      @PathVariable Long repositoryId,
+      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
       @Valid @RequestBody PermissionCheckDto dto) {
     return ApiLocaleResult.success(accessFacade.checkPermission(repositoryId, dto));
   }
@@ -48,7 +49,7 @@ public class AccessPermissionRest {
   })
   @GetMapping("/user-permissions")
   public ApiLocaleResult<UserPermissionVo> getUserPermissions(
-      @PathVariable Long repositoryId) {
+      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId) {
     return ApiLocaleResult.success(accessFacade.getUserPermissions(repositoryId));
   }
 
@@ -59,7 +60,7 @@ public class AccessPermissionRest {
   })
   @GetMapping("/access-statistics")
   public ApiLocaleResult<AccessStatisticsVo> getAccessStatistics(
-      @PathVariable Long repositoryId) {
+      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId) {
     return ApiLocaleResult.success(accessFacade.getAccessStatistics(repositoryId));
   }
 }

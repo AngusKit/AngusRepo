@@ -9,6 +9,7 @@ import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,7 +61,7 @@ public class HelmProtocolRest {
       @ApiResponse(responseCode = "404", description = "仓库不存在")
   })
   @GetMapping("/{repositoryName}/index.yaml")
-  public ResponseEntity<?> index(@PathVariable String repositoryName) {
+  public ResponseEntity<?> index(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
 
@@ -79,8 +80,8 @@ public class HelmProtocolRest {
       @ApiResponse(responseCode = "404", description = "Chart不存在")
   })
   @GetMapping("/{repositoryName}/charts/{filename}")
-  public ResponseEntity<?> downloadChart(@PathVariable String repositoryName,
-      @PathVariable String filename) {
+  public ResponseEntity<?> downloadChart(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "filename", description = "filename") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
 
@@ -107,7 +108,7 @@ public class HelmProtocolRest {
   })
   @PostMapping(value = "/{repositoryName}/api/charts",
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<?> uploadChart(@PathVariable String repositoryName,
+  public ResponseEntity<?> uploadChart(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
       @RequestParam("chart") MultipartFile chart) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
@@ -144,8 +145,8 @@ public class HelmProtocolRest {
       @ApiResponse(responseCode = "404", description = "Chart不存在")
   })
   @DeleteMapping("/{repositoryName}/api/charts/{name}/{version}")
-  public ResponseEntity<?> deleteChart(@PathVariable String repositoryName,
-      @PathVariable String name, @PathVariable String version) {
+  public ResponseEntity<?> deleteChart(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+      @Parameter(name = "name", description = "name") @PathVariable String name, @Parameter(name = "version", description = "version") @PathVariable String version) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
     validateHosted(repository);

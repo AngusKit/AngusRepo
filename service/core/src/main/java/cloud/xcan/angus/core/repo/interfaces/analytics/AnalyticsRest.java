@@ -16,8 +16,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,36 +37,41 @@ public class AnalyticsRest {
 
   @Operation(summary = "下载分析", operationId = "analytics:downloads")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "查询成功")})
+  @ResponseStatus(HttpStatus.OK)
   @GetMapping("/downloads")
-  public ApiLocaleResult<DownloadAnalyticsVo> getDownloadAnalytics(@ParameterObject DownloadAnalyticsDto dto) {
+  public ApiLocaleResult<DownloadAnalyticsVo> getDownloadAnalytics(@Valid @ParameterObject DownloadAnalyticsDto dto) {
     return ApiLocaleResult.success(analyticsFacade.getDownloadAnalytics(dto));
   }
 
   @Operation(summary = "用户活跃度分析", operationId = "analytics:userActivity")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "查询成功")})
+  @ResponseStatus(HttpStatus.OK)
   @GetMapping("/user-activity")
-  public ApiLocaleResult<UserActivityAnalyticsVo> getUserActivityAnalytics(@ParameterObject UserActivityAnalyticsDto dto) {
+  public ApiLocaleResult<UserActivityAnalyticsVo> getUserActivityAnalytics(@Valid @ParameterObject UserActivityAnalyticsDto dto) {
     return ApiLocaleResult.success(analyticsFacade.getUserActivityAnalytics(dto));
   }
 
   @Operation(summary = "仓库对比分析", operationId = "analytics:repositoryComparison")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "查询成功")})
+  @ResponseStatus(HttpStatus.OK)
   @GetMapping("/repository-comparison")
-  public ApiLocaleResult<List<RepositoryComparisonVo>> getRepositoryComparison(@ParameterObject RepositoryComparisonDto dto) {
+  public ApiLocaleResult<List<RepositoryComparisonVo>> getRepositoryComparison(@Valid @ParameterObject RepositoryComparisonDto dto) {
     return ApiLocaleResult.success(analyticsFacade.getRepositoryComparison(dto));
   }
 
   @Operation(summary = "导出分析报告", operationId = "analytics:export")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "导出任务已创建")})
+  @ResponseStatus(HttpStatus.OK)
   @GetMapping("/export")
-  public ApiLocaleResult<String> exportReport(@ParameterObject AnalyticsExportDto dto) {
+  public ApiLocaleResult<String> exportReport(@Valid @ParameterObject AnalyticsExportDto dto) {
     return ApiLocaleResult.success(analyticsFacade.exportReport(dto));
   }
 
   @Operation(summary = "格式使用统计", operationId = "analytics:formatUsage")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "查询成功")})
+  @ResponseStatus(HttpStatus.OK)
   @GetMapping("/format-usage")
-  public ApiLocaleResult<List<FormatUsageVo>> getFormatUsage(@ParameterObject FormatUsageDto dto) {
+  public ApiLocaleResult<List<FormatUsageVo>> getFormatUsage(@Valid @ParameterObject FormatUsageDto dto) {
     return ApiLocaleResult.success(analyticsFacade.getFormatUsage(dto));
   }
 }

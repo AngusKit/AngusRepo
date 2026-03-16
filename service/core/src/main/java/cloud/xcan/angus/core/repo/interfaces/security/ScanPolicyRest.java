@@ -8,6 +8,7 @@ import cloud.xcan.angus.core.repo.interfaces.security.facade.vo.ScanPolicyDetail
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import cloud.xcan.angus.remote.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,14 +48,14 @@ public class ScanPolicyRest {
   @Operation(summary = "更新扫描策略", description = "更新扫描策略信息", operationId = "scanPolicy:update")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "更新成功")})
   @PutMapping("/{id}")
-  public ApiLocaleResult<ScanPolicyDetailVo> update(@PathVariable String id, @Valid @RequestBody ScanPolicyUpdateDto dto) {
+  public ApiLocaleResult<ScanPolicyDetailVo> update(@Parameter(name = "id", description = "id") @PathVariable String id, @Valid @RequestBody ScanPolicyUpdateDto dto) {
     return ApiLocaleResult.success(scanPolicyFacade.update(id, dto));
   }
 
   @Operation(summary = "启用/禁用策略", description = "启用或禁用扫描策略", operationId = "scanPolicy:updateEnabled")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "操作成功")})
   @PutMapping("/{id}/enabled")
-  public ApiLocaleResult<?> updateEnabled(@PathVariable String id, @RequestParam Boolean enabled) {
+  public ApiLocaleResult<?> updateEnabled(@Parameter(name = "id", description = "id") @PathVariable String id, @RequestParam Boolean enabled) {
     scanPolicyFacade.updateEnabled(id, enabled);
     return ApiLocaleResult.success();
   }
@@ -63,7 +64,7 @@ public class ScanPolicyRest {
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "删除成功")})
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable String id) {
+  public void delete(@Parameter(name = "id", description = "id") @PathVariable String id) {
     scanPolicyFacade.delete(id);
   }
 
@@ -73,7 +74,7 @@ public class ScanPolicyRest {
       @ApiResponse(responseCode = "404", description = "策略不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<ScanPolicyDetailVo> getById(@PathVariable String id) {
+  public ApiLocaleResult<ScanPolicyDetailVo> getById(@Parameter(name = "id", description = "id") @PathVariable String id) {
     return ApiLocaleResult.success(scanPolicyFacade.getById(id));
   }
 
