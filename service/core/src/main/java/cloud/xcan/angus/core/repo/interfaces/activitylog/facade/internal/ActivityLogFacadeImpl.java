@@ -26,12 +26,14 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 /**
  * 活动日志Facade实现
  */
+@Slf4j
 @Component
 public class ActivityLogFacadeImpl implements ActivityLogFacade {
 
@@ -112,7 +114,8 @@ public class ActivityLogFacadeImpl implements ActivityLogFacade {
     if ("csv".equals(format)) {
       exportCsv(logs, response);
     } else {
-      // Excel格式需要额外的库支持，这里先返回CSV
+      // Excel格式需要引入 Apache POI 或 EasyExcel 库支持，当前降级为 CSV 导出
+      log.warn("Excel export not yet supported, falling back to CSV format");
       exportCsv(logs, response);
     }
   }

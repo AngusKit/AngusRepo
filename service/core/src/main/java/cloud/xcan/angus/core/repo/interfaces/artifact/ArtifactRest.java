@@ -155,13 +155,13 @@ public class ArtifactRest {
   @Operation(summary = "取消收藏", description = "取消收藏指定制品",
       operationId = "artifact:removeStar")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "取消收藏成功")
+      @ApiResponse(responseCode = "204", description = "取消收藏成功")
   })
   @DeleteMapping("/{id}/star")
-  public ApiLocaleResult<?> removeStar(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void removeStar(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     Long userId = PrincipalContext.getUserId();
     artifactFacade.removeStar(id, userId);
-    return ApiLocaleResult.success();
   }
 
   @Operation(summary = "查询制品版本列表", description = "获取制品的所有版本",

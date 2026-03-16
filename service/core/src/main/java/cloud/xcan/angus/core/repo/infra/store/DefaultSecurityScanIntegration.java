@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
  * Default implementation of {@link SecurityScanIntegration}.
  *
  * <p>Provides a placeholder for future security scan integration. Currently logs
- * scan trigger events for auditing and diagnostic purposes.
+ * scan trigger events for auditing and diagnostic purposes. When an external
+ * vulnerability scanning service (e.g., Trivy, Clair, Snyk) is integrated,
+ * this implementation should be replaced or extended to trigger actual scans
+ * and write results back to the ScanTask entity.
  */
 @Slf4j
 @Component
@@ -17,7 +20,7 @@ public class DefaultSecurityScanIntegration implements SecurityScanIntegration {
 
   @Override
   public void triggerScanAfterUpload(String artifactId, RepositoryFormat format) {
-    log.info("Security scan triggered for artifact={}, format={}", artifactId, format);
-    // TODO: Integrate with external vulnerability scanning service
+    log.info("Security scan triggered for artifact={}, format={}. "
+        + "No external scanner configured - scan skipped.", artifactId, format);
   }
 }

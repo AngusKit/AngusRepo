@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import static cloud.xcan.angus.core.repo.domain.Constants.*;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
 
 @Getter
@@ -22,7 +24,7 @@ public class FormatArtifactUploadDto implements Serializable {
   private Long repositoryId;
 
   @NotBlank
-  @Size(max = 500)
+  @Length(max = MAX_LONG_DESC_LENGTH)
   @Schema(description = "制品名称", requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 

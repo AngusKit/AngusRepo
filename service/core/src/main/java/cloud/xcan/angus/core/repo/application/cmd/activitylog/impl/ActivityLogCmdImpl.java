@@ -29,7 +29,8 @@ public class ActivityLogCmdImpl extends CommCmd<ActivityLog, String> implements 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public ActivityLog create(ActivityLog activityLog) {
-    // 活动日志可以由系统自动创建，不需要检查isUserAction
+    // Null input returns null by design: this method may be called by internal batch
+    // processing where null entries should be silently skipped rather than throwing exceptions
     if (Objects.isNull(activityLog)) {
       return null;
     }

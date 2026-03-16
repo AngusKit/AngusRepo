@@ -11,6 +11,7 @@ import static cloud.xcan.angus.core.utils.CoreUtils.buildVoPageResult;
 import cloud.xcan.angus.core.repo.application.cmd.artifact.ArtifactCmd;
 import cloud.xcan.angus.core.repo.application.query.artifact.ArtifactQuery;
 import cloud.xcan.angus.core.repo.domain.artifact.Artifact;
+import cloud.xcan.angus.core.repo.domain.format.store.BlobStore;
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.ArtifactFacade;
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.dto.ArtifactBatchDeleteDto;
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.dto.ArtifactCreateDto;
@@ -21,12 +22,18 @@ import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactDetailVo
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactStatisticsVo;
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactVersionVo;
 import cloud.xcan.angus.remote.PageResult;
+import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ArtifactFacadeImpl implements ArtifactFacade {
 
@@ -35,6 +42,9 @@ public class ArtifactFacadeImpl implements ArtifactFacade {
 
   @Resource
   private ArtifactQuery artifactQuery;
+
+  @Resource
+  private BlobStore blobStore;
 
   @Override
   public ArtifactDetailVo create(ArtifactCreateDto dto) {
@@ -96,7 +106,23 @@ public class ArtifactFacadeImpl implements ArtifactFacade {
     if (artifact.getSizeBytes() != null) {
       response.setContentLengthLong(artifact.getSizeBytes());
     }
-    // TODO: Read artifact file from blob storage and write to response.getOutputStream()
+
+    // Read artifact file from blob storage and write to response output stream
+    String tenantId = PrincipalContext.get().getTenantId().toString();
+    String repositoryId = artifact.getRepositoryId().toString();
+    String path = artifact.getPath() != null ? artifact.getPath() : artifact.getName();
+    try (InputStream inputStream = blobStore.retrieve(tenantId, repositoryId, path);
+         OutputStream outputStream = response.getOutputStream()) {
+      byte[] buffer = new byte[8192];
+      int bytesRead;
+      while ((bytesRead = inputStream.read(buffer)) != -1) {
+        outputStream.write(buffer, 0, bytesRead);
+      }
+      outputStream.flush();
+    } catch (IOException e) {
+      log.error("Failed to download artifact: id={}, path={}", id, path, e);
+      throw new RuntimeException("Failed to download artifact file", e);
+    }
   }
 
   @Override

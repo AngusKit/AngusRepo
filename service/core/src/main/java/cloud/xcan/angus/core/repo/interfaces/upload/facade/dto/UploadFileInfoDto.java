@@ -4,10 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import static cloud.xcan.angus.core.repo.domain.Constants.*;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
@@ -18,7 +20,7 @@ import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 public class UploadFileInfoDto implements Serializable {
 
   @NotBlank
-  @Size(max = 500)
+  @Length(max = MAX_LONG_DESC_LENGTH)
   @Schema(description = "文件名称", requiredMode = Schema.RequiredMode.REQUIRED)
   private String fileName;
 
@@ -26,7 +28,7 @@ public class UploadFileInfoDto implements Serializable {
   @Schema(description = "文件大小（字节）", requiredMode = Schema.RequiredMode.REQUIRED)
   private Long fileSize;
 
-  @Size(max = 1000)
+  @Length(max = MAX_EXPRESSION_LENGTH)
   @Schema(description = "上传路径")
   private String path;
 

@@ -120,6 +120,6 @@ public class PyPIFormatHandler implements ArtifactFormatHandler {
     if (parts.length >= 5) {
       return parts[parts.length - 3];
     }
-    return null;
+    return "unknown";
   }
 }
