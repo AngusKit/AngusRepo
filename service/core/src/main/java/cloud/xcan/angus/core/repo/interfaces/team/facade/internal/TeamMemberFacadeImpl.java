@@ -22,6 +22,7 @@ import cloud.xcan.angus.core.repo.interfaces.team.facade.vo.TeamInvitationVo;
 import cloud.xcan.angus.core.repo.interfaces.team.facade.vo.TeamMemberVo;
 import cloud.xcan.angus.core.repo.interfaces.team.facade.vo.TeamStatisticsVo;
 import cloud.xcan.angus.remote.PageResult;
+import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -37,8 +38,7 @@ public class TeamMemberFacadeImpl implements TeamMemberFacade {
 
   @Override
   public TeamInvitationVo invite(MemberInviteDto dto) {
-    // TODO: Replace with PrincipalContext.getUserId() when security context is available
-    Long invitedBy = 1L;
+    Long invitedBy = PrincipalContext.getUserId();
     TeamInvitation invitation = toInvitationEntity(dto, invitedBy);
     TeamInvitation created = teamMemberCmd.invite(invitation);
     return toInvitationVo(created);

@@ -24,6 +24,7 @@ import cloud.xcan.angus.core.repo.domain.activity.ActivityRepo;
 import cloud.xcan.angus.core.repo.domain.activity.ActivitySearchRepo;
 import cloud.xcan.angus.core.repo.domain.activity.ActivitySummary;
 import jakarta.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -121,7 +122,7 @@ public class ActivityQueryImpl implements ActivityQuery {
     // Retrieve all activities for the specified target
     List<Activity> activities = activityRepo.findByTargetTypeAndTargetId(targetType, targetId);
     if (isEmpty(activities)) {
-      return null;
+      return new ArrayList<>();
     }
 
     // Enrich activities with user information
