@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "通知设置请求参数")
-public class NotificationSettingsDto {
+public class NotificationSettingsDto implements Serializable {
 
   @Schema(description = "是否启用邮件通知")
   private Boolean emailEnabled;

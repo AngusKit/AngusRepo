@@ -5,18 +5,21 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
+import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "完成上传任务请求参数")
-public class UploadCompleteDto {
+public class UploadCompleteDto implements Serializable {
 
   @Size(max = 2000)
   @Schema(description = "制品描述")
   private String description;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "许可证")
   private String license;
 

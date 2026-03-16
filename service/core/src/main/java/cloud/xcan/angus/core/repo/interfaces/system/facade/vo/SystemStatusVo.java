@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "系统状态信息")
-public class SystemStatusVo {
+public class SystemStatusVo implements Serializable {
 
   @Schema(description = "系统版本")
   private String version;

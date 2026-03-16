@@ -5,12 +5,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "用户权限信息")
-public class UserPermissionVo {
+public class UserPermissionVo implements Serializable {
 
   @Schema(description = "用户ID")
   private Long userId;

@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "格式使用统计结果")
-public class FormatUsageVo {
+public class FormatUsageVo implements Serializable {
 
   @Schema(description = "格式名称")
   private String format;

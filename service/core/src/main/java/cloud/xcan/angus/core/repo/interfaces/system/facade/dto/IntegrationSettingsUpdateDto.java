@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "集成设置更新请求参数")
-public class IntegrationSettingsUpdateDto {
+public class IntegrationSettingsUpdateDto implements Serializable {
 
   @Schema(description = "SMTP配置（JSON）")
   private String smtpConfig;

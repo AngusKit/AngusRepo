@@ -9,6 +9,7 @@ import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,7 +61,7 @@ public class YumProtocolRest {
       @ApiResponse(responseCode = "404", description = "仓库元数据不存在")
   })
   @GetMapping("/{repositoryName}/repodata/repomd.xml")
-  public ResponseEntity<?> repomd(@PathVariable String repositoryName) {
+  public ResponseEntity<?> repomd(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.YUM);
 
@@ -90,8 +91,8 @@ public class YumProtocolRest {
       @ApiResponse(responseCode = "404", description = "元数据文件不存在")
   })
   @GetMapping("/{repositoryName}/repodata/{filename}")
-  public ResponseEntity<?> repodata(@PathVariable String repositoryName,
-      @PathVariable String filename) {
+  public ResponseEntity<?> repodata(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "filename", description = "文件名") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.YUM);
 
@@ -116,8 +117,8 @@ public class YumProtocolRest {
       @ApiResponse(responseCode = "404", description = "RPM包不存在")
   })
   @GetMapping("/{repositoryName}/Packages/{letter}/{filename}")
-  public ResponseEntity<?> downloadRpm(@PathVariable String repositoryName,
-      @PathVariable String letter, @PathVariable String filename) {
+  public ResponseEntity<?> downloadRpm(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "letter", description = "letter") @PathVariable String letter, @Parameter(name = "filename", description = "文件名") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.YUM);
 
@@ -144,7 +145,7 @@ public class YumProtocolRest {
   })
   @PutMapping(value = "/{repositoryName}/upload",
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<?> uploadRpm(@PathVariable String repositoryName,
+  public ResponseEntity<?> uploadRpm(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       @RequestParam("file") MultipartFile file) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.YUM);
@@ -183,8 +184,8 @@ public class YumProtocolRest {
       @ApiResponse(responseCode = "404", description = "RPM包不存在")
   })
   @DeleteMapping("/{repositoryName}/Packages/{letter}/{filename}")
-  public ResponseEntity<?> deleteRpm(@PathVariable String repositoryName,
-      @PathVariable String letter, @PathVariable String filename) {
+  public ResponseEntity<?> deleteRpm(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "letter", description = "letter") @PathVariable String letter, @Parameter(name = "filename", description = "文件名") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.YUM);
     validateHosted(repository);

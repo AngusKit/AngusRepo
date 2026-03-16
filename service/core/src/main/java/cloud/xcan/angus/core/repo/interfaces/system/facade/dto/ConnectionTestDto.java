@@ -6,12 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "连接测试请求参数")
-public class ConnectionTestDto {
+public class ConnectionTestDto implements Serializable {
 
   @NotNull
   @Schema(description = "连接类型", requiredMode = Schema.RequiredMode.REQUIRED)

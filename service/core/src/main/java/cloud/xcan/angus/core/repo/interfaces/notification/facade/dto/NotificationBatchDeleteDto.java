@@ -7,12 +7,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "批量删除通知请求参数")
-public class NotificationBatchDeleteDto {
+public class NotificationBatchDeleteDto implements Serializable {
 
   @NotNull
   @Size(min = 1)

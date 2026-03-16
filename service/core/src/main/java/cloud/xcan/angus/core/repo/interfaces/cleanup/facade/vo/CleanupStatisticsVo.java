@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "清理统计信息")
-public class CleanupStatisticsVo {
+public class CleanupStatisticsVo implements Serializable {
 
   @Schema(description = "策略总数")
   private Long totalPolicies;

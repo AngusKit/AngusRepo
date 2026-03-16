@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 @Setter
 @Accessors(chain = true)
+@Schema(description = "查询活动记录请求参数")
 public class ActivityFindDto extends PageQuery {
 
   @Schema(description = "Activity record identifier")

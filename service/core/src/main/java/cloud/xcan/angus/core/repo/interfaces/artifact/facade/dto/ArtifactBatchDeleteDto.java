@@ -6,12 +6,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "批量删除制品请求参数")
-public class ArtifactBatchDeleteDto {
+public class ArtifactBatchDeleteDto implements Serializable {
 
   @NotEmpty
   @Schema(description = "制品ID列表", requiredMode = Schema.RequiredMode.REQUIRED)

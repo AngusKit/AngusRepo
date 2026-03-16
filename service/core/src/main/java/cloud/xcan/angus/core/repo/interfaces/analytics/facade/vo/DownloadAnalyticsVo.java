@@ -5,12 +5,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "下载分析结果")
-public class DownloadAnalyticsVo {
+public class DownloadAnalyticsVo implements Serializable {
 
   @Schema(description = "总下载次数")
   private Long totalDownloads;

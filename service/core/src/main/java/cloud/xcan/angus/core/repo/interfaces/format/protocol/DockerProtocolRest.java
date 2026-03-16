@@ -6,6 +6,7 @@ import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -96,7 +97,7 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "404", description = "镜像不存在")
   })
   @GetMapping("/{name}/tags/list")
-  public ResponseEntity<?> listTags(@PathVariable String name) {
+  public ResponseEntity<?> listTags(@Parameter(name = "name", description = "镜像名称") @PathVariable String name) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     return ResponseEntity.ok()
@@ -115,8 +116,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "404", description = "Manifest不存在")
   })
   @RequestMapping(value = "/{name}/manifests/{reference}", method = RequestMethod.HEAD)
-  public ResponseEntity<?> checkManifest(@PathVariable String name,
-      @PathVariable String reference) {
+  public ResponseEntity<?> checkManifest(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "reference", description = "标签或摘要引用") @PathVariable String reference) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     String tenantId = String.valueOf(repository.getTenantId());
@@ -143,8 +144,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "404", description = "Manifest不存在")
   })
   @GetMapping("/{name}/manifests/{reference}")
-  public ResponseEntity<?> getManifest(@PathVariable String name,
-      @PathVariable String reference) {
+  public ResponseEntity<?> getManifest(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "reference", description = "标签或摘要引用") @PathVariable String reference) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     String tenantId = String.valueOf(repository.getTenantId());
@@ -172,8 +173,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持上传")
   })
   @PutMapping("/{name}/manifests/{reference}")
-  public ResponseEntity<?> uploadManifest(@PathVariable String name,
-      @PathVariable String reference, HttpServletRequest request) throws IOException {
+  public ResponseEntity<?> uploadManifest(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "reference", description = "标签或摘要引用") @PathVariable String reference, HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     validateHosted(repository);
@@ -202,8 +203,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "404", description = "Manifest不存在")
   })
   @DeleteMapping("/{name}/manifests/{reference}")
-  public ResponseEntity<?> deleteManifest(@PathVariable String name,
-      @PathVariable String reference) {
+  public ResponseEntity<?> deleteManifest(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "reference", description = "标签或摘要引用") @PathVariable String reference) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     validateHosted(repository);
@@ -228,8 +229,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "404", description = "Blob不存在")
   })
   @RequestMapping(value = "/{name}/blobs/{digest}", method = RequestMethod.HEAD)
-  public ResponseEntity<?> checkBlob(@PathVariable String name,
-      @PathVariable String digest) {
+  public ResponseEntity<?> checkBlob(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "digest", description = "内容摘要") @PathVariable String digest) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     String tenantId = String.valueOf(repository.getTenantId());
@@ -256,8 +257,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "404", description = "Blob不存在")
   })
   @GetMapping("/{name}/blobs/{digest}")
-  public ResponseEntity<?> downloadBlob(@PathVariable String name,
-      @PathVariable String digest) {
+  public ResponseEntity<?> downloadBlob(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "digest", description = "内容摘要") @PathVariable String digest) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     String tenantId = String.valueOf(repository.getTenantId());
@@ -286,8 +287,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "404", description = "Blob不存在")
   })
   @DeleteMapping("/{name}/blobs/{digest}")
-  public ResponseEntity<?> deleteBlob(@PathVariable String name,
-      @PathVariable String digest) {
+  public ResponseEntity<?> deleteBlob(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "digest", description = "内容摘要") @PathVariable String digest) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     validateHosted(repository);
@@ -312,7 +313,7 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持上传")
   })
   @PostMapping(value = {"/{name}/blobs/uploads", "/{name}/blobs/uploads/"})
-  public ResponseEntity<?> startUpload(@PathVariable String name) {
+  public ResponseEntity<?> startUpload(@Parameter(name = "name", description = "镜像名称") @PathVariable String name) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     validateHosted(repository);
@@ -334,8 +335,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持上传")
   })
   @PatchMapping("/{name}/blobs/uploads/{uuid}")
-  public ResponseEntity<?> uploadChunk(@PathVariable String name,
-      @PathVariable String uuid, HttpServletRequest request) throws IOException {
+  public ResponseEntity<?> uploadChunk(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "uuid", description = "上传会话UUID") @PathVariable String uuid, HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);
     validateHosted(repository);
@@ -364,8 +365,8 @@ public class DockerProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持上传")
   })
   @PutMapping("/{name}/blobs/uploads/{uuid}")
-  public ResponseEntity<?> completeUpload(@PathVariable String name,
-      @PathVariable String uuid, @RequestParam String digest,
+  public ResponseEntity<?> completeUpload(@Parameter(name = "name", description = "镜像名称") @PathVariable String name,
+      @Parameter(name = "uuid", description = "上传会话UUID") @PathVariable String uuid, @RequestParam String digest,
       HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(name);
     validateFormat(repository, RepositoryFormat.DOCKER);

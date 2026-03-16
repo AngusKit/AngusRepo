@@ -5,12 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "获取客户端配置指南请求参数")
-public class FormatSetupGuideDto {
+public class FormatSetupGuideDto implements Serializable {
 
   @NotNull
   @Schema(description = "仓库ID", requiredMode = Schema.RequiredMode.REQUIRED)

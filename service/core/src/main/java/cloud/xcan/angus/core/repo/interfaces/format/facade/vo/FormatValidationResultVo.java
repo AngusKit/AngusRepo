@@ -5,12 +5,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "格式验证结果")
-public class FormatValidationResultVo {
+public class FormatValidationResultVo implements Serializable {
 
   @Schema(description = "是否验证通过")
   private Boolean valid;

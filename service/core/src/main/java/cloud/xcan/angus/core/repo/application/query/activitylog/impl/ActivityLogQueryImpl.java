@@ -24,11 +24,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 活动日志查询实现
  */
 @Biz
+@Transactional(readOnly = true)
 public class ActivityLogQueryImpl implements ActivityLogQuery {
 
   @Resource

@@ -10,8 +10,10 @@ import cloud.xcan.angus.core.repo.interfaces.analytics.facade.vo.TrendingReposit
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Biz
+@Transactional(readOnly = true)
 public class TrendAnalyticsQueryImpl implements TrendAnalyticsQuery {
 
   @Override

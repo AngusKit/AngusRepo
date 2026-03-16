@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "扫描统计信息")
-public class ScanStatisticsVo {
+public class ScanStatisticsVo implements Serializable {
 
   @Schema(description = "总扫描数")
   private Long totalScans;

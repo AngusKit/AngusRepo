@@ -13,6 +13,7 @@ import cloud.xcan.angus.core.repo.interfaces.reposettings.facade.vo.WebhookVo;
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import cloud.xcan.angus.remote.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -81,7 +82,7 @@ public class RepoSettingsRest {
   })
   @PutMapping("/webhooks/{id}")
   public ApiLocaleResult<WebhookVo> updateWebhook(
-      @PathVariable Long id, @Valid @RequestBody WebhookUpdateDto dto) {
+      @Parameter(name = "id", description = "Webhook ID") @PathVariable Long id, @Valid @RequestBody WebhookUpdateDto dto) {
     return ApiLocaleResult.success(repoSettingsFacade.updateWebhook(id, dto));
   }
 
@@ -92,7 +93,7 @@ public class RepoSettingsRest {
   })
   @PutMapping("/webhooks/{id}/active")
   public ApiLocaleResult<?> updateWebhookActive(
-      @PathVariable Long id, @Valid @RequestBody WebhookActiveDto dto) {
+      @Parameter(name = "id", description = "Webhook ID") @PathVariable Long id, @Valid @RequestBody WebhookActiveDto dto) {
     repoSettingsFacade.updateWebhookActive(id, dto);
     return ApiLocaleResult.success();
   }
@@ -104,7 +105,7 @@ public class RepoSettingsRest {
   })
   @DeleteMapping("/webhooks/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteWebhook(@PathVariable Long id) {
+  public void deleteWebhook(@Parameter(name = "id", description = "Webhook ID") @PathVariable Long id) {
     repoSettingsFacade.deleteWebhook(id);
   }
 
@@ -115,7 +116,7 @@ public class RepoSettingsRest {
       @ApiResponse(responseCode = "404", description = "Webhook不存在")
   })
   @GetMapping("/webhooks/{id}")
-  public ApiLocaleResult<WebhookVo> getWebhookById(@PathVariable Long id) {
+  public ApiLocaleResult<WebhookVo> getWebhookById(@Parameter(name = "id", description = "Webhook ID") @PathVariable Long id) {
     return ApiLocaleResult.success(repoSettingsFacade.getWebhookById(id));
   }
 
@@ -136,7 +137,7 @@ public class RepoSettingsRest {
       @ApiResponse(responseCode = "200", description = "测试完成")
   })
   @PostMapping("/webhooks/{id}/test")
-  public ApiLocaleResult<WebhookTestResultVo> testWebhook(@PathVariable Long id) {
+  public ApiLocaleResult<WebhookTestResultVo> testWebhook(@Parameter(name = "id", description = "Webhook ID") @PathVariable Long id) {
     return ApiLocaleResult.success(repoSettingsFacade.testWebhook(id));
   }
 
@@ -146,7 +147,7 @@ public class RepoSettingsRest {
       @ApiResponse(responseCode = "200", description = "查询成功")
   })
   @GetMapping("/webhooks/{id}/logs")
-  public ApiLocaleResult<List<WebhookLogVo>> getWebhookLogs(@PathVariable Long id) {
+  public ApiLocaleResult<List<WebhookLogVo>> getWebhookLogs(@Parameter(name = "id", description = "Webhook ID") @PathVariable Long id) {
     return ApiLocaleResult.success(repoSettingsFacade.getWebhookLogs(id));
   }
 }

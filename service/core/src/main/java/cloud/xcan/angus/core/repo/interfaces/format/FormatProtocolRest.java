@@ -5,6 +5,7 @@ import cloud.xcan.angus.core.repo.domain.format.ArtifactFormatHandler;
 import cloud.xcan.angus.core.repo.domain.format.FormatHandlerRegistry;
 import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,7 +62,7 @@ public class FormatProtocolRest {
       RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.PATCH
   })
   public ResponseEntity<?> handleProtocolRequestById(
-      @PathVariable Long repositoryId, HttpServletRequest request) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId, HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findAndCheck(repositoryId);
     ArtifactFormatHandler handler = formatHandlerRegistry.getHandler(repository.getFormat());
     return handler.handleFormatSpecificRequest(request, repository);
@@ -78,7 +79,7 @@ public class FormatProtocolRest {
       RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.PATCH
   })
   public ResponseEntity<?> handleProtocolRequestByName(
-      @PathVariable String repositoryName, HttpServletRequest request) {
+      @Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName, HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     ArtifactFormatHandler handler = formatHandlerRegistry.getHandler(repository.getFormat());
     return handler.handleFormatSpecificRequest(request, repository);

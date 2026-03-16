@@ -8,6 +8,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 /**
  * 活动日志统计视图对象
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @Schema(description = "活动日志统计信息")
-public class ActivityLogStatisticsVo {
+public class ActivityLogStatisticsVo implements Serializable {
 
   @Schema(description = "总日志数")
   private Long totalLogs;

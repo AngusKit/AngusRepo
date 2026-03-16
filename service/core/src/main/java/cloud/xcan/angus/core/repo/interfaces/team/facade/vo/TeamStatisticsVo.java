@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "团队统计信息")
-public class TeamStatisticsVo {
+public class TeamStatisticsVo implements Serializable {
 
   @Schema(description = "总成员数")
   private Long totalMembers;

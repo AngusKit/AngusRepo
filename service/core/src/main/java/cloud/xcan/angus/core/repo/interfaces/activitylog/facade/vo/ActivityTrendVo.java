@@ -6,6 +6,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 /**
  * 活动趋势视图对象
@@ -14,7 +15,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @Schema(description = "活动趋势")
-public class ActivityTrendVo {
+public class ActivityTrendVo implements Serializable {
 
   @Schema(description = "日期")
   private String date;

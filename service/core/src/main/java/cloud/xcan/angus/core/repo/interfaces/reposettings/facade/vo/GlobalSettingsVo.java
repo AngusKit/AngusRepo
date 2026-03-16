@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "全局仓库设置详情")
-public class GlobalSettingsVo {
+public class GlobalSettingsVo implements Serializable {
 
   @Schema(description = "设置ID")
   private Long id;

@@ -7,14 +7,17 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
+import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "更新访问规则请求参数")
-public class AccessRuleUpdateDto {
+public class AccessRuleUpdateDto implements Serializable {
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "规则名称")
   private String name;
 

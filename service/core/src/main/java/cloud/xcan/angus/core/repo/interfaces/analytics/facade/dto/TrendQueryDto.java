@@ -5,12 +5,13 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "趋势查询参数")
-public class TrendQueryDto {
+public class TrendQueryDto implements Serializable {
 
   @Schema(description = "统计周期(7/30/90天)")
   private Integer period = 30;

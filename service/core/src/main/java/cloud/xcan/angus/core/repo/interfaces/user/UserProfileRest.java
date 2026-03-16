@@ -12,6 +12,7 @@ import cloud.xcan.angus.core.repo.interfaces.user.facade.vo.PasswordChangeResult
 import cloud.xcan.angus.core.repo.interfaces.user.facade.vo.UserProfileVo;
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -135,7 +136,7 @@ public class UserProfileRest {
   })
   @DeleteMapping("/api-tokens/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void revokeApiToken(@PathVariable Long id) {
+  public void revokeApiToken(@Parameter(name = "id", description = "API Token ID") @PathVariable Long id) {
     userProfileFacade.revokeApiToken(id);
   }
 

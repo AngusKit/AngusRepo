@@ -8,12 +8,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "邀请成员请求参数")
-public class MemberInviteDto {
+public class MemberInviteDto implements Serializable {
 
   @NotBlank
   @Email

@@ -10,6 +10,7 @@ import cloud.xcan.angus.core.repo.interfaces.upload.facade.vo.UploadTaskVo;
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import cloud.xcan.angus.remote.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,7 +60,7 @@ public class UploadRest {
   })
   @PostMapping(value = "/{taskId}/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ApiLocaleResult<?> uploadFile(
-      @PathVariable Long taskId,
+      @Parameter(name = "taskId", description = "上传任务ID") @PathVariable Long taskId,
       @RequestParam("file") MultipartFile file) {
     uploadFacade.uploadFile(taskId, file);
     return ApiLocaleResult.success();
@@ -72,7 +73,7 @@ public class UploadRest {
   })
   @PutMapping("/{taskId}/complete")
   public ApiLocaleResult<UploadTaskVo> completeTask(
-      @PathVariable Long taskId,
+      @Parameter(name = "taskId", description = "上传任务ID") @PathVariable Long taskId,
       @Valid @RequestBody UploadCompleteDto dto) {
     return ApiLocaleResult.success(uploadFacade.completeTask(taskId, dto));
   }
@@ -84,7 +85,7 @@ public class UploadRest {
   })
   @PutMapping("/{taskId}/cancel")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void cancelTask(@PathVariable Long taskId) {
+  public void cancelTask(@Parameter(name = "taskId", description = "上传任务ID") @PathVariable Long taskId) {
     uploadFacade.cancelTask(taskId);
   }
 
@@ -95,7 +96,7 @@ public class UploadRest {
       @ApiResponse(responseCode = "404", description = "上传任务不存在")
   })
   @GetMapping("/{taskId}")
-  public ApiLocaleResult<UploadTaskVo> getTask(@PathVariable Long taskId) {
+  public ApiLocaleResult<UploadTaskVo> getTask(@Parameter(name = "taskId", description = "上传任务ID") @PathVariable Long taskId) {
     return ApiLocaleResult.success(uploadFacade.getTask(taskId));
   }
 

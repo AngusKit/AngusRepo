@@ -5,12 +5,13 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "分析报告导出参数")
-public class AnalyticsExportDto {
+public class AnalyticsExportDto implements Serializable {
 
   @Schema(description = "导出格式(PDF/EXCEL)")
   private String exportFormat = "EXCEL";

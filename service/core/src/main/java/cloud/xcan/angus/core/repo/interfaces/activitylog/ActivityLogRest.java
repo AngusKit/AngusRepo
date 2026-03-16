@@ -11,6 +11,7 @@ import cloud.xcan.angus.core.repo.interfaces.activitylog.facade.vo.ActivityUserL
 import cloud.xcan.angus.remote.ApiLocaleResult;
 import cloud.xcan.angus.remote.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,7 +62,7 @@ public class ActivityLogRest {
       @ApiResponse(responseCode = "404", description = "日志不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<ActivityLogVo> getById(@PathVariable String id) {
+  public ApiLocaleResult<ActivityLogVo> getById(@Parameter(name = "id", description = "活动日志ID") @PathVariable String id) {
     return ApiLocaleResult.success(activityLogFacade.getById(id));
   }
 
@@ -105,7 +106,7 @@ public class ActivityLogRest {
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable String id) {
+  public void delete(@Parameter(name = "id", description = "活动日志ID") @PathVariable String id) {
     activityLogFacade.delete(id);
   }
 

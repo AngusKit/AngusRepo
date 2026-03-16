@@ -7,26 +7,29 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
+import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "创建制品请求参数")
-public class ArtifactCreateDto {
+public class ArtifactCreateDto implements Serializable {
 
   @NotNull
   @Schema(description = "仓库ID", requiredMode = Schema.RequiredMode.REQUIRED)
   private Long repositoryId;
 
   @NotBlank
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "制品名称", requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 
   @Schema(description = "制品路径")
   private String path;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "制品版本")
   private String version;
 
@@ -37,11 +40,11 @@ public class ArtifactCreateDto {
   @Schema(description = "文件大小（字节）")
   private Long sizeBytes;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "校验和")
   private String checksum;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "许可证")
   private String license;
 

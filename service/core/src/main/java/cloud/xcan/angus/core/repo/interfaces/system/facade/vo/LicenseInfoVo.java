@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "许可证信息")
-public class LicenseInfoVo {
+public class LicenseInfoVo implements Serializable {
 
   @Schema(description = "许可证类型")
   private String licenseType;

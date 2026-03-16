@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
+import java.io.Serializable;
 
 /**
  * 批量删除活动日志DTO
@@ -18,7 +19,7 @@ import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FO
 @Setter
 @Accessors(chain = true)
 @Schema(description = "批量删除活动日志请求参数")
-public class ActivityLogBatchDeleteDto {
+public class ActivityLogBatchDeleteDto implements Serializable {
 
   @Schema(description = "日志ID列表（为空则按条件删除）")
   private List<String> ids;

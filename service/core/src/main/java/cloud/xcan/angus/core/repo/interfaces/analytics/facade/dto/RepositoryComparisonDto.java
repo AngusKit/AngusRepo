@@ -5,12 +5,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "仓库对比分析查询参数")
-public class RepositoryComparisonDto {
+public class RepositoryComparisonDto implements Serializable {
 
   @Schema(description = "仓库ID列表")
   private List<Long> repositoryIds;

@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "Webhook日志详情")
-public class WebhookLogVo {
+public class WebhookLogVo implements Serializable {
 
   @Schema(description = "日志ID")
   private Long id;

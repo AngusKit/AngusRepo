@@ -5,12 +5,13 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "用户活跃度分析查询参数")
-public class UserActivityAnalyticsDto {
+public class UserActivityAnalyticsDto implements Serializable {
 
   @Schema(description = "统计周期(天)")
   private Integer period = 30;

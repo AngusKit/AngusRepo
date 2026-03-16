@@ -10,12 +10,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "团队成员信息")
-public class TeamMemberVo {
+public class TeamMemberVo implements Serializable {
 
   @Schema(description = "成员ID")
   private Long id;
