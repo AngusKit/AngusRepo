@@ -53,7 +53,7 @@ public class PyPIProtocolRest {
       @ApiResponse(responseCode = "200", description = "返回HTML索引页面")
   })
   @GetMapping(value = "/{repositoryName}/simple/", produces = MediaType.TEXT_HTML_VALUE)
-  public ResponseEntity<?> simpleIndex(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName) {
+  public ResponseEntity<?> simpleIndex(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.PYPI);
 
@@ -82,8 +82,8 @@ public class PyPIProtocolRest {
       @ApiResponse(responseCode = "404", description = "包不存在")
   })
   @GetMapping(value = "/{repositoryName}/simple/{packageName}/", produces = MediaType.TEXT_HTML_VALUE)
-  public ResponseEntity<?> packagePage(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName) {
+  public ResponseEntity<?> packagePage(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "包名称") @PathVariable String packageName) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.PYPI);
 
@@ -109,7 +109,7 @@ public class PyPIProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持上传")
   })
   @PostMapping(value = "/{repositoryName}/legacy/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<?> upload(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> upload(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       @RequestParam("content") MultipartFile content,
       @RequestParam(value = "name", required = false) String name,
       @RequestParam(value = "version", required = false) String version) throws IOException {
@@ -143,9 +143,9 @@ public class PyPIProtocolRest {
   })
   @GetMapping(value = "/{repositoryName}/packages/{packageName}/{version}/{filename}",
       produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-  public ResponseEntity<?> download(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, @Parameter(name = "version", description = "version") @PathVariable String version,
-      @Parameter(name = "filename", description = "filename") @PathVariable String filename) {
+  public ResponseEntity<?> download(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "包名称") @PathVariable String packageName, @Parameter(name = "version", description = "版本号") @PathVariable String version,
+      @Parameter(name = "filename", description = "文件名") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.PYPI);
 
@@ -170,8 +170,8 @@ public class PyPIProtocolRest {
       @ApiResponse(responseCode = "404", description = "包不存在")
   })
   @GetMapping(value = "/{repositoryName}/pypi/{packageName}/json", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> packageJson(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName) {
+  public ResponseEntity<?> packageJson(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "包名称") @PathVariable String packageName) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.PYPI);
 
@@ -197,8 +197,8 @@ public class PyPIProtocolRest {
   })
   @GetMapping(value = "/{repositoryName}/pypi/{packageName}/{version}/json",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> versionJson(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "packageName", description = "packageName") @PathVariable String packageName, @Parameter(name = "version", description = "version") @PathVariable String version) {
+  public ResponseEntity<?> versionJson(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "packageName", description = "包名称") @PathVariable String packageName, @Parameter(name = "version", description = "版本号") @PathVariable String version) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.PYPI);
 

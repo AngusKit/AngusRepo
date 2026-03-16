@@ -37,7 +37,7 @@ public class AccessPermissionRest {
   })
   @PostMapping("/check-permission")
   public ApiLocaleResult<PermissionCheckResultVo> checkPermission(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
       @Valid @RequestBody PermissionCheckDto dto) {
     return ApiLocaleResult.success(accessFacade.checkPermission(repositoryId, dto));
   }
@@ -49,7 +49,7 @@ public class AccessPermissionRest {
   })
   @GetMapping("/user-permissions")
   public ApiLocaleResult<UserPermissionVo> getUserPermissions(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId) {
     return ApiLocaleResult.success(accessFacade.getUserPermissions(repositoryId));
   }
 
@@ -60,7 +60,7 @@ public class AccessPermissionRest {
   })
   @GetMapping("/access-statistics")
   public ApiLocaleResult<AccessStatisticsVo> getAccessStatistics(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId) {
     return ApiLocaleResult.success(accessFacade.getAccessStatistics(repositoryId));
   }
 }

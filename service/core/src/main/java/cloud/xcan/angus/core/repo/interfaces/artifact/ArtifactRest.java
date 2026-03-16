@@ -61,7 +61,7 @@ public class ArtifactRest {
   })
   @PutMapping("/{id}")
   public ApiLocaleResult<ArtifactDetailVo> update(
-      @Parameter(name = "id", description = "id") @PathVariable Long id, @Valid @RequestBody ArtifactUpdateDto dto) {
+      @Parameter(name = "id", description = "制品ID") @PathVariable Long id, @Valid @RequestBody ArtifactUpdateDto dto) {
     return ApiLocaleResult.success(artifactFacade.update(id, dto));
   }
 
@@ -71,7 +71,7 @@ public class ArtifactRest {
       @ApiResponse(responseCode = "200", description = "标记成功")
   })
   @PutMapping("/{id}/latest")
-  public ApiLocaleResult<?> markLatest(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<?> markLatest(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     artifactFacade.markLatest(id);
     return ApiLocaleResult.success();
   }
@@ -83,7 +83,7 @@ public class ArtifactRest {
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public void delete(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     artifactFacade.delete(id);
   }
 
@@ -94,7 +94,7 @@ public class ArtifactRest {
       @ApiResponse(responseCode = "404", description = "制品不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<ArtifactDetailVo> getById(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<ArtifactDetailVo> getById(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     return ApiLocaleResult.success(artifactFacade.getById(id));
   }
 
@@ -126,7 +126,7 @@ public class ArtifactRest {
       @ApiResponse(responseCode = "404", description = "制品不存在")
   })
   @GetMapping("/{id}/download")
-  public void download(@Parameter(name = "id", description = "id") @PathVariable Long id, HttpServletResponse response) {
+  public void download(@Parameter(name = "id", description = "制品ID") @PathVariable Long id, HttpServletResponse response) {
     artifactFacade.download(id, response);
   }
 
@@ -136,7 +136,7 @@ public class ArtifactRest {
       @ApiResponse(responseCode = "200", description = "查询成功")
   })
   @GetMapping("/{id}/download-url")
-  public ApiLocaleResult<String> getDownloadUrl(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<String> getDownloadUrl(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     return ApiLocaleResult.success(artifactFacade.getDownloadUrl(id));
   }
 
@@ -146,7 +146,7 @@ public class ArtifactRest {
       @ApiResponse(responseCode = "200", description = "收藏成功")
   })
   @PutMapping("/{id}/star")
-  public ApiLocaleResult<?> addStar(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<?> addStar(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     Long userId = PrincipalContext.getUserId();
     artifactFacade.addStar(id, userId);
     return ApiLocaleResult.success();
@@ -158,7 +158,7 @@ public class ArtifactRest {
       @ApiResponse(responseCode = "200", description = "取消收藏成功")
   })
   @DeleteMapping("/{id}/star")
-  public ApiLocaleResult<?> removeStar(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<?> removeStar(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     Long userId = PrincipalContext.getUserId();
     artifactFacade.removeStar(id, userId);
     return ApiLocaleResult.success();
@@ -170,7 +170,7 @@ public class ArtifactRest {
       @ApiResponse(responseCode = "200", description = "查询成功")
   })
   @GetMapping("/{id}/versions")
-  public ApiLocaleResult<List<ArtifactVersionVo>> getVersions(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<List<ArtifactVersionVo>> getVersions(@Parameter(name = "id", description = "制品ID") @PathVariable Long id) {
     return ApiLocaleResult.success(artifactFacade.getVersions(id));
   }
 

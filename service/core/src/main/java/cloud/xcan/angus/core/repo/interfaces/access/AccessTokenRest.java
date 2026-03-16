@@ -40,7 +40,7 @@ public class AccessTokenRest {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ApiLocaleResult<AccessTokenVo> create(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
       @Valid @RequestBody AccessTokenCreateDto dto) {
     return ApiLocaleResult.success(accessFacade.createToken(repositoryId, dto));
   }
@@ -53,8 +53,8 @@ public class AccessTokenRest {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void revoke(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
-      @Parameter(name = "id", description = "id") @PathVariable Long id) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
+      @Parameter(name = "id", description = "访问令牌ID") @PathVariable Long id) {
     accessFacade.revokeToken(repositoryId, id);
   }
 
@@ -65,7 +65,7 @@ public class AccessTokenRest {
   })
   @GetMapping
   public ApiLocaleResult<List<AccessTokenVo>> list(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId) {
     return ApiLocaleResult.success(accessFacade.listTokens(repositoryId));
   }
 }

@@ -62,7 +62,7 @@ public class FormatProtocolRest {
       RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.PATCH
   })
   public ResponseEntity<?> handleProtocolRequestById(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId, HttpServletRequest request) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId, HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findAndCheck(repositoryId);
     ArtifactFormatHandler handler = formatHandlerRegistry.getHandler(repository.getFormat());
     return handler.handleFormatSpecificRequest(request, repository);
@@ -79,7 +79,7 @@ public class FormatProtocolRest {
       RequestMethod.DELETE, RequestMethod.HEAD, RequestMethod.PATCH
   })
   public ResponseEntity<?> handleProtocolRequestByName(
-      @Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName, HttpServletRequest request) {
+      @Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName, HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     ArtifactFormatHandler handler = formatHandlerRegistry.getHandler(repository.getFormat());
     return handler.handleFormatSpecificRequest(request, repository);

@@ -59,7 +59,7 @@ public class RepositoryRest {
   })
   @PutMapping("/{id}")
   public ApiLocaleResult<RepositoryDetailVo> update(
-      @Parameter(name = "id", description = "id") @PathVariable Long id, @Valid @RequestBody RepositoryUpdateDto dto) {
+      @Parameter(name = "id", description = "仓库ID") @PathVariable Long id, @Valid @RequestBody RepositoryUpdateDto dto) {
     return ApiLocaleResult.success(repositoryFacade.update(id, dto));
   }
 
@@ -70,7 +70,7 @@ public class RepositoryRest {
   })
   @PutMapping("/{id}/status")
   public ApiLocaleResult<RepositoryDetailVo> updateStatus(
-      @Parameter(name = "id", description = "id") @PathVariable Long id, @Valid @RequestBody RepositoryStatusUpdateDto dto) {
+      @Parameter(name = "id", description = "仓库ID") @PathVariable Long id, @Valid @RequestBody RepositoryStatusUpdateDto dto) {
     return ApiLocaleResult.success(repositoryFacade.updateStatus(id, dto));
   }
 
@@ -81,7 +81,7 @@ public class RepositoryRest {
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public void delete(@Parameter(name = "id", description = "仓库ID") @PathVariable Long id) {
     repositoryFacade.delete(id);
   }
 
@@ -92,7 +92,7 @@ public class RepositoryRest {
       @ApiResponse(responseCode = "404", description = "仓库不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<RepositoryDetailVo> getById(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<RepositoryDetailVo> getById(@Parameter(name = "id", description = "仓库ID") @PathVariable Long id) {
     return ApiLocaleResult.success(repositoryFacade.getById(id));
   }
 
@@ -134,7 +134,7 @@ public class RepositoryRest {
       @ApiResponse(responseCode = "200", description = "查询成功")
   })
   @GetMapping("/{id}/url")
-  public ApiLocaleResult<RepositoryUrlVo> getUrl(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<RepositoryUrlVo> getUrl(@Parameter(name = "id", description = "仓库ID") @PathVariable Long id) {
     return ApiLocaleResult.success(repositoryFacade.getUrl(id));
   }
 }

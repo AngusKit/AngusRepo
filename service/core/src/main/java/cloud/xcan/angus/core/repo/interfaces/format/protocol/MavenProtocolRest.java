@@ -59,7 +59,7 @@ public class MavenProtocolRest {
       @ApiResponse(responseCode = "404", description = "制品不存在")
   })
   @GetMapping("/{repositoryName}/**")
-  public ResponseEntity<?> download(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> download(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.MAVEN);
@@ -102,7 +102,7 @@ public class MavenProtocolRest {
       @ApiResponse(responseCode = "403", description = "仓库类型不支持上传")
   })
   @PutMapping("/{repositoryName}/**")
-  public ResponseEntity<?> upload(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> upload(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.MAVEN);
@@ -135,7 +135,7 @@ public class MavenProtocolRest {
       @ApiResponse(responseCode = "404", description = "制品不存在")
   })
   @RequestMapping(value = "/{repositoryName}/**", method = RequestMethod.HEAD)
-  public ResponseEntity<?> exists(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> exists(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.MAVEN);
@@ -161,7 +161,7 @@ public class MavenProtocolRest {
       @ApiResponse(responseCode = "404", description = "制品不存在")
   })
   @DeleteMapping("/{repositoryName}/**")
-  public ResponseEntity<?> delete(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> delete(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.MAVEN);

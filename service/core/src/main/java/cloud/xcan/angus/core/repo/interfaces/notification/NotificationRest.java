@@ -50,14 +50,14 @@ public class NotificationRest {
   @Operation(summary = "更新通知", operationId = "notification:update")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "更新成功")})
   @PutMapping("/{id}")
-  public ApiLocaleResult<NotificationDetailVo> update(@Parameter(name = "id", description = "id") @PathVariable String id, @Valid @RequestBody NotificationUpdateDto dto) {
+  public ApiLocaleResult<NotificationDetailVo> update(@Parameter(name = "id", description = "通知ID") @PathVariable String id, @Valid @RequestBody NotificationUpdateDto dto) {
     return ApiLocaleResult.success(notificationFacade.update(id, dto));
   }
 
   @Operation(summary = "标记已读", operationId = "notification:markAsRead")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "操作成功")})
   @PutMapping("/{id}/read")
-  public ApiLocaleResult<?> markAsRead(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<?> markAsRead(@Parameter(name = "id", description = "通知ID") @PathVariable String id) {
     notificationFacade.markAsRead(id);
     return ApiLocaleResult.success();
   }
@@ -66,7 +66,7 @@ public class NotificationRest {
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "删除成功")})
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public void delete(@Parameter(name = "id", description = "通知ID") @PathVariable String id) {
     notificationFacade.delete(id);
   }
 
@@ -76,7 +76,7 @@ public class NotificationRest {
       @ApiResponse(responseCode = "404", description = "通知不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<NotificationDetailVo> getById(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<NotificationDetailVo> getById(@Parameter(name = "id", description = "通知ID") @PathVariable String id) {
     return ApiLocaleResult.success(notificationFacade.getById(id));
   }
 
@@ -113,7 +113,7 @@ public class NotificationRest {
   @Operation(summary = "添加星标", operationId = "notification:addStar")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "操作成功")})
   @PutMapping("/{id}/star")
-  public ApiLocaleResult<?> addStar(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<?> addStar(@Parameter(name = "id", description = "通知ID") @PathVariable String id) {
     notificationFacade.addStar(id);
     return ApiLocaleResult.success();
   }
@@ -121,7 +121,7 @@ public class NotificationRest {
   @Operation(summary = "移除星标", operationId = "notification:removeStar")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "操作成功")})
   @DeleteMapping("/{id}/star")
-  public ApiLocaleResult<?> removeStar(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<?> removeStar(@Parameter(name = "id", description = "通知ID") @PathVariable String id) {
     notificationFacade.removeStar(id);
     return ApiLocaleResult.success();
   }
@@ -129,7 +129,7 @@ public class NotificationRest {
   @Operation(summary = "归档通知", operationId = "notification:archive")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "操作成功")})
   @PutMapping("/{id}/archive")
-  public ApiLocaleResult<?> archive(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<?> archive(@Parameter(name = "id", description = "通知ID") @PathVariable String id) {
     notificationFacade.archive(id);
     return ApiLocaleResult.success();
   }
@@ -137,7 +137,7 @@ public class NotificationRest {
   @Operation(summary = "取消归档", operationId = "notification:unarchive")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "操作成功")})
   @DeleteMapping("/{id}/archive")
-  public ApiLocaleResult<?> unarchive(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<?> unarchive(@Parameter(name = "id", description = "通知ID") @PathVariable String id) {
     notificationFacade.unarchive(id);
     return ApiLocaleResult.success();
   }

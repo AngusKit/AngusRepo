@@ -57,7 +57,7 @@ public class TeamMemberRest {
   })
   @PutMapping("/api/v1/team/members/{id}/role")
   public ApiLocaleResult<TeamMemberVo> updateRole(
-      @Parameter(name = "id", description = "id") @PathVariable Long id, @Valid @RequestBody MemberRoleUpdateDto dto) {
+      @Parameter(name = "id", description = "成员ID") @PathVariable Long id, @Valid @RequestBody MemberRoleUpdateDto dto) {
     return ApiLocaleResult.success(teamMemberFacade.updateRole(id, dto));
   }
 
@@ -68,7 +68,7 @@ public class TeamMemberRest {
   })
   @DeleteMapping("/api/v1/team/members/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void removeMember(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public void removeMember(@Parameter(name = "id", description = "成员ID") @PathVariable Long id) {
     teamMemberFacade.removeMember(id);
   }
 
@@ -79,7 +79,7 @@ public class TeamMemberRest {
       @ApiResponse(responseCode = "404", description = "成员不存在")
   })
   @GetMapping("/api/v1/team/members/{id}")
-  public ApiLocaleResult<TeamMemberVo> getMemberById(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<TeamMemberVo> getMemberById(@Parameter(name = "id", description = "成员ID") @PathVariable Long id) {
     return ApiLocaleResult.success(teamMemberFacade.getMemberById(id));
   }
 
@@ -121,7 +121,7 @@ public class TeamMemberRest {
       @ApiResponse(responseCode = "200", description = "邀请已重发")
   })
   @PostMapping("/api/v1/team/invitations/{id}/resend")
-  public ApiLocaleResult<TeamInvitationVo> resendInvitation(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public ApiLocaleResult<TeamInvitationVo> resendInvitation(@Parameter(name = "id", description = "成员ID") @PathVariable Long id) {
     return ApiLocaleResult.success(teamMemberFacade.resendInvitation(id));
   }
 
@@ -132,7 +132,7 @@ public class TeamMemberRest {
   })
   @DeleteMapping("/api/v1/team/invitations/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void revokeInvitation(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public void revokeInvitation(@Parameter(name = "id", description = "成员ID") @PathVariable Long id) {
     teamMemberFacade.revokeInvitation(id);
   }
 
@@ -143,7 +143,7 @@ public class TeamMemberRest {
   })
   @PostMapping("/api/v1/public/invitations/{token}/accept")
   public ApiLocaleResult<InvitationAcceptResultVo> acceptInvitation(
-      @Parameter(name = "token", description = "token") @PathVariable String token, @Valid @RequestBody InvitationAcceptDto dto) {
+      @Parameter(name = "token", description = "邀请令牌") @PathVariable String token, @Valid @RequestBody InvitationAcceptDto dto) {
     return ApiLocaleResult.success(teamMemberFacade.acceptInvitation(token, dto));
   }
 }

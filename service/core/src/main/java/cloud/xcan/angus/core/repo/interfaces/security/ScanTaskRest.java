@@ -48,14 +48,14 @@ public class ScanTaskRest {
   @Operation(summary = "更新扫描任务", description = "更新扫描任务信息", operationId = "scan:update")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "更新成功")})
   @PutMapping("/{id}")
-  public ApiLocaleResult<ScanTaskDetailVo> update(@Parameter(name = "id", description = "id") @PathVariable String id, @Valid @RequestBody ScanTaskUpdateDto dto) {
+  public ApiLocaleResult<ScanTaskDetailVo> update(@Parameter(name = "id", description = "扫描任务ID") @PathVariable String id, @Valid @RequestBody ScanTaskUpdateDto dto) {
     return ApiLocaleResult.success(scanTaskFacade.update(id, dto));
   }
 
   @Operation(summary = "取消扫描任务", description = "取消正在执行的扫描任务", operationId = "scan:cancel")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "取消成功")})
   @PutMapping("/{id}/cancel")
-  public ApiLocaleResult<?> cancel(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<?> cancel(@Parameter(name = "id", description = "扫描任务ID") @PathVariable String id) {
     scanTaskFacade.cancel(id);
     return ApiLocaleResult.success();
   }
@@ -64,7 +64,7 @@ public class ScanTaskRest {
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "删除成功")})
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public void delete(@Parameter(name = "id", description = "扫描任务ID") @PathVariable String id) {
     scanTaskFacade.delete(id);
   }
 
@@ -74,7 +74,7 @@ public class ScanTaskRest {
       @ApiResponse(responseCode = "404", description = "任务不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<ScanTaskDetailVo> getById(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<ScanTaskDetailVo> getById(@Parameter(name = "id", description = "扫描任务ID") @PathVariable String id) {
     return ApiLocaleResult.success(scanTaskFacade.getById(id));
   }
 

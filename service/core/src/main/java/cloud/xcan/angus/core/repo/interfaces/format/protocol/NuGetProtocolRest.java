@@ -52,7 +52,7 @@ public class NuGetProtocolRest {
       @ApiResponse(responseCode = "200", description = "返回服务索引JSON")
   })
   @GetMapping(value = "/{repositoryName}/v3/index.json", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> serviceIndex(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> serviceIndex(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NUGET);
@@ -77,7 +77,7 @@ public class NuGetProtocolRest {
       @ApiResponse(responseCode = "200", description = "返回搜索结果JSON")
   })
   @GetMapping(value = "/{repositoryName}/v3/search", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> search(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> search(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       @RequestParam(value = "q", required = false, defaultValue = "") String query,
       @RequestParam(value = "skip", required = false, defaultValue = "0") int skip,
       @RequestParam(value = "take", required = false, defaultValue = "20") int take) {
@@ -98,8 +98,8 @@ public class NuGetProtocolRest {
   })
   @GetMapping(value = "/{repositoryName}/v3/registration/{id}/index.json",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> registration(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ResponseEntity<?> registration(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "id", description = "NuGet包ID") @PathVariable String id) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NUGET);
 
@@ -125,8 +125,8 @@ public class NuGetProtocolRest {
   })
   @GetMapping(value = "/{repositoryName}/v3/flatcontainer/{id}/index.json",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> packageVersions(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ResponseEntity<?> packageVersions(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "id", description = "NuGet包ID") @PathVariable String id) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NUGET);
 
@@ -152,8 +152,8 @@ public class NuGetProtocolRest {
   })
   @GetMapping(value = "/{repositoryName}/v3/flatcontainer/{id}/{version}/**",
       produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-  public ResponseEntity<?> download(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "id", description = "id") @PathVariable String id, @Parameter(name = "version", description = "version") @PathVariable String version,
+  public ResponseEntity<?> download(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "id", description = "NuGet包ID") @PathVariable String id, @Parameter(name = "version", description = "版本号") @PathVariable String version,
       HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NUGET);
@@ -182,7 +182,7 @@ public class NuGetProtocolRest {
   })
   @PutMapping(value = "/{repositoryName}/api/v2/package",
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<?> push(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> push(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NUGET);
@@ -205,8 +205,8 @@ public class NuGetProtocolRest {
       @ApiResponse(responseCode = "404", description = "包不存在")
   })
   @DeleteMapping("/{repositoryName}/api/v2/package/{id}/{version}")
-  public ResponseEntity<?> delete(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "id", description = "id") @PathVariable String id, @Parameter(name = "version", description = "version") @PathVariable String version) {
+  public ResponseEntity<?> delete(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "id", description = "NuGet包ID") @PathVariable String id, @Parameter(name = "version", description = "版本号") @PathVariable String version) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.NUGET);
     validateHosted(repository);

@@ -61,7 +61,7 @@ public class HelmProtocolRest {
       @ApiResponse(responseCode = "404", description = "仓库不存在")
   })
   @GetMapping("/{repositoryName}/index.yaml")
-  public ResponseEntity<?> index(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName) {
+  public ResponseEntity<?> index(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
 
@@ -80,8 +80,8 @@ public class HelmProtocolRest {
       @ApiResponse(responseCode = "404", description = "Chart不存在")
   })
   @GetMapping("/{repositoryName}/charts/{filename}")
-  public ResponseEntity<?> downloadChart(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "filename", description = "filename") @PathVariable String filename) {
+  public ResponseEntity<?> downloadChart(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "filename", description = "文件名") @PathVariable String filename) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
 
@@ -108,7 +108,7 @@ public class HelmProtocolRest {
   })
   @PostMapping(value = "/{repositoryName}/api/charts",
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<?> uploadChart(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> uploadChart(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       @RequestParam("chart") MultipartFile chart) throws IOException {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
@@ -145,8 +145,8 @@ public class HelmProtocolRest {
       @ApiResponse(responseCode = "404", description = "Chart不存在")
   })
   @DeleteMapping("/{repositoryName}/api/charts/{name}/{version}")
-  public ResponseEntity<?> deleteChart(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "name", description = "name") @PathVariable String name, @Parameter(name = "version", description = "version") @PathVariable String version) {
+  public ResponseEntity<?> deleteChart(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "name", description = "镜像名称") @PathVariable String name, @Parameter(name = "version", description = "版本号") @PathVariable String version) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.HELM);
     validateHosted(repository);

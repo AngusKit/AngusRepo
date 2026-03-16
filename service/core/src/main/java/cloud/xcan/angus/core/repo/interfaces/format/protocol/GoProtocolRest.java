@@ -53,7 +53,7 @@ public class GoProtocolRest {
       @ApiResponse(responseCode = "404", description = "模块不存在")
   })
   @GetMapping("/{repositoryName}/**/@v/list")
-  public ResponseEntity<?> listVersions(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> listVersions(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.GO);
@@ -80,8 +80,8 @@ public class GoProtocolRest {
       @ApiResponse(responseCode = "404", description = "版本不存在")
   })
   @GetMapping("/{repositoryName}/**/@v/{version}.info")
-  public ResponseEntity<?> versionInfo(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "version", description = "version") @PathVariable String version, HttpServletRequest request) {
+  public ResponseEntity<?> versionInfo(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "version", description = "版本号") @PathVariable String version, HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.GO);
     String modulePath = extractModulePath(request, repositoryName);
@@ -107,8 +107,8 @@ public class GoProtocolRest {
       @ApiResponse(responseCode = "404", description = "版本不存在")
   })
   @GetMapping("/{repositoryName}/**/@v/{version}.mod")
-  public ResponseEntity<?> goMod(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "version", description = "version") @PathVariable String version, HttpServletRequest request) {
+  public ResponseEntity<?> goMod(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "version", description = "版本号") @PathVariable String version, HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.GO);
     String modulePath = extractModulePath(request, repositoryName);
@@ -134,8 +134,8 @@ public class GoProtocolRest {
       @ApiResponse(responseCode = "404", description = "版本不存在")
   })
   @GetMapping("/{repositoryName}/**/@v/{version}.zip")
-  public ResponseEntity<?> downloadZip(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
-      @Parameter(name = "version", description = "version") @PathVariable String version, HttpServletRequest request) {
+  public ResponseEntity<?> downloadZip(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
+      @Parameter(name = "version", description = "版本号") @PathVariable String version, HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.GO);
     String modulePath = extractModulePath(request, repositoryName);
@@ -161,7 +161,7 @@ public class GoProtocolRest {
       @ApiResponse(responseCode = "404", description = "模块不存在")
   })
   @GetMapping("/{repositoryName}/**/@latest")
-  public ResponseEntity<?> latest(@Parameter(name = "repositoryName", description = "repositoryName") @PathVariable String repositoryName,
+  public ResponseEntity<?> latest(@Parameter(name = "repositoryName", description = "仓库名称") @PathVariable String repositoryName,
       HttpServletRequest request) {
     RepoEntity repository = repositoryQuery.findByNameAndCheck(repositoryName);
     validateFormat(repository, RepositoryFormat.GO);

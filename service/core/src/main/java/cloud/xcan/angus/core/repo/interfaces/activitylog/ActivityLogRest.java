@@ -62,7 +62,7 @@ public class ActivityLogRest {
       @ApiResponse(responseCode = "404", description = "日志不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<ActivityLogVo> getById(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<ActivityLogVo> getById(@Parameter(name = "id", description = "活动日志ID") @PathVariable String id) {
     return ApiLocaleResult.success(activityLogFacade.getById(id));
   }
 
@@ -106,7 +106,7 @@ public class ActivityLogRest {
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public void delete(@Parameter(name = "id", description = "活动日志ID") @PathVariable String id) {
     activityLogFacade.delete(id);
   }
 

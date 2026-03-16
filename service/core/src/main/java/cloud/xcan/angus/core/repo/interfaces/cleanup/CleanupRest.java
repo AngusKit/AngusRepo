@@ -60,7 +60,7 @@ public class CleanupRest {
   })
   @PutMapping("/{id}")
   public ApiLocaleResult<CleanupPolicyDetailVo> update(
-      @Parameter(name = "id", description = "id") @PathVariable String id, @Valid @RequestBody CleanupPolicyUpdateDto dto) {
+      @Parameter(name = "id", description = "清理策略ID") @PathVariable String id, @Valid @RequestBody CleanupPolicyUpdateDto dto) {
     return ApiLocaleResult.success(cleanupFacade.update(id, dto));
   }
 
@@ -71,7 +71,7 @@ public class CleanupRest {
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public void delete(@Parameter(name = "id", description = "清理策略ID") @PathVariable String id) {
     cleanupFacade.delete(id);
   }
 
@@ -93,7 +93,7 @@ public class CleanupRest {
   })
   @PutMapping("/{id}/enabled")
   public ApiLocaleResult<?> updateEnabled(
-      @Parameter(name = "id", description = "id") @PathVariable String id, @RequestParam Boolean enabled) {
+      @Parameter(name = "id", description = "清理策略ID") @PathVariable String id, @RequestParam Boolean enabled) {
     cleanupFacade.updateEnabled(id, enabled);
     return ApiLocaleResult.success();
   }
@@ -105,7 +105,7 @@ public class CleanupRest {
       @ApiResponse(responseCode = "404", description = "清理策略不存在")
   })
   @GetMapping("/{id}")
-  public ApiLocaleResult<CleanupPolicyDetailVo> getById(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<CleanupPolicyDetailVo> getById(@Parameter(name = "id", description = "清理策略ID") @PathVariable String id) {
     return ApiLocaleResult.success(cleanupFacade.getById(id));
   }
 
@@ -137,7 +137,7 @@ public class CleanupRest {
   })
   @PostMapping("/{id}/execute")
   @ResponseStatus(HttpStatus.CREATED)
-  public ApiLocaleResult<CleanupExecutionVo> execute(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<CleanupExecutionVo> execute(@Parameter(name = "id", description = "清理策略ID") @PathVariable String id) {
     return ApiLocaleResult.success(cleanupFacade.execute(id));
   }
 
@@ -147,7 +147,7 @@ public class CleanupRest {
       @ApiResponse(responseCode = "200", description = "取消成功")
   })
   @PutMapping("/executions/{executionId}/cancel")
-  public ApiLocaleResult<?> cancelExecution(@Parameter(name = "executionId", description = "executionId") @PathVariable String executionId) {
+  public ApiLocaleResult<?> cancelExecution(@Parameter(name = "executionId", description = "执行ID") @PathVariable String executionId) {
     cleanupFacade.cancelExecution(executionId);
     return ApiLocaleResult.success();
   }
@@ -158,7 +158,7 @@ public class CleanupRest {
       @ApiResponse(responseCode = "200", description = "查询成功")
   })
   @GetMapping("/{id}/executions")
-  public ApiLocaleResult<List<CleanupExecutionVo>> getExecutions(@Parameter(name = "id", description = "id") @PathVariable String id) {
+  public ApiLocaleResult<List<CleanupExecutionVo>> getExecutions(@Parameter(name = "id", description = "清理策略ID") @PathVariable String id) {
     return ApiLocaleResult.success(cleanupFacade.getExecutions(id));
   }
 }

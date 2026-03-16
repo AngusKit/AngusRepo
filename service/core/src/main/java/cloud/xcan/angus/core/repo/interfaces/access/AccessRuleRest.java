@@ -44,7 +44,7 @@ public class AccessRuleRest {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ApiLocaleResult<AccessRuleVo> create(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
       @Valid @RequestBody AccessRuleCreateDto dto) {
     return ApiLocaleResult.success(accessFacade.createRule(repositoryId, dto));
   }
@@ -56,8 +56,8 @@ public class AccessRuleRest {
   })
   @PutMapping("/{id}")
   public ApiLocaleResult<AccessRuleVo> update(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
-      @Parameter(name = "id", description = "id") @PathVariable Long id,
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
+      @Parameter(name = "id", description = "访问规则ID") @PathVariable Long id,
       @Valid @RequestBody AccessRuleUpdateDto dto) {
     return ApiLocaleResult.success(accessFacade.updateRule(repositoryId, id, dto));
   }
@@ -70,8 +70,8 @@ public class AccessRuleRest {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
-      @Parameter(name = "id", description = "id") @PathVariable Long id) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
+      @Parameter(name = "id", description = "访问规则ID") @PathVariable Long id) {
     accessFacade.deleteRule(repositoryId, id);
   }
 
@@ -83,8 +83,8 @@ public class AccessRuleRest {
   })
   @GetMapping("/{id}")
   public ApiLocaleResult<AccessRuleVo> getById(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
-      @Parameter(name = "id", description = "id") @PathVariable Long id) {
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
+      @Parameter(name = "id", description = "访问规则ID") @PathVariable Long id) {
     return ApiLocaleResult.success(accessFacade.getRuleById(repositoryId, id));
   }
 
@@ -95,7 +95,7 @@ public class AccessRuleRest {
   })
   @GetMapping
   public ApiLocaleResult<PageResult<AccessRuleVo>> list(
-      @Parameter(name = "repositoryId", description = "repositoryId") @PathVariable Long repositoryId,
+      @Parameter(name = "repositoryId", description = "仓库ID") @PathVariable Long repositoryId,
       @Valid @ParameterObject AccessRuleFindDto dto) {
     return ApiLocaleResult.success(accessFacade.listRules(repositoryId, dto));
   }

@@ -136,7 +136,7 @@ public class UserProfileRest {
   })
   @DeleteMapping("/api-tokens/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void revokeApiToken(@Parameter(name = "id", description = "id") @PathVariable Long id) {
+  public void revokeApiToken(@Parameter(name = "id", description = "API Token ID") @PathVariable Long id) {
     userProfileFacade.revokeApiToken(id);
   }
 
