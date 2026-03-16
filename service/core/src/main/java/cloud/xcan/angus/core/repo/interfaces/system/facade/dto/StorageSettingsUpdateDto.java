@@ -5,12 +5,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "存储设置更新请求参数")
-public class StorageSettingsUpdateDto {
+public class StorageSettingsUpdateDto implements Serializable {
 
   @Schema(description = "存储后端类型")
   private StorageBackend backend;

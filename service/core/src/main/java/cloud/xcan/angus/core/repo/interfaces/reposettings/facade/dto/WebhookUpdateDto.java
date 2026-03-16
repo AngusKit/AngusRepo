@@ -5,14 +5,16 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.*;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "更新Webhook请求参数")
-public class WebhookUpdateDto {
+public class WebhookUpdateDto implements Serializable {
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "Webhook名称")
   private String name;
 
@@ -23,7 +25,7 @@ public class WebhookUpdateDto {
   @Schema(description = "事件类型列表（JSON）")
   private String events;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "密钥")
   private String secret;
 

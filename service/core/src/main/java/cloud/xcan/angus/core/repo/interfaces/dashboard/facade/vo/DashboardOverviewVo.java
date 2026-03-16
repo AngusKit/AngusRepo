@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "仪表盘总览")
-public class DashboardOverviewVo {
+public class DashboardOverviewVo implements Serializable {
 
   @Schema(description = "仓库总数")
   private Long totalRepositories;

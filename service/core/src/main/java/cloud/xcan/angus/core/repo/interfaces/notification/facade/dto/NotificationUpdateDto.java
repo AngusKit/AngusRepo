@@ -7,12 +7,13 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "更新通知请求参数")
-public class NotificationUpdateDto {
+public class NotificationUpdateDto implements Serializable {
 
   @Size(max = 500)
   @Schema(description = "通知标题")

@@ -12,15 +12,17 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.*;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "创建API Token请求参数")
-public class ApiTokenCreateDto {
+public class ApiTokenCreateDto implements Serializable {
 
   @NotBlank
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "Token名称", requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 

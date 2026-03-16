@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 /**
  * 创建活动日志DTO
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @Schema(description = "创建活动日志请求参数")
-public class ActivityLogCreateDto {
+public class ActivityLogCreateDto implements Serializable {
 
   @NotNull
   @Schema(description = "操作类型", required = true)

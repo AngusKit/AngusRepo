@@ -5,12 +5,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "更新扫描任务请求参数")
-public class ScanTaskUpdateDto {
+public class ScanTaskUpdateDto implements Serializable {
 
   @Schema(description = "扫描类型")
   private ScanType scanType;

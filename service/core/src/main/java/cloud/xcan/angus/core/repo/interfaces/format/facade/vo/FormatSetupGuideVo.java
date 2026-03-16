@@ -5,12 +5,13 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "客户端配置指南")
-public class FormatSetupGuideVo {
+public class FormatSetupGuideVo implements Serializable {
 
   @Schema(description = "格式名称")
   private String formatName;

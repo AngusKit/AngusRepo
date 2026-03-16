@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "系统重启请求参数")
-public class SystemRestartDto {
+public class SystemRestartDto implements Serializable {
 
   @Schema(description = "是否进入维护模式")
   private Boolean maintenanceMode;

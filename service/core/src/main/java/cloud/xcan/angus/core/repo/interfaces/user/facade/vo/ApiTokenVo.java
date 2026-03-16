@@ -9,12 +9,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "API Token信息")
-public class ApiTokenVo {
+public class ApiTokenVo implements Serializable {
 
   @Schema(description = "Token ID")
   private Long id;

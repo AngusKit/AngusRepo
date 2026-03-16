@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "存储设置信息")
-public class StorageSettingsVo {
+public class StorageSettingsVo implements Serializable {
 
   @Schema(description = "存储后端类型")
   private String backend;

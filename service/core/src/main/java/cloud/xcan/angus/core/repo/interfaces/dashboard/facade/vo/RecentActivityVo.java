@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "最近活动")
-public class RecentActivityVo {
+public class RecentActivityVo implements Serializable {
 
   @Schema(description = "活动ID")
   private Long id;

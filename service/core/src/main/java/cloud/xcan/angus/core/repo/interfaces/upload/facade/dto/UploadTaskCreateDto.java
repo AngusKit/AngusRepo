@@ -7,12 +7,14 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.*;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "创建上传任务请求参数")
-public class UploadTaskCreateDto {
+public class UploadTaskCreateDto implements Serializable {
 
   @NotNull
   @Schema(description = "仓库ID", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -27,7 +29,7 @@ public class UploadTaskCreateDto {
   @Schema(description = "文件大小（字节）", requiredMode = Schema.RequiredMode.REQUIRED)
   private Long fileSize;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "文件校验和")
   private String checksum;
 
@@ -35,7 +37,7 @@ public class UploadTaskCreateDto {
   @Schema(description = "上传路径")
   private String path;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "制品版本号")
   private String version;
 

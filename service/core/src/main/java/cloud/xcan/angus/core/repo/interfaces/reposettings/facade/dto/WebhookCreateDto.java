@@ -6,15 +6,17 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.*;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "创建Webhook请求参数")
-public class WebhookCreateDto {
+public class WebhookCreateDto implements Serializable {
 
   @NotBlank
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "Webhook名称", requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 
@@ -26,7 +28,7 @@ public class WebhookCreateDto {
   @Schema(description = "事件类型列表（JSON）")
   private String events;
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "密钥")
   private String secret;
 

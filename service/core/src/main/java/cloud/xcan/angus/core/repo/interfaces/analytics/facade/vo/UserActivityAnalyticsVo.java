@@ -5,12 +5,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "用户活跃度分析结果")
-public class UserActivityAnalyticsVo {
+public class UserActivityAnalyticsVo implements Serializable {
 
   @Schema(description = "活跃用户数")
   private Long activeUsers;

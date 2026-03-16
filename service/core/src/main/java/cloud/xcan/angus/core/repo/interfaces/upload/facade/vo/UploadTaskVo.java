@@ -9,12 +9,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "上传任务详情")
-public class UploadTaskVo {
+public class UploadTaskVo implements Serializable {
 
   @Schema(description = "任务ID")
   private Long id;

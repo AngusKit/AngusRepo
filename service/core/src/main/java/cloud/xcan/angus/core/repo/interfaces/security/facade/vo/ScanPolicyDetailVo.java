@@ -10,12 +10,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "扫描策略详情")
-public class ScanPolicyDetailVo {
+public class ScanPolicyDetailVo implements Serializable {
 
   @Schema(description = "策略ID")
   private String id;

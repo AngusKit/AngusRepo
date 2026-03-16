@@ -6,14 +6,16 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.*;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "更新全局仓库设置请求参数")
-public class GlobalSettingsUpdateDto {
+public class GlobalSettingsUpdateDto implements Serializable {
 
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "默认仓库")
   private String defaultRepository;
 

@@ -8,12 +8,14 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.*;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "格式制品上传请求参数")
-public class FormatArtifactUploadDto {
+public class FormatArtifactUploadDto implements Serializable {
 
   @NotNull
   @Schema(description = "仓库ID", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -24,7 +26,7 @@ public class FormatArtifactUploadDto {
   @Schema(description = "制品名称", requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 
-  @Size(max = 100)
+  @Size(max = MAX_NAME_LENGTH)
   @Schema(description = "制品版本")
   private String version;
 

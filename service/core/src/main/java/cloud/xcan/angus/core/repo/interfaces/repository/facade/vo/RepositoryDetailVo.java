@@ -11,12 +11,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "仓库详情")
-public class RepositoryDetailVo {
+public class RepositoryDetailVo implements Serializable {
 
   @Schema(description = "仓库ID")
   private Long id;

@@ -9,12 +9,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "清理策略详情")
-public class CleanupPolicyDetailVo {
+public class CleanupPolicyDetailVo implements Serializable {
 
   @Schema(description = "策略ID")
   private String id;

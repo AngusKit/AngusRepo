@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 /**
  * 活动用户列表视图对象
@@ -13,7 +14,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @Schema(description = "活动用户列表")
-public class ActivityUserListVo {
+public class ActivityUserListVo implements Serializable {
 
   @Schema(description = "用户列表")
   private List<String> users;

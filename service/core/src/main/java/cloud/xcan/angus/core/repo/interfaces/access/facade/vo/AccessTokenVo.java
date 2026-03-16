@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "访问令牌详情")
-public class AccessTokenVo {
+public class AccessTokenVo implements Serializable {
 
   @Schema(description = "令牌ID")
   private Long id;

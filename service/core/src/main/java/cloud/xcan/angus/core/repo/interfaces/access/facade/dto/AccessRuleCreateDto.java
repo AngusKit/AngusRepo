@@ -9,15 +9,17 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+import static cloud.xcan.angus.spec.experimental.BizConstant.*;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "创建访问规则请求参数")
-public class AccessRuleCreateDto {
+public class AccessRuleCreateDto implements Serializable {
 
   @NotBlank
-  @Size(max = 255)
+  @Size(max = MAX_NAME_LENGTH_X2)
   @Schema(description = "规则名称", requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 

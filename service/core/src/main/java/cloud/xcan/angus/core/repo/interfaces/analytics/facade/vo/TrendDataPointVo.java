@@ -5,12 +5,13 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "趋势数据点")
-public class TrendDataPointVo {
+public class TrendDataPointVo implements Serializable {
 
   @Schema(description = "日期")
   private LocalDate date;

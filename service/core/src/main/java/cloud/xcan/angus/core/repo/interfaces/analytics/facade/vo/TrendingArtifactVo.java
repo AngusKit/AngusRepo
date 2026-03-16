@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "热门制品")
-public class TrendingArtifactVo {
+public class TrendingArtifactVo implements Serializable {
 
   @Schema(description = "制品ID")
   private Long id;

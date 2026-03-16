@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
+import java.io.Serializable;
 
 /**
  * 导出活动日志DTO
@@ -17,7 +18,7 @@ import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FO
 @Setter
 @Accessors(chain = true)
 @Schema(description = "导出活动日志请求参数")
-public class ActivityLogExportDto {
+public class ActivityLogExportDto implements Serializable {
 
   @Schema(description = "导出格式（csv/excel）", defaultValue = "csv")
   private String format = "csv";

@@ -7,12 +7,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "创建扫描任务请求参数")
-public class ScanTaskCreateDto {
+public class ScanTaskCreateDto implements Serializable {
 
   @NotBlank
   @Schema(description = "制品ID", requiredMode = Schema.RequiredMode.REQUIRED)

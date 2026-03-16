@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
+import java.io.Serializable;
 
 /**
  * 活动日志视图对象
@@ -18,7 +19,7 @@ import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FO
 @Setter
 @Accessors(chain = true)
 @Schema(description = "活动日志信息")
-public class ActivityLogVo {
+public class ActivityLogVo implements Serializable {
 
   @Schema(description = "租户ID")
   private String tenantId;
