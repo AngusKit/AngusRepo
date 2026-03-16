@@ -2,10 +2,12 @@ package cloud.xcan.angus.core.repo.interfaces.system.facade.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import static cloud.xcan.angus.core.repo.domain.Constants.*;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
@@ -19,7 +21,7 @@ public class GeneralSettingsUpdateDto implements Serializable {
   @Schema(description = "站点名称")
   private String siteName;
 
-  @Size(max = 500)
+  @Length(max = MAX_LONG_DESC_LENGTH)
   @Schema(description = "站点URL")
   private String siteUrl;
 

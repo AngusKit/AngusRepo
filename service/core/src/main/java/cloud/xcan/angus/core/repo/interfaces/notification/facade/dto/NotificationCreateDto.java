@@ -5,11 +5,12 @@ import cloud.xcan.angus.core.repo.domain.notification.NotificationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import static cloud.xcan.angus.core.repo.domain.Constants.*;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ import java.io.Serializable;
 public class NotificationCreateDto implements Serializable {
 
   @NotBlank
-  @Size(max = 500)
+  @Length(max = MAX_LONG_DESC_LENGTH)
   @Schema(description = "通知标题", requiredMode = Schema.RequiredMode.REQUIRED)
   private String title;
 

@@ -6,10 +6,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import static cloud.xcan.angus.core.repo.domain.Constants.*;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
@@ -32,7 +34,7 @@ public class RepositoryCreateDto implements Serializable {
   @Schema(description = "仓库类型", requiredMode = Schema.RequiredMode.REQUIRED)
   private RepositoryType type;
 
-  @Size(max = 2000)
+  @Length(max = MAX_CONTENT_LENGTH)
   @Schema(description = "仓库描述")
   private String description;
 

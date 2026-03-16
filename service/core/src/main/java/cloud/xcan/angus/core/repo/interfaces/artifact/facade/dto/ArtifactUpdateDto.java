@@ -2,10 +2,12 @@ package cloud.xcan.angus.core.repo.interfaces.artifact.facade.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import static cloud.xcan.angus.core.repo.domain.Constants.*;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
@@ -19,7 +21,7 @@ public class ArtifactUpdateDto implements Serializable {
   @Schema(description = "制品名称")
   private String name;
 
-  @Size(max = 2000)
+  @Length(max = MAX_CONTENT_LENGTH)
   @Schema(description = "制品描述")
   private String description;
 

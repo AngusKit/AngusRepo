@@ -3,10 +3,12 @@ package cloud.xcan.angus.core.repo.interfaces.reposettings.facade.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import static cloud.xcan.angus.core.repo.domain.Constants.*;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH;
 import static cloud.xcan.angus.spec.experimental.BizConstant.MAX_NAME_LENGTH_X2;
 
@@ -22,7 +24,7 @@ public class WebhookCreateDto implements Serializable {
   private String name;
 
   @NotBlank
-  @Size(max = 2000)
+  @Length(max = MAX_CONTENT_LENGTH)
   @Schema(description = "Webhook URL", requiredMode = Schema.RequiredMode.REQUIRED)
   private String url;
 
