@@ -139,10 +139,15 @@ public class TrendAnalyticsQueryImpl implements TrendAnalyticsQuery {
         List<RepoEntity> allRepos = repoEntityRepo.findAll();
         long totalRepos = allRepos.size();
 
-        // Group repos by format to avoid repeated DB calls
+        // Group repos by format
         Map<RepositoryFormat, List<RepoEntity>> reposByFormat = allRepos.stream()
             .filter(r -> r.getFormat() != null)
             .collect(Collectors.groupingBy(RepoEntity::getFormat));
+
+        // Batch-load all artifacts and group by repository to avoid N+1 queries
+        List<Artifact> allArtifacts = artifactRepo.findAll();
+        Map<Long, List<Artifact>> artifactsByRepo = allArtifacts.stream()
+            .collect(Collectors.groupingBy(Artifact::getRepositoryId));
 
         List<FormatDistributionVo> result = new ArrayList<>();
         for (RepositoryFormat format : RepositoryFormat.values()) {
@@ -153,7 +158,7 @@ public class TrendAnalyticsQueryImpl implements TrendAnalyticsQuery {
           long artifactCount = 0;
           long storageBytes = 0;
           for (RepoEntity repo : repos) {
-            List<Artifact> artifacts = artifactRepo.findByRepositoryId(repo.getId());
+            List<Artifact> artifacts = artifactsByRepo.getOrDefault(repo.getId(), List.of());
             artifactCount += artifacts.size();
             for (Artifact artifact : artifacts) {
               storageBytes += artifact.getSizeBytes() != null ? artifact.getSizeBytes() : 0;

@@ -135,6 +135,11 @@ public class AnalyticsQueryImpl implements AnalyticsQuery {
             .filter(r -> r.getFormat() != null)
             .collect(Collectors.groupingBy(RepoEntity::getFormat));
 
+        // Batch-load all artifacts and group by repository to avoid N+1 queries
+        List<Artifact> allArtifacts = artifactRepo.findAll();
+        Map<Long, List<Artifact>> artifactsByRepo = allArtifacts.stream()
+            .collect(Collectors.groupingBy(Artifact::getRepositoryId));
+
         List<FormatUsageVo> result = new ArrayList<>();
         for (Map.Entry<RepositoryFormat, List<RepoEntity>> entry : byFormat.entrySet()) {
           FormatUsageVo vo = new FormatUsageVo();
@@ -151,10 +156,10 @@ public class AnalyticsQueryImpl implements AnalyticsQuery {
               .sum();
           vo.setStorageBytes(storage);
 
-          // Aggregate downloads from artifacts in repos of this format
+          // Aggregate downloads from pre-loaded artifacts
           long downloads = 0L;
           for (RepoEntity repo : entry.getValue()) {
-            List<Artifact> repoArtifacts = artifactRepo.findByRepositoryId(repo.getId());
+            List<Artifact> repoArtifacts = artifactsByRepo.getOrDefault(repo.getId(), List.of());
             downloads += repoArtifacts.stream()
                 .mapToLong(a -> a.getDownloads() != null ? a.getDownloads() : 0L)
                 .sum();

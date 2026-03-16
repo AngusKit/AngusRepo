@@ -85,8 +85,18 @@ public class DashboardQueryImpl implements DashboardQuery {
         // Get top 10 repositories by artifact count
         Page<RepoEntity> page = repoEntityRepo.findAll(
             PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "artifacts")));
+        List<RepoEntity> repos = page.getContent();
+        if (repos.isEmpty()) {
+          return new ArrayList<>();
+        }
+
+        // Batch-load all artifacts for these repos to avoid N+1 queries
+        List<Artifact> allArtifacts = artifactRepo.findAll();
+        Map<Long, List<Artifact>> artifactsByRepo = allArtifacts.stream()
+            .collect(Collectors.groupingBy(Artifact::getRepositoryId));
+
         List<TopRepositoryVo> result = new ArrayList<>();
-        for (RepoEntity repo : page.getContent()) {
+        for (RepoEntity repo : repos) {
           TopRepositoryVo vo = new TopRepositoryVo();
           vo.setId(repo.getId());
           vo.setName(repo.getName());
@@ -94,8 +104,7 @@ public class DashboardQueryImpl implements DashboardQuery {
           vo.setArtifactCount(repo.getArtifacts() != null ? repo.getArtifacts().longValue() : 0L);
           vo.setStorageBytes(repo.getSizeBytes() != null ? repo.getSizeBytes() : 0L);
 
-          // Aggregate downloads from artifacts in this repository
-          List<Artifact> repoArtifacts = artifactRepo.findByRepositoryId(repo.getId());
+          List<Artifact> repoArtifacts = artifactsByRepo.getOrDefault(repo.getId(), List.of());
           long downloads = repoArtifacts.stream()
               .mapToLong(a -> a.getDownloads() != null ? a.getDownloads() : 0L)
               .sum();
@@ -118,7 +127,7 @@ public class DashboardQueryImpl implements DashboardQuery {
         List<RecentActivityVo> result = new ArrayList<>();
         for (ActivityLog log : page.getContent()) {
           RecentActivityVo vo = new RecentActivityVo();
-          vo.setId(log.getId() != null ? (long) log.getId().hashCode() : null);
+          vo.setId(log.getId() != null ? (long) Math.abs(log.getId().hashCode()) : null);
           vo.setAction(log.getAction() != null ? log.getAction().name() : null);
           vo.setTargetType(log.getCategory() != null ? log.getCategory().name() : null);
           vo.setTargetName(log.getArtifact());
