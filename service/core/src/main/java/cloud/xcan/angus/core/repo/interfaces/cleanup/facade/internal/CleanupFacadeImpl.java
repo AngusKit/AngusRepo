@@ -21,6 +21,7 @@ import cloud.xcan.angus.core.repo.interfaces.cleanup.facade.internal.assembler.C
 import cloud.xcan.angus.core.repo.interfaces.cleanup.facade.vo.CleanupExecutionVo;
 import cloud.xcan.angus.core.repo.interfaces.cleanup.facade.vo.CleanupPolicyDetailVo;
 import cloud.xcan.angus.core.repo.interfaces.cleanup.facade.vo.CleanupStatisticsVo;
+import cloud.xcan.angus.remote.NameJoin;
 import cloud.xcan.angus.remote.PageResult;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
@@ -38,6 +39,7 @@ public class CleanupFacadeImpl implements CleanupFacade {
   private CleanupQuery cleanupQuery;
 
   @Override
+  @NameJoin
   public CleanupPolicyDetailVo create(CleanupPolicyCreateDto dto) {
     CleanupPolicy entity = toCreateEntity(dto);
     CleanupPolicy created = cleanupCmd.create(entity);
@@ -45,6 +47,7 @@ public class CleanupFacadeImpl implements CleanupFacade {
   }
 
   @Override
+  @NameJoin
   public CleanupPolicyDetailVo update(String id, CleanupPolicyUpdateDto dto) {
     CleanupPolicy entity = toUpdateEntity(dto, id);
     CleanupPolicy updated = cleanupCmd.update(entity);
@@ -67,12 +70,14 @@ public class CleanupFacadeImpl implements CleanupFacade {
   }
 
   @Override
+  @NameJoin
   public CleanupPolicyDetailVo getById(String id) {
     CleanupPolicy entity = cleanupQuery.findPolicyAndCheck(id);
     return toPolicyDetailVo(entity);
   }
 
   @Override
+  @NameJoin
   public PageResult<CleanupPolicyDetailVo> list(CleanupPolicyFindDto dto) {
     Page<CleanupPolicy> page = cleanupQuery.find(
         getSpecification(dto),

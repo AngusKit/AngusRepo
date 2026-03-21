@@ -21,6 +21,7 @@ import cloud.xcan.angus.core.repo.interfaces.artifact.facade.internal.assembler.
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactDetailVo;
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactStatisticsVo;
 import cloud.xcan.angus.core.repo.interfaces.artifact.facade.vo.ArtifactVersionVo;
+import cloud.xcan.angus.remote.NameJoin;
 import cloud.xcan.angus.remote.PageResult;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
@@ -47,6 +48,7 @@ public class ArtifactFacadeImpl implements ArtifactFacade {
   private BlobStore blobStore;
 
   @Override
+  @NameJoin
   public ArtifactDetailVo create(ArtifactCreateDto dto) {
     Artifact entity = toCreateEntity(dto);
     Artifact created = artifactCmd.create(entity);
@@ -54,6 +56,7 @@ public class ArtifactFacadeImpl implements ArtifactFacade {
   }
 
   @Override
+  @NameJoin
   public ArtifactDetailVo update(Long id, ArtifactUpdateDto dto) {
     Artifact entity = toUpdateEntity(dto, id);
     Artifact updated = artifactCmd.update(entity);
@@ -76,12 +79,14 @@ public class ArtifactFacadeImpl implements ArtifactFacade {
   }
 
   @Override
+  @NameJoin
   public ArtifactDetailVo getById(Long id) {
     Artifact entity = artifactQuery.findAndCheck(id);
     return toDetailVo(entity);
   }
 
   @Override
+  @NameJoin
   public PageResult<ArtifactDetailVo> list(ArtifactFindDto dto) {
     Page<Artifact> page = artifactQuery.find(
         getSpecification(dto),
@@ -98,31 +103,7 @@ public class ArtifactFacadeImpl implements ArtifactFacade {
 
   @Override
   public void download(Long id, HttpServletResponse response) {
-    Artifact artifact = artifactQuery.findAndCheck(id);
-    artifactCmd.incrementDownloads(id);
-    response.setContentType("application/octet-stream");
-    response.setHeader("Content-Disposition",
-        "attachment; filename=\"" + artifact.getName() + "\"");
-    if (artifact.getSizeBytes() != null) {
-      response.setContentLengthLong(artifact.getSizeBytes());
-    }
-
-    // Read artifact file from blob storage and write to response output stream
-    String tenantId = PrincipalContext.get().getTenantId().toString();
-    String repositoryId = artifact.getRepositoryId().toString();
-    String path = artifact.getPath() != null ? artifact.getPath() : artifact.getName();
-    try (InputStream inputStream = blobStore.retrieve(tenantId, repositoryId, path);
-         OutputStream outputStream = response.getOutputStream()) {
-      byte[] buffer = new byte[8192];
-      int bytesRead;
-      while ((bytesRead = inputStream.read(buffer)) != -1) {
-        outputStream.write(buffer, 0, bytesRead);
-      }
-      outputStream.flush();
-    } catch (IOException e) {
-      log.error("Failed to download artifact: id={}, path={}", id, path, e);
-      throw new RuntimeException("Failed to download artifact file", e);
-    }
+    artifactCmd.download(id, response);
   }
 
   @Override

@@ -8,6 +8,7 @@ import cloud.xcan.angus.core.repo.domain.security.ScanPolicy;
 import cloud.xcan.angus.core.repo.domain.security.ScanPolicyListRepo;
 import cloud.xcan.angus.core.repo.domain.security.ScanPolicyRepo;
 import cloud.xcan.angus.core.repo.domain.security.ScanPolicySearchRepo;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import jakarta.annotation.Resource;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -42,12 +43,22 @@ public class ScanPolicyQueryImpl implements ScanPolicyQuery {
 
   @Override
   public Optional<ScanPolicy> findById(String id) {
-    return scanPolicyRepo.findById(id);
+    return new BizTemplate<Optional<ScanPolicy>>() {
+      @Override
+      protected Optional<ScanPolicy> process() {
+        return scanPolicyRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public ScanPolicy findAndCheck(String id) {
-    return scanPolicyRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("扫描策略不存在: " + id));
+    return new BizTemplate<ScanPolicy>() {
+      @Override
+      protected ScanPolicy process() {
+        return scanPolicyRepo.findById(id)
+            .orElseThrow(() -> ResourceNotFound.of(id, "ScanPolicy"));
+      }
+    }.execute();
   }
 }

@@ -3,6 +3,7 @@ package cloud.xcan.angus.core.repo.interfaces.repository.facade.vo;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryStatus;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryType;
+import cloud.xcan.angus.remote.NameJoinField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -62,6 +63,7 @@ public class RepositoryDetailVo implements Serializable {
   private Long createdBy;
 
   @Schema(description = "创建人姓名")
+  @NameJoinField(id = "createdBy", repository = "commonUserBaseRepo")
   private String creatorName;
 
   @JsonFormat(pattern = DEFAULT_DATE_TIME_FORMAT)

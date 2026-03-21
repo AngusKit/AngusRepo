@@ -21,6 +21,7 @@ import cloud.xcan.angus.core.repo.interfaces.repository.facade.vo.RepositoryDeta
 import cloud.xcan.angus.core.repo.interfaces.repository.facade.vo.RepositoryStatisticsVo;
 import cloud.xcan.angus.core.repo.interfaces.repository.facade.vo.RepositoryUrlVo;
 import cloud.xcan.angus.core.repo.interfaces.repository.facade.internal.assembler.RepositoryAssembler;
+import cloud.xcan.angus.remote.NameJoin;
 import cloud.xcan.angus.remote.PageResult;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,7 @@ public class RepositoryFacadeImpl implements RepositoryFacade {
   private RepositoryQuery repositoryQuery;
 
   @Override
+  @NameJoin
   public RepositoryDetailVo create(RepositoryCreateDto dto) {
     RepoEntity entity = toCreateEntity(dto);
     RepoEntity created = repositoryCmd.create(entity);
@@ -43,6 +45,7 @@ public class RepositoryFacadeImpl implements RepositoryFacade {
   }
 
   @Override
+  @NameJoin
   public RepositoryDetailVo update(Long id, RepositoryUpdateDto dto) {
     RepoEntity entity = toUpdateEntity(dto, id);
     RepoEntity updated = repositoryCmd.update(entity);
@@ -50,6 +53,7 @@ public class RepositoryFacadeImpl implements RepositoryFacade {
   }
 
   @Override
+  @NameJoin
   public RepositoryDetailVo updateStatus(Long id, RepositoryStatusUpdateDto dto) {
     RepoEntity updated = repositoryCmd.updateStatus(id, dto.getStatus());
     return toDetailVo(updated);
@@ -66,12 +70,14 @@ public class RepositoryFacadeImpl implements RepositoryFacade {
   }
 
   @Override
+  @NameJoin
   public RepositoryDetailVo getById(Long id) {
     RepoEntity entity = repositoryQuery.findAndCheck(id);
     return toDetailVo(entity);
   }
 
   @Override
+  @NameJoin
   public PageResult<RepositoryDetailVo> list(RepositoryFindDto dto) {
     Page<RepoEntity> page = repositoryQuery.find(
         getSpecification(dto),

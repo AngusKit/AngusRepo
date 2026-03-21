@@ -2,8 +2,7 @@ package cloud.xcan.angus.core.repo.interfaces.cleanup.facade.vo;
 
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
 
-import cloud.xcan.angus.core.repo.domain.cleanup.CleanupType;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import cloud.xcan.angus.core.repo.domain.cleanup.CleanupType;import cloud.xcan.angus.remote.NameJoinField;import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -63,6 +62,10 @@ public class CleanupPolicyDetailVo implements Serializable {
 
   @Schema(description = "创建人ID")
   private Long createdBy;
+
+  @Schema(description = "创建人名称")
+  @NameJoinField(id = "createdBy", repository = "commonUserBaseRepo")
+  private String createdByName;
 
   @JsonFormat(pattern = DEFAULT_DATE_TIME_FORMAT)
   @Schema(description = "创建时间")

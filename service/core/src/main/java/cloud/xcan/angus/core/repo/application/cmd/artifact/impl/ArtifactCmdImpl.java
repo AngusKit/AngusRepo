@@ -9,11 +9,21 @@ import cloud.xcan.angus.core.repo.domain.artifact.Artifact;
 import cloud.xcan.angus.core.repo.domain.artifact.ArtifactRepo;
 import cloud.xcan.angus.core.repo.domain.artifact.ArtifactStar;
 import cloud.xcan.angus.core.repo.domain.artifact.ArtifactStarRepo;
+import cloud.xcan.angus.core.repo.domain.format.store.BlobStore;
+import cloud.xcan.angus.remote.message.ProtocolException;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
+import cloud.xcan.angus.spec.principal.PrincipalContext;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Biz
 public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements ArtifactCmd {
 
@@ -23,6 +33,9 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
   @Autowired(required = false)
   private ArtifactStarRepo artifactStarRepo;
 
+  @Autowired(required = false)
+  private BlobStore blobStore;
+
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Artifact create(Artifact artifact) {
@@ -31,8 +44,8 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
       protected void checkParams() {
         if (artifactRepo.existsByRepositoryIdAndNameAndVersion(
             artifact.getRepositoryId(), artifact.getName(), artifact.getVersion())) {
-          throw new RuntimeException(
-              "制品已存在: " + artifact.getName() + ":" + artifact.getVersion());
+          throw ProtocolException.of("制品已存在：{0}:{1}", 
+              new Object[]{artifact.getName(), artifact.getVersion()});
         }
       }
 
@@ -53,6 +66,8 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
           artifact.setSizeBytes(0L);
         }
         insert0(artifact);
+        log.info("Artifact created: name={}, version={}, id={}", 
+            artifact.getName(), artifact.getVersion(), artifact.getId());
         return artifact;
       }
     }.execute();
@@ -67,7 +82,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
       @Override
       protected void checkParams() {
         existing = artifactRepo.findById(artifact.getId())
-            .orElseThrow(() -> new RuntimeException("制品不存在: " + artifact.getId()));
+            .orElseThrow(() -> ResourceNotFound.of(artifact.getId(), "Artifact"));
       }
 
       @Override
@@ -90,6 +105,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
         existing.setModifiedBy(artifact.getModifiedBy());
         existing.setModifiedDate(LocalDateTime.now());
         artifactRepo.save(existing);
+        log.info("Artifact updated: id={}, name={}", artifact.getId(), artifact.getName());
         return existing;
       }
     }.execute();
@@ -104,7 +120,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
       @Override
       protected void checkParams() {
         existing = artifactRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("制品不存在: " + id));
+            .orElseThrow(() -> ResourceNotFound.of(id, "Artifact"));
       }
 
       @Override
@@ -118,6 +134,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
         }
         // Set current artifact as latest
         artifactRepo.updateIsLatest(id, true);
+        log.info("Artifact marked as latest: id={}", id);
         return null;
       }
     }.execute();
@@ -126,12 +143,14 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(Long id) {
+    log.warn("Artifact deleted: id={}", id);
     artifactRepo.deleteById(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<Long> ids) {
+    log.warn("Artifacts deleted in batch: count={}", ids.size());
     artifactRepo.deleteAllById(ids);
   }
 
@@ -142,7 +161,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
       @Override
       protected void checkParams() {
         if (!artifactRepo.existsById(id)) {
-          throw new RuntimeException("制品不存在: " + id);
+          throw ResourceNotFound.of(id, "Artifact");
         }
       }
 
@@ -161,10 +180,10 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
       @Override
       protected void checkParams() {
         if (!artifactRepo.existsById(artifactId)) {
-          throw new RuntimeException("制品不存在: " + artifactId);
+          throw ResourceNotFound.of(artifactId, "Artifact");
         }
         if (artifactStarRepo.existsByArtifactIdAndUserId(artifactId, userId)) {
-          throw new RuntimeException("已收藏该制品");
+          throw ProtocolException.of("已收藏该制品");
         }
       }
 
@@ -176,6 +195,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
         star.setStarredDate(LocalDateTime.now());
         artifactStarRepo.save(star);
         artifactRepo.updateStarCount(artifactId, 1);
+        log.debug("Artifact starred: artifactId={}, userId={}", artifactId, userId);
         return null;
       }
     }.execute();
@@ -188,10 +208,10 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
       @Override
       protected void checkParams() {
         if (!artifactRepo.existsById(artifactId)) {
-          throw new RuntimeException("制品不存在: " + artifactId);
+          throw ResourceNotFound.of(artifactId, "Artifact");
         }
         if (!artifactStarRepo.existsByArtifactIdAndUserId(artifactId, userId)) {
-          throw new RuntimeException("未收藏该制品");
+          throw ProtocolException.of("未收藏该制品");
         }
       }
 
@@ -199,6 +219,57 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
       protected Void process() {
         artifactStarRepo.deleteByArtifactIdAndUserId(artifactId, userId);
         artifactRepo.updateStarCount(artifactId, -1);
+        log.debug("Artifact unstarred: artifactId={}, userId={}", artifactId, userId);
+        return null;
+      }
+    }.execute();
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void download(Long id, HttpServletResponse response) {
+    new BizTemplate<Void>() {
+      Artifact artifact;
+      String tenantId;
+      String repositoryId;
+      String path;
+
+      @Override
+      protected void checkParams() {
+        artifact = artifactRepo.findById(id)
+            .orElseThrow(() -> ResourceNotFound.of(id, "Artifact"));
+        tenantId = PrincipalContext.get().getTenantId().toString();
+        repositoryId = artifact.getRepositoryId().toString();
+        path = artifact.getPath() != null ? artifact.getPath() : artifact.getName();
+      }
+
+      @Override
+      protected Void process() {
+        // Increment download count
+        artifactRepo.updateDownloadCount(id, 1);
+        
+        // Set response headers
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition",
+            "attachment; filename=\"" + artifact.getName() + "\"");
+        if (artifact.getSizeBytes() != null) {
+          response.setContentLengthLong(artifact.getSizeBytes());
+        }
+
+        // Read artifact file from blob storage and write to response output stream
+        try (InputStream inputStream = blobStore.retrieve(tenantId, repositoryId, path);
+             OutputStream outputStream = response.getOutputStream()) {
+          byte[] buffer = new byte[8192];
+          int bytesRead;
+          while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+          }
+          outputStream.flush();
+          log.info("Artifact downloaded: id={}, path={}, tenantId={}", id, path, tenantId);
+        } catch (IOException e) {
+          log.error("Failed to download artifact: id={}, path={}", id, path, e);
+          throw ProtocolException.of("制品下载失败，请稍后重试");
+        }
         return null;
       }
     }.execute();

@@ -11,6 +11,7 @@ import cloud.xcan.angus.core.repo.domain.repository.RepoEntitySearchRepo;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryFormat;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryStatus;
 import cloud.xcan.angus.core.repo.interfaces.repository.facade.vo.RepositoryStatisticsVo;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import jakarta.annotation.Resource;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -45,19 +46,34 @@ public class RepositoryQueryImpl implements RepositoryQuery {
 
   @Override
   public Optional<RepoEntity> findById(Long id) {
-    return repoEntityRepo.findById(id);
+    return new BizTemplate<Optional<RepoEntity>>() {
+      @Override
+      protected Optional<RepoEntity> process() {
+        return repoEntityRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public RepoEntity findAndCheck(Long id) {
-    return repoEntityRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("仓库不存在: " + id));
+    return new BizTemplate<RepoEntity>() {
+      @Override
+      protected RepoEntity process() {
+        return repoEntityRepo.findById(id)
+            .orElseThrow(() -> ResourceNotFound.of(id, "Repository"));
+      }
+    }.execute();
   }
 
   @Override
   public RepoEntity findByNameAndCheck(String name) {
-    return repoEntityRepo.findByName(name)
-        .orElseThrow(() -> new RuntimeException("仓库不存在: " + name));
+    return new BizTemplate<RepoEntity>() {
+      @Override
+      protected RepoEntity process() {
+        return repoEntityRepo.findByName(name)
+            .orElseThrow(() -> ResourceNotFound.of(name, "Repository"));
+      }
+    }.execute();
   }
 
   @Override

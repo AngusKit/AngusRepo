@@ -8,11 +8,15 @@ import cloud.xcan.angus.core.repo.application.cmd.security.ScanTaskCmd;
 import cloud.xcan.angus.core.repo.domain.security.ScanStatus;
 import cloud.xcan.angus.core.repo.domain.security.ScanTask;
 import cloud.xcan.angus.core.repo.domain.security.ScanTaskRepo;
+import cloud.xcan.angus.remote.message.ProtocolException;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Biz
 public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTaskCmd {
 
@@ -35,6 +39,7 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
         scanTask.setLowCount(0);
         scanTask.setCreatedDate(LocalDateTime.now());
         insert0(scanTask);
+        log.info("Scan task created: id={}", scanTask.getId());
         return scanTask;
       }
     }.execute();
@@ -49,7 +54,7 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
       @Override
       protected void checkParams() {
         existing = scanTaskRepo.findById(scanTask.getId())
-            .orElseThrow(() -> new RuntimeException("扫描任务不存在: " + scanTask.getId()));
+            .orElseThrow(() -> ResourceNotFound.of(scanTask.getId(), "ScanTask"));
       }
 
       @Override
@@ -58,6 +63,7 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
           existing.setScanType(scanTask.getScanType());
         }
         scanTaskRepo.save(existing);
+        log.info("Scan task updated: id={}", scanTask.getId());
         return existing;
       }
     }.execute();
@@ -72,9 +78,9 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
       @Override
       protected void checkParams() {
         existing = scanTaskRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("扫描任务不存在: " + id));
+            .orElseThrow(() -> ResourceNotFound.of(id, "ScanTask"));
         if (!existing.isRunning()) {
-          throw new RuntimeException("扫描任务已完成，无法取消: " + id);
+          throw ProtocolException.of("扫描任务已完成，无法取消");
         }
       }
 
@@ -83,6 +89,7 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
         existing.setStatus(ScanStatus.CANCELLED);
         existing.setEndTime(LocalDateTime.now());
         scanTaskRepo.save(existing);
+        log.info("Scan task cancelled: id={}", id);
         return null;
       }
     }.execute();
@@ -91,6 +98,7 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
+    log.warn("Scan task deleted: id={}", id);
     scanTaskRepo.deleteById(id);
   }
 

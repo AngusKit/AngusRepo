@@ -17,6 +17,7 @@ import cloud.xcan.angus.core.repo.interfaces.security.facade.dto.ScanTaskUpdateD
 import cloud.xcan.angus.core.repo.interfaces.security.facade.internal.assembler.ScanTaskAssembler;
 import cloud.xcan.angus.core.repo.interfaces.security.facade.vo.ScanStatisticsVo;
 import cloud.xcan.angus.core.repo.interfaces.security.facade.vo.ScanTaskDetailVo;
+import cloud.xcan.angus.remote.NameJoin;
 import cloud.xcan.angus.remote.PageResult;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,7 @@ public class ScanTaskFacadeImpl implements ScanTaskFacade {
   private ScanTaskQuery scanTaskQuery;
 
   @Override
+  @NameJoin
   public ScanTaskDetailVo create(ScanTaskCreateDto dto) {
     ScanTask entity = toCreateEntity(dto);
     ScanTask created = scanTaskCmd.create(entity);
@@ -39,6 +41,7 @@ public class ScanTaskFacadeImpl implements ScanTaskFacade {
   }
 
   @Override
+  @NameJoin
   public ScanTaskDetailVo update(String id, ScanTaskUpdateDto dto) {
     ScanTask entity = toUpdateEntity(dto, id);
     ScanTask updated = scanTaskCmd.update(entity);
@@ -56,12 +59,14 @@ public class ScanTaskFacadeImpl implements ScanTaskFacade {
   }
 
   @Override
+  @NameJoin
   public ScanTaskDetailVo getById(String id) {
     ScanTask entity = scanTaskQuery.findAndCheck(id);
     return toDetailVo(entity);
   }
 
   @Override
+  @NameJoin
   public PageResult<ScanTaskDetailVo> list(ScanTaskFindDto dto) {
     Page<ScanTask> page = scanTaskQuery.find(
         getSpecification(dto),

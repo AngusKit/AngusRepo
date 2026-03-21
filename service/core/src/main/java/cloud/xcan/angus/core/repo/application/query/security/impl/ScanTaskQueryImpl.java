@@ -10,6 +10,7 @@ import cloud.xcan.angus.core.repo.domain.security.ScanTaskListRepo;
 import cloud.xcan.angus.core.repo.domain.security.ScanTaskRepo;
 import cloud.xcan.angus.core.repo.domain.security.ScanTaskSearchRepo;
 import cloud.xcan.angus.core.repo.interfaces.security.facade.vo.ScanStatisticsVo;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
 import java.util.Optional;
@@ -45,13 +46,23 @@ public class ScanTaskQueryImpl implements ScanTaskQuery {
 
   @Override
   public Optional<ScanTask> findById(String id) {
-    return scanTaskRepo.findById(id);
+    return new BizTemplate<Optional<ScanTask>>() {
+      @Override
+      protected Optional<ScanTask> process() {
+        return scanTaskRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public ScanTask findAndCheck(String id) {
-    return scanTaskRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("扫描任务不存在: " + id));
+    return new BizTemplate<ScanTask>() {
+      @Override
+      protected ScanTask process() {
+        return scanTaskRepo.findById(id)
+            .orElseThrow(() -> ResourceNotFound.of(id, "ScanTask"));
+      }
+    }.execute();
   }
 
   @Override

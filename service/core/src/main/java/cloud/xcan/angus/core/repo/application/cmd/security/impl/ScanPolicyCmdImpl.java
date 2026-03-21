@@ -7,11 +7,15 @@ import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.security.ScanPolicyCmd;
 import cloud.xcan.angus.core.repo.domain.security.ScanPolicy;
 import cloud.xcan.angus.core.repo.domain.security.ScanPolicyRepo;
+import cloud.xcan.angus.remote.message.ProtocolException;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Biz
 public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements ScanPolicyCmd {
 
@@ -26,7 +30,7 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
       protected void checkParams() {
         if (scanPolicyRepo.findByTenantIdAndNameAndRepositoryId(
             policy.getTenantId(), policy.getName(), policy.getRepositoryId()).isPresent()) {
-          throw new RuntimeException("扫描策略已存在: " + policy.getName());
+          throw ProtocolException.of("扫描策略已存在：{0}", new Object[]{policy.getName()});
         }
       }
 
@@ -45,6 +49,7 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
           policy.setAutoBlock(false);
         }
         insert0(policy);
+        log.info("Scan policy created: name={}, id={}", policy.getName(), policy.getId());
         return policy;
       }
     }.execute();
@@ -59,11 +64,11 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
       @Override
       protected void checkParams() {
         existing = scanPolicyRepo.findById(policy.getId())
-            .orElseThrow(() -> new RuntimeException("扫描策略不存在: " + policy.getId()));
+            .orElseThrow(() -> ResourceNotFound.of(policy.getId(), "ScanPolicy"));
         if (policy.getName() != null && !policy.getName().equals(existing.getName())) {
           if (scanPolicyRepo.existsByTenantIdAndNameAndRepositoryIdAndIdNot(
               existing.getTenantId(), policy.getName(), existing.getRepositoryId(), existing.getId())) {
-            throw new RuntimeException("扫描策略名称已存在: " + policy.getName());
+            throw ProtocolException.of("扫描策略名称已存在：{0}", new Object[]{policy.getName()});
           }
         }
       }
@@ -81,6 +86,7 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
         existing.setModifiedBy(policy.getModifiedBy());
         existing.setModifiedDate(LocalDateTime.now());
         scanPolicyRepo.save(existing);
+        log.info("Scan policy updated: id={}, name={}", policy.getId(), policy.getName());
         return existing;
       }
     }.execute();
@@ -89,6 +95,7 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
+    log.warn("Scan policy deleted: id={}", id);
     scanPolicyRepo.deleteById(id);
   }
 
@@ -99,13 +106,14 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
       @Override
       protected void checkParams() {
         if (!scanPolicyRepo.existsById(id)) {
-          throw new RuntimeException("扫描策略不存在: " + id);
+          throw ResourceNotFound.of(id, "ScanPolicy");
         }
       }
 
       @Override
       protected Void process() {
         scanPolicyRepo.updateEnabled(null, id, enabled, LocalDateTime.now(), modifiedBy);
+        log.info("Scan policy enabled status updated: id={}, enabled={}", id, enabled);
         return null;
       }
     }.execute();

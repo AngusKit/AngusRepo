@@ -16,6 +16,7 @@ import cloud.xcan.angus.core.repo.interfaces.security.facade.dto.ScanPolicyFindD
 import cloud.xcan.angus.core.repo.interfaces.security.facade.dto.ScanPolicyUpdateDto;
 import cloud.xcan.angus.core.repo.interfaces.security.facade.internal.assembler.ScanPolicyAssembler;
 import cloud.xcan.angus.core.repo.interfaces.security.facade.vo.ScanPolicyDetailVo;
+import cloud.xcan.angus.remote.NameJoin;
 import cloud.xcan.angus.remote.PageResult;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
@@ -32,6 +33,7 @@ public class ScanPolicyFacadeImpl implements ScanPolicyFacade {
   private ScanPolicyQuery scanPolicyQuery;
 
   @Override
+  @NameJoin
   public ScanPolicyDetailVo create(ScanPolicyCreateDto dto) {
     ScanPolicy entity = toCreateEntity(dto);
     ScanPolicy created = scanPolicyCmd.create(entity);
@@ -39,6 +41,7 @@ public class ScanPolicyFacadeImpl implements ScanPolicyFacade {
   }
 
   @Override
+  @NameJoin
   public ScanPolicyDetailVo update(String id, ScanPolicyUpdateDto dto) {
     ScanPolicy entity = toUpdateEntity(dto, id);
     ScanPolicy updated = scanPolicyCmd.update(entity);
@@ -56,12 +59,14 @@ public class ScanPolicyFacadeImpl implements ScanPolicyFacade {
   }
 
   @Override
+  @NameJoin
   public ScanPolicyDetailVo getById(String id) {
     ScanPolicy entity = scanPolicyQuery.findAndCheck(id);
     return toDetailVo(entity);
   }
 
   @Override
+  @NameJoin
   public PageResult<ScanPolicyDetailVo> list(ScanPolicyFindDto dto) {
     Page<ScanPolicy> page = scanPolicyQuery.find(
         getSpecification(dto),

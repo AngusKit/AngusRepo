@@ -8,11 +8,15 @@ import cloud.xcan.angus.core.repo.application.cmd.repository.RepositoryCmd;
 import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepoEntityRepo;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryStatus;
+import cloud.xcan.angus.remote.message.ProtocolException;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Biz
 public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements RepositoryCmd {
 
@@ -27,7 +31,8 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
       protected void checkParams() {
         // 检查名称唯一性
         if (repoEntityRepo.existsByName(repository.getName())) {
-          throw new RuntimeException("仓库名称已存在: " + repository.getName());
+          throw ProtocolException.of("仓库名称已存在：{0}", 
+              new Object[]{repository.getName()});
         }
       }
 
@@ -45,6 +50,7 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
           repository.setSizeBytes(0L);
         }
         insert0(repository);
+        log.info("Repository created: name={}, id={}", repository.getName(), repository.getId());
         return repository;
       }
     }.execute();
@@ -59,7 +65,7 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
       @Override
       protected void checkParams() {
         existing = repoEntityRepo.findById(repository.getId())
-            .orElseThrow(() -> new RuntimeException("仓库不存在: " + repository.getId()));
+            .orElseThrow(() -> ResourceNotFound.of(repository.getId(), "Repository"));
       }
 
       @Override
@@ -71,6 +77,7 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
         existing.setModifiedBy(repository.getModifiedBy());
         existing.setModifiedDate(LocalDateTime.now());
         repoEntityRepo.save(existing);
+        log.info("Repository updated: id={}, name={}", repository.getId(), repository.getName());
         return existing;
       }
     }.execute();
@@ -85,7 +92,7 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
       @Override
       protected void checkParams() {
         existing = repoEntityRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("仓库不存在: " + id));
+            .orElseThrow(() -> ResourceNotFound.of(id, "Repository"));
       }
 
       @Override
@@ -93,6 +100,7 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
         existing.setStatus(status);
         existing.setModifiedDate(LocalDateTime.now());
         repoEntityRepo.save(existing);
+        log.info("Repository status updated: id={}, status={}", id, status);
         return existing;
       }
     }.execute();
@@ -101,12 +109,14 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(Long id) {
+    log.warn("Repository deleted: id={}", id);
     repoEntityRepo.deleteById(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<Long> ids) {
+    log.warn("Repositories deleted in batch: count={}", ids.size());
     repoEntityRepo.deleteAllById(ids);
   }
 

@@ -7,13 +7,17 @@ import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.notification.NotificationCmd;
 import cloud.xcan.angus.core.repo.domain.notification.Notification;
 import cloud.xcan.angus.core.repo.domain.notification.NotificationRepo;
+import cloud.xcan.angus.remote.message.http.ProtocolException;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Biz
 public class NotificationCmdImpl extends CommCmd<Notification, String> implements NotificationCmd {
 
@@ -32,6 +36,8 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
         notification.setIsArchived(false);
         notification.setCreatedDate(LocalDateTime.now());
         insert0(notification);
+        log.info("Notification created: id={}, title={}, type={}", 
+            notification.getId(), notification.getTitle(), notification.getType());
         return notification;
       }
     }.execute();
@@ -46,7 +52,7 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
       @Override
       protected void checkParams() {
         existing = notificationRepo.findById(notification.getId())
-            .orElseThrow(() -> new RuntimeException("通知不存在: " + notification.getId()));
+            .orElseThrow(() -> ResourceNotFound.of(notification.getId(), "Notification"));
       }
 
       @Override
@@ -56,6 +62,7 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
         if (notification.getType() != null) existing.setType(notification.getType());
         if (notification.getPriority() != null) existing.setPriority(notification.getPriority());
         notificationRepo.save(existing);
+        log.info("Notification updated: id={}, title={}", existing.getId(), existing.getTitle());
         return existing;
       }
     }.execute();
@@ -65,12 +72,14 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
     notificationRepo.deleteById(id);
+    log.warn("Notification deleted: id={}", id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<String> ids) {
     notificationRepo.deleteAllById(ids);
+    log.warn("Notifications deleted in batch: count={}", ids.size());
   }
 
   @Override
@@ -80,13 +89,14 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
       @Override
       protected void checkParams() {
         if (!notificationRepo.existsById(id)) {
-          throw new RuntimeException("通知不存在: " + id);
+          throw ResourceNotFound.of(id, "Notification");
         }
       }
 
       @Override
       protected Void process() {
         notificationRepo.markAsRead(PrincipalContext.getTenantId(), id);
+        log.info("Notification marked as read: id={}", id);
         return null;
       }
     }.execute();
@@ -99,6 +109,7 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
       @Override
       protected Void process() {
         notificationRepo.markBatchAsRead(PrincipalContext.getTenantId(), ids);
+        log.info("Batch notifications marked as read: count={}", ids.size());
         return null;
       }
     }.execute();
@@ -111,13 +122,14 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
       @Override
       protected void checkParams() {
         if (!notificationRepo.existsById(id)) {
-          throw new RuntimeException("通知不存在: " + id);
+          throw ResourceNotFound.of(id, "Notification");
         }
       }
 
       @Override
       protected Void process() {
         notificationRepo.updateStarred(PrincipalContext.getTenantId(), id, true);
+        log.info("Notification starred: id={}", id);
         return null;
       }
     }.execute();
@@ -130,13 +142,14 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
       @Override
       protected void checkParams() {
         if (!notificationRepo.existsById(id)) {
-          throw new RuntimeException("通知不存在: " + id);
+          throw ResourceNotFound.of(id, "Notification");
         }
       }
 
       @Override
       protected Void process() {
         notificationRepo.updateStarred(PrincipalContext.getTenantId(), id, false);
+        log.info("Notification unstarred: id={}", id);
         return null;
       }
     }.execute();
@@ -149,13 +162,14 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
       @Override
       protected void checkParams() {
         if (!notificationRepo.existsById(id)) {
-          throw new RuntimeException("通知不存在: " + id);
+          throw ResourceNotFound.of(id, "Notification");
         }
       }
 
       @Override
       protected Void process() {
         notificationRepo.updateArchived(PrincipalContext.getTenantId(), id, true);
+        log.info("Notification archived: id={}", id);
         return null;
       }
     }.execute();
@@ -168,13 +182,14 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
       @Override
       protected void checkParams() {
         if (!notificationRepo.existsById(id)) {
-          throw new RuntimeException("通知不存在: " + id);
+          throw ResourceNotFound.of(id, "Notification");
         }
       }
 
       @Override
       protected Void process() {
         notificationRepo.updateArchived(PrincipalContext.getTenantId(), id, false);
+        log.info("Notification unarchived: id={}", id);
         return null;
       }
     }.execute();

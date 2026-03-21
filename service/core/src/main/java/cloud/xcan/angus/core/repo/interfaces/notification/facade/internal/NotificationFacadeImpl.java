@@ -19,6 +19,7 @@ import cloud.xcan.angus.core.repo.interfaces.notification.facade.dto.Notificatio
 import cloud.xcan.angus.core.repo.interfaces.notification.facade.internal.assembler.NotificationAssembler;
 import cloud.xcan.angus.core.repo.interfaces.notification.facade.vo.NotificationDetailVo;
 import cloud.xcan.angus.core.repo.interfaces.notification.facade.vo.NotificationStatisticsVo;
+import cloud.xcan.angus.remote.NameJoin;
 import cloud.xcan.angus.remote.PageResult;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ public class NotificationFacadeImpl implements NotificationFacade {
   private NotificationQuery notificationQuery;
 
   @Override
+  @NameJoin
   public NotificationDetailVo create(NotificationCreateDto dto) {
     Notification entity = toCreateEntity(dto);
     Notification created = notificationCmd.create(entity);
@@ -41,6 +43,7 @@ public class NotificationFacadeImpl implements NotificationFacade {
   }
 
   @Override
+  @NameJoin
   public NotificationDetailVo update(String id, NotificationUpdateDto dto) {
     Notification entity = toUpdateEntity(dto, id);
     Notification updated = notificationCmd.update(entity);
@@ -58,12 +61,14 @@ public class NotificationFacadeImpl implements NotificationFacade {
   }
 
   @Override
+  @NameJoin
   public NotificationDetailVo getById(String id) {
     Notification entity = notificationQuery.findAndCheck(id);
     return toDetailVo(entity);
   }
 
   @Override
+  @NameJoin
   public PageResult<NotificationDetailVo> list(NotificationFindDto dto) {
     Page<Notification> page = notificationQuery.find(
         getSpecification(dto),

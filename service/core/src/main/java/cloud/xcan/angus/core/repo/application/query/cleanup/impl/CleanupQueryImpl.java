@@ -12,6 +12,7 @@ import cloud.xcan.angus.core.repo.domain.cleanup.CleanupPolicyRepo;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupPolicySearchRepo;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupStatus;
 import cloud.xcan.angus.core.repo.interfaces.cleanup.facade.vo.CleanupStatisticsVo;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
 import java.util.List;
@@ -57,7 +58,7 @@ public class CleanupQueryImpl implements CleanupQuery {
   @Override
   public CleanupPolicy findPolicyAndCheck(String id) {
     return cleanupPolicyRepo.findByTenantIdAndId(PrincipalContext.getTenantId(), id)
-        .orElseThrow(() -> new RuntimeException("清理策略不存在: " + id));
+        .orElseThrow(() -> ResourceNotFound.of(id, "CleanupPolicy"));
   }
 
   @Override

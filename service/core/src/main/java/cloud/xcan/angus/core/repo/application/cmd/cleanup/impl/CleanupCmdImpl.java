@@ -10,12 +10,16 @@ import cloud.xcan.angus.core.repo.domain.cleanup.CleanupExecutionRepo;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupPolicy;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupPolicyRepo;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupStatus;
+import cloud.xcan.angus.remote.message.ProtocolException;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Biz
 public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements CleanupCmd {
 
@@ -33,8 +37,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
       protected void checkParams() {
         if (cleanupPolicyRepo.findByTenantIdAndNameAndRepositoryId(
             policy.getTenantId(), policy.getName(), policy.getRepositoryId()).isPresent()) {
-          throw new RuntimeException(
-              "清理策略已存在: " + policy.getName());
+          throw ProtocolException.of("清理策略已存在：{0}", new Object[]{policy.getName()});
         }
       }
 
@@ -53,6 +56,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
           policy.setExecutionCount(0);
         }
         insert0(policy);
+        log.info("Cleanup policy created: name={}, id={}", policy.getName(), policy.getId());
         return policy;
       }
     }.execute();
@@ -67,11 +71,11 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
       @Override
       protected void checkParams() {
         existing = cleanupPolicyRepo.findById(policy.getId())
-            .orElseThrow(() -> new RuntimeException("清理策略不存在: " + policy.getId()));
+            .orElseThrow(() -> ResourceNotFound.of(policy.getId(), "CleanupPolicy"));
         if (policy.getName() != null && !policy.getName().equals(existing.getName())) {
           if (cleanupPolicyRepo.existsByTenantIdAndNameAndRepositoryIdAndIdNot(
               existing.getTenantId(), policy.getName(), existing.getRepositoryId(), existing.getId())) {
-            throw new RuntimeException("清理策略名称已存在: " + policy.getName());
+            throw ProtocolException.of("清理策略名称已存在：{0}", new Object[]{policy.getName()});
           }
         }
       }
@@ -102,6 +106,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
         existing.setModifiedBy(policy.getModifiedBy());
         existing.setModifiedDate(LocalDateTime.now());
         cleanupPolicyRepo.save(existing);
+        log.info("Cleanup policy updated: id={}, name={}", policy.getId(), policy.getName());
         return existing;
       }
     }.execute();
@@ -110,12 +115,14 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
+    log.warn("Cleanup policy deleted: id={}", id);
     cleanupPolicyRepo.deleteById(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<String> ids) {
+    log.warn("Cleanup policies deleted in batch: count={}", ids.size());
     cleanupPolicyRepo.deleteAllById(ids);
   }
 
@@ -126,7 +133,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
       @Override
       protected void checkParams() {
         if (!cleanupPolicyRepo.existsById(id)) {
-          throw new RuntimeException("清理策略不存在: " + id);
+          throw ResourceNotFound.of(id, "CleanupPolicy");
         }
       }
 
@@ -134,6 +141,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
       protected Void process() {
         cleanupPolicyRepo.updateEnabled(
             null, id, enabled, LocalDateTime.now(), modifiedBy);
+        log.info("Cleanup policy enabled status updated: id={}, enabled={}", id, enabled);
         return null;
       }
     }.execute();
@@ -146,7 +154,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
       @Override
       protected void checkParams() {
         if (!cleanupPolicyRepo.existsById(policyId)) {
-          throw new RuntimeException("清理策略不存在: " + policyId);
+          throw ResourceNotFound.of(policyId, "CleanupPolicy");
         }
       }
 
@@ -159,6 +167,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
         execution.setProgress(0);
         execution.setCreatedDate(LocalDateTime.now());
         cleanupExecutionRepo.save(execution);
+        log.info("Cleanup execution created: policyId={}, executionId={}", policyId, execution.getId());
         return execution;
       }
     }.execute();
@@ -173,9 +182,9 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
       @Override
       protected void checkParams() {
         execution = cleanupExecutionRepo.findById(executionId)
-            .orElseThrow(() -> new RuntimeException("执行记录不存在: " + executionId));
+            .orElseThrow(() -> ResourceNotFound.of(executionId, "CleanupExecution"));
         if (!execution.isRunning()) {
-          throw new RuntimeException("执行已完成，无法取消: " + executionId);
+          throw ProtocolException.of("执行已完成，无法取消");
         }
       }
 
@@ -184,6 +193,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
         execution.setStatus(CleanupStatus.CANCELLED);
         execution.setEndTime(LocalDateTime.now());
         cleanupExecutionRepo.save(execution);
+        log.info("Cleanup execution cancelled: executionId={}", executionId);
         return null;
       }
     }.execute();

@@ -1,6 +1,7 @@
 package cloud.xcan.angus.core.repo.application.cmd.artifact;
 
 import cloud.xcan.angus.core.repo.domain.artifact.Artifact;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface ArtifactCmd {
@@ -20,4 +21,6 @@ public interface ArtifactCmd {
   void addStar(Long artifactId, Long userId);
 
   void removeStar(Long artifactId, Long userId);
+
+  void download(Long id, HttpServletResponse response);
 }

@@ -10,6 +10,7 @@ import cloud.xcan.angus.core.repo.domain.notification.NotificationRepo;
 import cloud.xcan.angus.core.repo.domain.notification.NotificationSearchRepo;
 import cloud.xcan.angus.core.repo.domain.notification.NotificationType;
 import cloud.xcan.angus.core.repo.interfaces.notification.facade.vo.NotificationStatisticsVo;
+import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
 import jakarta.annotation.Resource;
 import java.util.Optional;
@@ -45,13 +46,18 @@ public class NotificationQueryImpl implements NotificationQuery {
 
   @Override
   public Optional<Notification> findById(String id) {
-    return notificationRepo.findById(id);
+    return new BizTemplate<Optional<Notification>>() {
+      @Override
+      protected Optional<Notification> process() {
+        return notificationRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public Notification findAndCheck(String id) {
     return notificationRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("通知不存在: " + id));
+        .orElseThrow(() -> ResourceNotFound.of(id, "Notification"));
   }
 
   @Override
