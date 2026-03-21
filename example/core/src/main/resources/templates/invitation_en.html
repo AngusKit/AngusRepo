@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 50%, #e0e7ff 100%);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(37, 99, 235, 0.15);
+      overflow: hidden;
+    }
+
+    .email-header {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+      padding: 50px 30px 45px;
+      text-align: center;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .email-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    .email-header .inviter-section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .email-header .invitation-title {
+      font-size: 22px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      opacity: 0.95;
+      position: relative;
+    }
+
+    .email-header .invitation-title::before {
+      content: '✨';
+      font-size: 48px;
+      display: block;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    .email-header .invitation-from {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .email-header .invitation-from strong {
+      font-weight: 900;
+    }
+
+    .email-body {
+      padding: 45px 35px;
+    }
+
+    .invitation-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 2px solid #e0e7ff;
+      border-radius: 16px;
+      padding: 35px;
+      margin: 35px 0;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .invitation-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+    }
+
+    .invitation-details {
+      margin-bottom: 0;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #e2e8f0;
+      transition: background-color 0.2s;
+    }
+
+    .detail-item:last-child {
+      border-bottom: none;
+    }
+
+    .detail-item:hover {
+      background-color: #f1f5f9;
+      margin: 0 -15px;
+      padding-left: 15px;
+      padding-right: 15px;
+      border-radius: 8px;
+    }
+
+    .detail-icon {
+      font-size: 24px;
+      margin-right: 18px;
+      width: 36px;
+      text-align: center;
+      filter: grayscale(0.2);
+    }
+
+    .detail-label {
+      color: #64748b;
+      font-size: 14px;
+      min-width: 90px;
+      font-weight: 500;
+    }
+
+    .detail-value {
+      color: #1e293b;
+      font-size: 16px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin: 45px 0;
+    }
+
+    .btn-accept {
+      display: inline-block;
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #ffffff;
+      padding: 18px 55px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-accept::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-accept:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-accept:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-accept:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-link {
+      display: block;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8fafc;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .btn-link a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      word-break: break-all;
+      transition: color 0.2s;
+    }
+
+    .btn-link a:hover {
+      color: #1e40af;
+      text-decoration: underline;
+    }
+
+    .expiry-notice {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-left: 5px solid #2563eb;
+      padding: 18px 20px;
+      margin: 30px 0;
+      color: #1e40af;
+      font-size: 15px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+      font-weight: 500;
+    }
+
+    .expiry-notice strong {
+      color: #1e3a8a;
+      font-weight: 700;
+    }
+
+    .email-footer {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 35px 30px;
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .email-footer a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .email-footer a:hover {
+      color: #1e40af;
+      text-decoration: underline;
+    }
+
+    .email-footer p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .email-footer p:last-child {
+      margin-top: 20px;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    @media only screen and (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .email-container {
+        border-radius: 12px;
+      }
+
+      .email-header {
+        padding: 40px 20px 35px;
+      }
+
+      .email-header .invitation-title {
+        font-size: 20px;
+      }
+
+      .email-body {
+        padding: 30px 20px;
+      }
+
+      .invitation-card {
+        padding: 25px 20px;
+      }
+
+      .detail-item {
+        flex-wrap: wrap;
+      }
+
+      .detail-label {
+        min-width: 100%;
+        margin-bottom: 5px;
+      }
+
+      .btn-accept {
+        padding: 16px 40px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="email-container">
+  <div class="email-header">
+    <div class="inviter-section">
+      <div class="invitation-title">Sincere Invitation</div>
+      <div class="invitation-from">
+        <strong>{inviterName}</strong> invites you to join our team
+      </div>
+    </div>
+  </div>
+
+  <div class="email-body">
+    <div class="invitation-card">
+      <div class="invitation-details">
+        <div class="detail-item">
+          <div class="detail-icon">👤</div>
+          <div class="detail-label">Inviter:</div>
+          <div class="detail-value">{inviterName}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-icon">🏢</div>
+          <div class="detail-label">Team:</div>
+          <div class="detail-value">{teamName}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-icon">🎯</div>
+          <div class="detail-label">Role:</div>
+          <div class="detail-value">{role}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-icon">📅</div>
+          <div class="detail-label">Invitation:</div>
+          <div class="detail-value">{inviteDate}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expiry-notice">
+      ⏰ This invitation will expire in <strong>{expiryDays} days</strong>, please accept it as soon
+      as possible
+    </div>
+
+    <div class="btn-container">
+      <a href="{inviteLink}" class="btn-accept">🎉 Accept Invitation</a>
+      <div class="btn-link">
+        Or copy the link to your browser:<br>
+        <a href="{inviteLink}">{inviteLink}</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="email-footer">
+    <p>If you don't know the inviter or don't want to accept this invitation, please ignore this
+      email</p>
+    <p>Have questions? Visit <a href="https://www.xcan.cloud">Help Center</a> or contact <a
+        href="mailto:technical_support@xcan.cloud">Support</a></p>
+    <p>© 2026 AngusGM. All rights reserved.</p>
+  </div>
+</div>
+</body>
+</html>

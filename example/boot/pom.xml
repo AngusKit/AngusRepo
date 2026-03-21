@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>cloud.xcan.angus</groupId>
+    <artifactId>xcan-angusgm.service</artifactId>
+    <version>2.0.0</version>
+  </parent>
+
+  <artifactId>xcan-angusgm.boot</artifactId>
+  <name>AngusGM :: Boot</name>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>cloud.xcan.angus</groupId>
+      <artifactId>xcan-angusgm.core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>cloud.xcan.angus</groupId>
+      <artifactId>xcan-infra.web-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Note: The auth-server-starter must come before auth-resource-starter to ensure it is initialized first. -->
+    <dependency>
+      <groupId>cloud.xcan.angus</groupId>
+      <artifactId>xcan-infra.auth-server-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>cloud.xcan.angus</groupId>
+      <artifactId>xcan-infra.auth-resource-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-ldap</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <finalName>${hump.name}-${editionName}-${project.version}</finalName>
+    <filters>
+      <filter>src/main/resources/application.yml</filter>
+      <filter>src/main/resources/application-${profile.active}.yml</filter>
+    </filters>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>application-local.yml</exclude>
+          <exclude>application-dev.yml</exclude>
+          <exclude>application-prod.yml</exclude>
+          <exclude>application-priv.yml</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>META-INF/*</include>
+          <include>banner.txt</include>
+          <include>application.yml</include>
+          <include>application-${profile.active}.yml</include>
+          <include>spring-logback.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>conf</directory>
+        <includes>
+          <include>*.properties</include>
+          <include>*.xml</include>
+        </includes>
+        <filtering>true</filtering>
+        <targetPath>${project.basedir}/target</targetPath>
+      </resource>
+      <resource>
+        <directory>src/main/scripts</directory>
+        <includes>
+          <include>init-*.sh</include>
+          <include>startup-*.sh</include>
+          <include>shutdown-*.sh</include>
+        </includes>
+        <filtering>true</filtering>
+        <targetPath>${project.basedir}/target</targetPath>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>repackage</id>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>cloud.xcan.angus.XCanAngusGMApplication</mainClass>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <configuration>
+          <skipSource>true</skipSource>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Default multi-environment configuration -->
+  <profiles>
+    <profile>
+      <id>env.local</id>
+      <properties>
+        <profile.active>local</profile.active>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+              <include>cert/XCanTest.publicCert.keystore</include>
+              <include>cert/license.lic</include>
+            </includes>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+    <profile>
+      <id>env.dev</id>
+      <properties>
+        <profile.active>dev</profile.active>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+              <include>cert/XCanTest.publicCert.keystore</include>
+              <include>cert/license.lic</include>
+            </includes>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+    <profile>
+      <id>env.prod</id>
+      <properties>
+        <profile.active>prod</profile.active>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+              <include>cert/XCanCloud.publicCert.keystore</include>
+              <include>cert/XCanCloud.lic</include>
+            </includes>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+    <profile>
+      <id>env.priv</id>
+      <properties>
+        <profile.active>priv</profile.active>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+              <include>cert/XCanTest.publicCert.keystore</include>
+              <include>cert/license.lic</include>
+            </includes>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+    <profile>
+      <id>db.mysql</id>
+      <properties>
+        <!-- Supporting databases: MYSQL、POSTGRES -->
+        <databaseType>MYSQL</databaseType>
+        <!-- Unused in project -->
+        <!--<databaseMode>MYSQL</databaseMode>-->
+        <databaseDialect>org.hibernate.dialect.MySQLDialect</databaseDialect>
+      </properties>
+    </profile>
+    <profile>
+      <id>db.postgres</id>
+      <properties>
+        <!-- Supporting databases: MYSQL、POSTGRES -->
+        <databaseType>POSTGRES</databaseType>
+        <databaseDialect>org.hibernate.dialect.PostgreSQL10Dialect</databaseDialect>
+      </properties>
+    </profile>
+
+    <!-- Deploy only community edition -->
+    <profile>
+      <id>edition.community</id>
+      <properties>
+        <profile.active>priv</profile.active>
+        <editionType>COMMUNITY</editionType>
+        <editionName>Community</editionName>
+      </properties>
+      <modules/>
+      <dependencies>
+        <dependency>
+          <groupId>cloud.xcan.angus</groupId>
+          <artifactId>xcan-angusstorage.core</artifactId>
+          <version>${xcan-angusstorage.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+    <!-- Deploy only enterprise edition -->
+    <profile>
+      <id>edition.enterprise</id>
+      <properties>
+        <profile.active>priv</profile.active>
+        <editionType>ENTERPRISE</editionType>
+        <editionName>Enterprise</editionName>
+      </properties>
+      <modules/>
+      <dependencies>
+        <dependency>
+          <groupId>cloud.xcan.angus</groupId>
+          <artifactId>xcan-angusstorage.core</artifactId>
+          <version>${xcan-angusstorage.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+    <!-- Deploy only datacenter edition -->
+    <profile>
+      <id>edition.datacenter</id>
+      <properties>
+        <profile.active>priv</profile.active>
+        <editionType>DATACENTER</editionType>
+        <editionName>Datacenter</editionName>
+      </properties>
+      <modules/>
+      <dependencies>
+        <dependency>
+          <groupId>cloud.xcan.angus</groupId>
+          <artifactId>xcan-angusstorage.core</artifactId>
+          <version>${xcan-angusstorage.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+    <!-- Deploy only cloud service edition -->
+    <profile>
+      <id>edition.cloud_service</id>
+      <properties>
+        <editionType>CLOUD_SERVICE</editionType>
+        <editionName>CloudService</editionName>
+      </properties>
+      <modules/>
+      <dependencies/>
+    </profile>
+  </profiles>
+</project>

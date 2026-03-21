@@ -1,0 +1,147 @@
+xcan:
+  trace:
+    enabled: true
+  cloud:
+    gmApiUrlPrefix: ${GM_CLOUD_APIS_URL_PREFIX}
+    storeApiUrlPrefix: ${STORE_CLOUD_APIS_URL_PREFIX}
+  event:
+    gmApiUrlPrefix: ${GM_APIS_URL_PREFIX}
+  datasource:
+    extra:
+      dbType: '@databaseType@'
+      entityPackages:
+        - cloud.xcan.angus.idgen.entity
+        - cloud.xcan.angus.core.gm.domain
+        - cloud.xcan.angus.core.storage.domain
+        - cloud.xcan.angus.api.commonlink
+    hikari:
+      readOnly: false
+      connectionTestQuery: SELECT 1 FROM DUAL
+      poolName: xcanHikariCP
+      idleTimeout: 600000
+      maxLifetime: 1800000
+      maximumPoolSize: 30
+      minimumIdle: 10
+    mysql:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+      url: jdbc:mysql://${GM_DB_HOST}:${GM_DB_PORT}/${GM_DB_NAME}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=${info.app.timezone}&rewriteBatchedStatements=true
+      username: ${GM_DB_USER}
+      password: ${GM_DB_PASSWORD}
+    postgresql:
+      driverClassName: org.postgresql.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+      url: jdbc:postgresql://${GM_DB_HOST}:${GM_DB_PORT}/${GM_DB_NAME}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=${info.app.timezone}&rewriteBatchedStatements=true
+      username: ${GM_DB_USER}
+      password: ${GM_DB_PASSWORD}
+    commonlink:
+      mysql:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mysql://${GM_DB_HOST}:${GM_DB_PORT}/${GM_DB_NAME}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=${info.app.timezone}&rewriteBatchedStatements=true
+        username: ${GM_DB_USER}
+        password: ${GM_DB_PASSWORD}
+      postgresql:
+        driverClassName: org.postgresql.Driver
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:postgresql://${GM_DB_HOST}:${GM_DB_PORT}/${GM_DB_NAME}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=${info.app.timezone}&rewriteBatchedStatements=true
+        username: ${GM_DB_USER}
+        password: ${GM_DB_PASSWORD}
+  redis:
+    enabled: true
+    deployment: ${REDIS_DEPLOYMENT:SINGLE}
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:YOUR_PASSWORD}
+    sentinel:
+      master: ${REDIS_SENTINEL_MASTER:YOUR_MASTER_ID}
+      nodes: ${REDIS_NODES:localhost:6379}
+    cluster:
+      nodes: ${REDIS_NODES:localhost:6379}
+    lettuce:
+      pool:
+        max-active: 16
+        max-idle: 16
+        min-idle: 5
+  storage:
+    storeType: ${STORAGE_TYPE}
+    proxyAddress: ${STORAGE_FILES_PROXY_ADDRESS}
+    aesKey: ${STORAGE_FILES_ENCRYPTION_KEY}
+    localDir: ${STORAGE_LOCAL_DIR}
+    region: ${STORAGE_S3_REGION:}
+    endpoint: ${STORAGE_S3_ENDPOINT}
+    accessKey: ${STORAGE_S3_ACCESS_KEY}
+    secretKey: ${STORAGE_S3_SECRET_KEY}
+
+eureka:
+  datacenter: self-host-dc1
+  environment: priv
+  server:
+    enable-self-preservation: false
+    renewal-percent-threshold: 0.85
+    a-sgcache-expiry-timeout-ms: 300000
+    registry-sync-retry-wait-ms: 10000
+    eviction-interval-timer-in-ms: 10000
+    peer-eureka-nodes-update-interval-ms: 60000
+    renewal-threshold-update-interval-ms: 60000
+  client:
+    healthcheck:
+      # Disable health check-triggered auto-deregistration
+      enabled: false
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 30
+    eureka-connection-idle-timeout-seconds: 30
+    initial-instance-info-replication-interval-seconds: 40
+    serviceUrl:
+      defaultZone: http://${EUREKA_USER_NAME}:${EUREKA_USER_PASSWORD}@${GM_HOST}:${GM_PORT}/eureka/
+  instance:
+    app-name: '@artifactId@'
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-expiration-duration-in-seconds: 90
+    lease-renewal-interval-in-seconds: 30
+    prefer-ip-address: true
+    status-page-url: http://${spring.cloud.client.ip-address}:${server.port}/swagger-ui/
+    health-check-url-path: /actuator/health
+
+spring:
+  web:
+    resources:
+      addMappings: false
+      static-locations: ${GM_WEB_STATICS:classpath:/static/,file:./statics/}
+  security:
+    oauth2:
+      resource-server:
+        opaque-token:
+          client-id: ${OAUTH2_INTROSPECT_CLIENT_ID}
+          client-secret: ${OAUTH2_INTROSPECT_CLIENT_SECRET}
+          introspection-uri: ${GM_APIS_URL_PREFIX}/oauth2/introspect
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: false
+        use_sql_comments: false
+        type: trace
+        jdbc:
+          batch_size: 200
+          time_zone: ${info.app.timezone}
+        order_inserts: true
+        order_updates: true
+        enable_lazy_load_no_trans: true
+        session_factory:
+          statement_inspector: cloud.xcan.angus.core.jpa.interceptor.TenantInterceptor
+    database: '@databaseType@'
+    database-platform: '@databaseDialect@'
+    open-in-view: false
+
+logging:
+  level:
+    org: INFO
+    com: INFO
+    com.netflix: ERROR
+    org.springframework.cloud.netflix.eureka.server: ERROR
+

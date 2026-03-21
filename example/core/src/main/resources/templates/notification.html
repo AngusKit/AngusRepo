@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>系统通知</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 50%, #e0e7ff 100%);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(37, 99, 235, 0.15);
+      overflow: hidden;
+    }
+
+    .email-header {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+      padding: 40px 30px;
+      text-align: center;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .email-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    .email-header h1 {
+      position: relative;
+      z-index: 1;
+    }
+
+    .email-header p {
+      position: relative;
+      z-index: 1;
+    }
+
+    .email-header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .email-header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .email-body {
+      padding: 40px 30px;
+    }
+
+    .greeting {
+      font-size: 18px;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+
+    .notification-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-left: 4px solid #2563eb;
+      padding: 25px;
+      border-radius: 12px;
+      margin: 25px 0;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    }
+
+    .notification-card.success {
+      border-left-color: #10b981;
+    }
+
+    .notification-card.warning {
+      border-left-color: #f59e0b;
+    }
+
+    .notification-card.info {
+      border-left-color: #3b82f6;
+    }
+
+    .notification-title {
+      font-size: 20px;
+      color: #333333;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .notification-icon {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+    .notification-content {
+      color: #666666;
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .notification-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .notification-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .notification-tag:empty,
+    .notification-tag:has(span:empty) {
+      display: none;
+    }
+
+    .notification-content:empty {
+      display: none;
+    }
+
+    .notification-tags:empty {
+      display: none;
+    }
+
+    .tag-category {
+      background-color: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .tag-priority {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .tag-priority.HIGH {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    .tag-priority.MEDIUM {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .tag-priority.LOW {
+      background-color: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .tag-type {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+
+    .notification-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      font-size: 13px;
+      color: #999999;
+      padding-top: 15px;
+      border-top: 1px solid #eeeeee;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .meta-item span {
+      margin-left: 5px;
+    }
+
+    .email-footer {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 30px;
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .email-footer a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .email-footer a:hover {
+      color: #1e40af;
+      text-decoration: underline;
+    }
+
+    .unsubscribe {
+      margin-top: 15px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+<div class="email-container">
+  <div class="email-header">
+    <h1>🔔 系统通知</h1>
+    <p>您有新的消息需要关注</p>
+  </div>
+
+  <div class="email-body">
+    <div class="greeting">
+      您好，{userName}！
+    </div>
+
+    <div class="notification-card">
+      <div class="notification-title">
+        <span class="notification-icon">{icon}</span>
+        <span>{title}</span>
+      </div>
+      <div class="notification-content"> {description}</div>
+      <div class="notification-tags">
+                    <span class="notification-tag tag-category">
+                        <span>📁</span>
+                        <span style="margin-left: 4px;">{category}</span>
+                    </span>
+        <span class="notification-tag tag-priority {priority}">
+                        <span>⚡</span>
+                        <span style="margin-left: 4px;">{priority}</span>
+                    </span>
+        <span class="notification-tag tag-type">
+                        <span>🏷️</span>
+                        <span style="margin-left: 4px;">{type}</span>
+                    </span>
+      </div>
+      <div class="notification-meta">
+        <div class="meta-item">
+          <span>📅</span>
+          <span>{dateTime}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="email-footer">
+    <p>此邮件由系统自动发送，请勿直接回复</p>
+    <p>有疑问？访问 <a href="https://www.xcan.cloud">帮助中心</a> 或联系 <a
+        href="mailto:echnical_support@xcan.cloud">客服支持</a></p>
+    <p>© 2026 AngusGM. All rights reserved.</p>
+  </div>
+</div>
+</body>
+</html>

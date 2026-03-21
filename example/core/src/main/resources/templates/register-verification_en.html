@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Verification Code</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 50%, #e0e7ff 100%);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(37, 99, 235, 0.15);
+      overflow: hidden;
+    }
+
+    .email-header {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+      padding: 40px 30px;
+      text-align: center;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .email-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    .email-header h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .email-header p {
+      position: relative;
+      z-index: 1;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .email-body {
+      padding: 40px 30px;
+    }
+
+    .greeting {
+      font-size: 18px;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      color: #666666;
+      font-size: 15px;
+      margin-bottom: 30px;
+    }
+
+    .code-container {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 2px dashed #3b82f6;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      margin: 30px 0;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+
+    .verification-code {
+      font-size: 36px;
+      font-weight: bold;
+      color: #2563eb;
+      letter-spacing: 8px;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    }
+
+    .expiry-notice {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-left: 5px solid #2563eb;
+      padding: 18px 20px;
+      margin: 20px 0;
+      color: #1e40af;
+      font-size: 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+      font-weight: 500;
+    }
+
+    .expiry-notice strong {
+      color: #1e3a8a;
+      font-weight: 700;
+    }
+
+    .security-tips {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 30px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .security-tips h3 {
+      color: #1e40af;
+      font-size: 16px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .security-tips ul {
+      color: #475569;
+      font-size: 14px;
+      padding-left: 20px;
+    }
+
+    .security-tips li {
+      margin-bottom: 8px;
+    }
+
+    .email-footer {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 30px;
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .email-footer a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .email-footer a:hover {
+      color: #1e40af;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="email-container">
+  <div class="email-header">
+    <h1>🎉 Welcome to Register</h1>
+    <p>Thank you for joining us</p>
+  </div>
+
+  <div class="email-body">
+    <div class="greeting">
+      Hello!
+    </div>
+
+    <div class="message">
+      Thank you for choosing to register for our service. To ensure your account security, please
+      use the following verification code to complete the registration process:
+    </div>
+
+    <div class="code-container">
+      <div class="verification-code">{verificationCode}</div>
+    </div>
+
+    <div class="expiry-notice">
+      ⏰ <strong>Important Notice:</strong> This verification code will expire in <strong>{expiryMinutes}
+      minutes</strong>, please use it as soon as possible.
+    </div>
+
+    <div class="security-tips">
+      <h3>🛡️ Security Tips</h3>
+      <ul>
+        <li>Never share your verification code with anyone, including customer service staff</li>
+        <li>If this was not your registration action, please ignore this email</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="email-footer">
+    <p>This email is automatically sent by the system, please do not reply directly</p>
+    <p>Have questions? Visit <a href="https://www.xcan.cloud">Help Center</a> or contact <a
+        href="mailto:echnical_support@xcan.cloud">Support</a></p>
+    <p>© 2026 AngusGM. All rights reserved.</p>
+  </div>
+</div>
+</body>
+</html>
