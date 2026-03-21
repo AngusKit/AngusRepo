@@ -51,6 +51,8 @@ public class ScanTaskAssembler {
     vo.setErrorMessage(entity.getErrorMessage());
     vo.setCreatedBy(entity.getCreatedBy());
     vo.setCreatedDate(entity.getCreatedDate());
+    vo.setModifiedBy(entity.getModifiedBy());
+    vo.setModifiedDate(entity.getModifiedDate());
     return vo;
   }
 

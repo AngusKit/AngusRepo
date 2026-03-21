@@ -5,19 +5,17 @@ import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FO
 import cloud.xcan.angus.core.repo.domain.notification.NotificationPriority;
 import cloud.xcan.angus.core.repo.domain.notification.NotificationType;
 import cloud.xcan.angus.remote.NameJoinField;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import cloud.xcan.angus.remote.vo.TenantAuditingVo;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "通知详情")
-public class NotificationDetailVo implements Serializable {
+public class NotificationDetailVo extends TenantAuditingVo {
 
   @Schema(description = "通知ID")
   private String id;
@@ -54,17 +52,6 @@ public class NotificationDetailVo implements Serializable {
 
   @Schema(description = "操作链接")
   private String actionUrl;
-
-  @Schema(description = "创建人ID")
-  private Long createdBy;
-
-  @Schema(description = "创建人名称")
-  @NameJoinField(id = "createdBy", repository = "commonUserBaseRepo")
-  private String createdByName;
-
-  @JsonFormat(pattern = DEFAULT_DATE_TIME_FORMAT)
-  @Schema(description = "创建时间")
-  private LocalDateTime createdDate;
 
   @JsonFormat(pattern = DEFAULT_DATE_TIME_FORMAT)
   @Schema(description = "已读时间")

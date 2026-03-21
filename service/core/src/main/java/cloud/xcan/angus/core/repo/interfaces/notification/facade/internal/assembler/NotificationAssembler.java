@@ -52,6 +52,8 @@ public class NotificationAssembler {
     vo.setActionUrl(entity.getActionUrl());
     vo.setCreatedBy(entity.getCreatedBy());
     vo.setCreatedDate(entity.getCreatedDate());
+    vo.setModifiedBy(entity.getModifiedBy());
+    vo.setModifiedDate(entity.getModifiedDate());
     vo.setReadDate(entity.getReadDate());
     return vo;
   }

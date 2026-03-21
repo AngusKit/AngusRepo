@@ -54,7 +54,6 @@ public class RepositoryAssembler {
     vo.setBlobStore(entity.getBlobStore());
     vo.setSettings(entity.getSettings());
     vo.setCreatedBy(entity.getCreatedBy());
-    vo.setCreatorName(entity.getCreatorName());
     vo.setCreatedDate(entity.getCreatedDate());
     vo.setModifiedBy(entity.getModifiedBy());
     vo.setModifiedDate(entity.getModifiedDate());

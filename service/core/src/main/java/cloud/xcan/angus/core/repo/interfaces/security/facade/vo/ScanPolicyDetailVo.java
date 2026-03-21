@@ -3,19 +3,21 @@ package cloud.xcan.angus.core.repo.interfaces.security.facade.vo;
 import static cloud.xcan.angus.spec.SpecConstant.DateFormat.DEFAULT_DATE_TIME_FORMAT;
 
 import cloud.xcan.angus.core.repo.domain.security.ScanType;
-import cloud.xcan.angus.core.repo.domain.security.VulnerabilitySeverity;import cloud.xcan.angus.remote.NameJoinField;import com.fasterxml.jackson.annotation.JsonFormat;
+import cloud.xcan.angus.core.repo.domain.security.VulnerabilitySeverity;
+import cloud.xcan.angus.remote.NameJoinField;
+import cloud.xcan.angus.remote.vo.TenantAuditingVo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import java.io.Serializable;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @Schema(description = "扫描策略详情")
-public class ScanPolicyDetailVo implements Serializable {
+public class ScanPolicyDetailVo extends TenantAuditingVo {
 
   @Schema(description = "策略ID")
   private String id;
@@ -53,22 +55,4 @@ public class ScanPolicyDetailVo implements Serializable {
   @JsonFormat(pattern = DEFAULT_DATE_TIME_FORMAT)
   @Schema(description = "最后扫描时间")
   private LocalDateTime lastScanTime;
-
-  @Schema(description = "创建人ID")
-  private Long createdBy;
-
-  @Schema(description = "创建人名称")
-  @NameJoinField(id = "createdBy", repository = "commonUserBaseRepo")
-  private String createdByName;
-
-  @JsonFormat(pattern = DEFAULT_DATE_TIME_FORMAT)
-  @Schema(description = "创建时间")
-  private LocalDateTime createdDate;
-
-  @Schema(description = "修改人ID")
-  private Long modifiedBy;
-
-  @JsonFormat(pattern = DEFAULT_DATE_TIME_FORMAT)
-  @Schema(description = "修改时间")
-  private LocalDateTime modifiedDate;
 }
