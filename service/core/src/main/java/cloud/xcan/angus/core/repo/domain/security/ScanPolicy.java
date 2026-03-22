@@ -1,6 +1,6 @@
 package cloud.xcan.angus.core.repo.domain.security;
 
-import cloud.xcan.angus.core.jpa.multitenancy.TenantEntity;
+import cloud.xcan.angus.core.jpa.multitenancy.TenantAuditingEntity;
 import cloud.xcan.angus.core.jpa.multitenancy.TenantListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +21,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class ScanPolicy extends TenantEntity<ScanPolicy, String> {
+public class ScanPolicy extends TenantAuditingEntity<ScanPolicy, String> {
 
     public static final int MAX_ID_LENGTH = 64;
     public static final int MAX_NAME_LENGTH = 255;
@@ -33,23 +31,19 @@ public class ScanPolicy extends TenantEntity<ScanPolicy, String> {
     @Column(length = MAX_ID_LENGTH)
     private String id;
 
-    @NotBlank
     @Column(nullable = false, length = MAX_NAME_LENGTH)
     private String name;
 
     @Column(length = MAX_DESC_LENGTH)
     private String description;
 
-    @NotBlank
     @Column(name = "repository_id", nullable = false, length = MAX_ID_LENGTH)
     private String repositoryId;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "scan_type", nullable = false, length = 20)
     private ScanType scanType;
 
-    @NotNull
     @Column(nullable = false)
     private Boolean enabled = true;
 
@@ -68,18 +62,6 @@ public class ScanPolicy extends TenantEntity<ScanPolicy, String> {
 
     @Column(name = "last_scan_time")
     private LocalDateTime lastScanTime;
-
-    @Column(name = "created_by")
-    private Long createdBy;
-
-    @Column(name = "created_date", nullable = false, updatable = false)
-    private LocalDateTime createdDate;
-
-    @Column(name = "modified_by")
-    private Long modifiedBy;
-
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
 
     @Transient
     private String repositoryName;

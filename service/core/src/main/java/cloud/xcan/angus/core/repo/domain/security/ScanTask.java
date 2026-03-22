@@ -10,8 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,20 +31,16 @@ public class ScanTask extends TenantEntity<ScanTask, String> {
     @Column(length = MAX_ID_LENGTH)
     private String id;
 
-    @NotBlank
     @Column(name = "artifact_id", nullable = false, length = MAX_ID_LENGTH)
     private String artifactId;
 
-    @NotBlank
     @Column(name = "repository_id", nullable = false, length = MAX_ID_LENGTH)
     private String repositoryId;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "scan_type", nullable = false, length = 20)
     private ScanType scanType;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ScanStatus status = ScanStatus.PENDING;

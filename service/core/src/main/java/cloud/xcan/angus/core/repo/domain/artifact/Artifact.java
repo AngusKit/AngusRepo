@@ -1,6 +1,6 @@
 package cloud.xcan.angus.core.repo.domain.artifact;
 
-import cloud.xcan.angus.core.jpa.multitenancy.TenantEntity;
+import cloud.xcan.angus.core.jpa.multitenancy.TenantAuditingEntity;
 import cloud.xcan.angus.core.jpa.multitenancy.TenantListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,7 +8,6 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +19,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class Artifact extends TenantEntity<Artifact, Long> {
+public class Artifact extends TenantAuditingEntity<Artifact, Long> {
 
   @Id
   private Long id;
@@ -69,18 +68,6 @@ public class Artifact extends TenantEntity<Artifact, Long> {
 
   @Column(name = "metadata", columnDefinition = "JSON")
   private String metadata;
-
-  @Column(name = "created_by")
-  private Long createdBy;
-
-  @Column(name = "created_date", nullable = false, updatable = false)
-  private LocalDateTime createdDate;
-
-  @Column(name = "modified_by")
-  private Long modifiedBy;
-
-  @Column(name = "modified_date")
-  private LocalDateTime modifiedDate;
 
   @Transient
   private String repositoryName;

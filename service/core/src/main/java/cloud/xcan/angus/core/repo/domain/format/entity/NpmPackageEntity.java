@@ -1,13 +1,12 @@
 package cloud.xcan.angus.core.repo.domain.format.entity;
 
-import cloud.xcan.angus.core.jpa.multitenancy.TenantEntity;
+import cloud.xcan.angus.core.jpa.multitenancy.TenantAuditingEntity;
 import cloud.xcan.angus.core.jpa.multitenancy.TenantListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -18,7 +17,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class NpmPackageEntity extends TenantEntity<NpmPackageEntity, Long> {
+public class NpmPackageEntity extends TenantAuditingEntity<NpmPackageEntity, Long> {
 
   @Id
   private Long id;
@@ -61,18 +60,6 @@ public class NpmPackageEntity extends TenantEntity<NpmPackageEntity, Long> {
 
   @Column(name = "time_info", columnDefinition = "JSON")
   private String timeInfo;
-
-  @Column(name = "created_by")
-  private Long createdBy;
-
-  @Column(name = "created_date", nullable = false, updatable = false)
-  private LocalDateTime createdDate;
-
-  @Column(name = "modified_by")
-  private Long modifiedBy;
-
-  @Column(name = "modified_date")
-  private LocalDateTime modifiedDate;
 
   @Override
   public Long identity() {

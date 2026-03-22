@@ -1,6 +1,6 @@
 package cloud.xcan.angus.core.repo.domain.cleanup;
 
-import cloud.xcan.angus.core.jpa.multitenancy.TenantEntity;
+import cloud.xcan.angus.core.jpa.multitenancy.TenantAuditingEntity;
 import cloud.xcan.angus.core.jpa.multitenancy.TenantListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +24,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class CleanupPolicy extends TenantEntity<CleanupPolicy, String> {
+public class CleanupPolicy extends TenantAuditingEntity<CleanupPolicy, String> {
 
     // 常量定义
     public static final int MAX_ID_LENGTH = 64;
@@ -37,23 +35,19 @@ public class CleanupPolicy extends TenantEntity<CleanupPolicy, String> {
     @Column(length = MAX_ID_LENGTH)
     private String id;
 
-    @NotBlank
     @Column(nullable = false, length = MAX_NAME_LENGTH)
     private String name;
 
     @Column(length = MAX_DESC_LENGTH)
     private String description;
 
-    @NotBlank
     @Column(name = "repository_id", nullable = false, length = MAX_ID_LENGTH)
     private String repositoryId;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private CleanupType type;
 
-    @NotNull
     @Column(nullable = false)
     private Boolean enabled = true;
 
@@ -78,19 +72,6 @@ public class CleanupPolicy extends TenantEntity<CleanupPolicy, String> {
 
     @Column(name = "last_execution_stats", columnDefinition = "JSON")
     private String lastExecutionStatsJson;
-
-    // 审计字段 - 扩展TenantEntity的功能
-    @Column(name = "created_by")
-    private Long createdBy;
-
-    @Column(name = "created_date", nullable = false, updatable = false)
-    private LocalDateTime createdDate;
-
-    @Column(name = "modified_by")
-    private Long modifiedBy;
-
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
 
     // 临时字段（不持久化）- 用于存储反序列化的JSON对象
     @Transient

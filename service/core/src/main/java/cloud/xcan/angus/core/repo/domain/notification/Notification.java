@@ -9,8 +9,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,19 +26,16 @@ public class Notification extends TenantEntity<Notification, String> {
     @Column(length = 64)
     private String id;
 
-    @NotBlank
     @Column(nullable = false, length = 500)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String message;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 20)
     private NotificationType type;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private NotificationPriority priority = NotificationPriority.MEDIUM;
@@ -54,7 +49,6 @@ public class Notification extends TenantEntity<Notification, String> {
     @Column(name = "is_archived", nullable = false)
     private Boolean isArchived = false;
 
-    @NotNull
     @Column(name = "target_user_id", nullable = false)
     private Long targetUserId;
 
