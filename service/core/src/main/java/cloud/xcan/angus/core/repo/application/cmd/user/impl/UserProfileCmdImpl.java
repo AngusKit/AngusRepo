@@ -133,7 +133,13 @@ public class UserProfileCmdImpl extends CommCmd<UserProfile, Long> implements Us
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void revokeApiToken(Long tokenId) {
-    userApiTokenRepo.deleteById(tokenId);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        userApiTokenRepo.deleteById(tokenId);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

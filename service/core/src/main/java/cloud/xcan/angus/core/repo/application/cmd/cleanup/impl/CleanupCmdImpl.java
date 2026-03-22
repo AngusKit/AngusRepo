@@ -118,15 +118,27 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
-    log.warn("Cleanup policy deleted: id={}", id);
-    cleanupPolicyRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Cleanup policy deleted: id={}", id);
+        cleanupPolicyRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<String> ids) {
-    log.warn("Cleanup policies deleted in batch: count={}", ids.size());
-    cleanupPolicyRepo.deleteAllById(ids);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Cleanup policies deleted in batch: count={}", ids.size());
+        cleanupPolicyRepo.deleteAllById(ids);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

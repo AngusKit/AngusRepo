@@ -144,15 +144,27 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(Long id) {
-    log.warn("Artifact deleted: id={}", id);
-    artifactRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Artifact deleted: id={}", id);
+        artifactRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<Long> ids) {
-    log.warn("Artifacts deleted in batch: count={}", ids.size());
-    artifactRepo.deleteAllById(ids);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Artifacts deleted in batch: count={}", ids.size());
+        artifactRepo.deleteAllById(ids);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

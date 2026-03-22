@@ -110,15 +110,27 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(Long id) {
-    log.warn("Repository deleted: id={}", id);
-    repoEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Repository deleted: id={}", id);
+        repoEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<Long> ids) {
-    log.warn("Repositories deleted in batch: count={}", ids.size());
-    repoEntityRepo.deleteAllById(ids);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Repositories deleted in batch: count={}", ids.size());
+        repoEntityRepo.deleteAllById(ids);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

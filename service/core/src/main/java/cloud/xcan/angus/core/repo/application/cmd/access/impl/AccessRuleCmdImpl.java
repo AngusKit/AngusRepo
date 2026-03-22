@@ -94,7 +94,13 @@ public class AccessRuleCmdImpl extends CommCmd<AccessRule, Long> implements Acce
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(Long id) {
-    accessRuleRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        accessRuleRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

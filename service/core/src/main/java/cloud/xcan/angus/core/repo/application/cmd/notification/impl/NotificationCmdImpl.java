@@ -73,15 +73,27 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
-    notificationRepo.deleteById(id);
-    log.warn("Notification deleted: id={}", id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        notificationRepo.deleteById(id);
+        log.warn("Notification deleted: id={}", id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteBatch(List<String> ids) {
-    notificationRepo.deleteAllById(ids);
-    log.warn("Notifications deleted in batch: count={}", ids.size());
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        notificationRepo.deleteAllById(ids);
+        log.warn("Notifications deleted in batch: count={}", ids.size());
+        return null;
+      }
+    }.execute();
   }
 
   @Override

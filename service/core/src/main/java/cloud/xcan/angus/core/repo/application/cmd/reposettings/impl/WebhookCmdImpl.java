@@ -109,7 +109,13 @@ public class WebhookCmdImpl extends CommCmd<Webhook, Long> implements WebhookCmd
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(Long id) {
-    webhookRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        webhookRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

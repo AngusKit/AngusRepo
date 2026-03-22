@@ -74,7 +74,13 @@ public class TeamMemberCmdImpl extends CommCmd<TeamMember, Long> implements Team
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void removeMember(Long memberId) {
-    teamMemberRepo.deleteById(memberId);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        teamMemberRepo.deleteById(memberId);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
@@ -103,7 +109,13 @@ public class TeamMemberCmdImpl extends CommCmd<TeamMember, Long> implements Team
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void revokeInvitation(Long invitationId) {
-    teamInvitationRepo.deleteById(invitationId);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        teamInvitationRepo.deleteById(invitationId);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

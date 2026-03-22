@@ -98,8 +98,14 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
-    log.warn("Scan policy deleted: id={}", id);
-    scanPolicyRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Scan policy deleted: id={}", id);
+        scanPolicyRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override

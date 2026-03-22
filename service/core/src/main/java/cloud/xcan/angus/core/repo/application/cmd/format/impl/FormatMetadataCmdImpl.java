@@ -93,7 +93,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteMavenMetadata(Long id) {
-    mavenMetadataEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        mavenMetadataEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== Docker =====
@@ -114,7 +120,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteDockerImage(Long id) {
-    dockerImageEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        dockerImageEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
@@ -132,7 +144,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteDockerBlob(Long id) {
-    dockerBlobEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        dockerBlobEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== NPM =====
@@ -153,7 +171,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteNpmPackage(Long id) {
-    npmPackageEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        npmPackageEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
@@ -171,7 +195,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteNpmVersion(Long id) {
-    npmVersionEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        npmVersionEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== NuGet =====
@@ -192,7 +222,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteNuGetPackage(Long id) {
-    nuGetPackageEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        nuGetPackageEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== PyPI =====
@@ -213,7 +249,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deletePyPIPackage(Long id) {
-    pyPIPackageEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        pyPIPackageEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
@@ -231,7 +273,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deletePyPIFile(Long id) {
-    pyPIFileEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        pyPIFileEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== APT =====
@@ -252,7 +300,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteAptPackage(Long id) {
-    aptPackageEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        aptPackageEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== YUM/RPM =====
@@ -273,7 +327,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteRpmPackage(Long id) {
-    rpmPackageEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        rpmPackageEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== Raw =====
@@ -294,7 +354,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteRawAsset(Long id) {
-    rawAssetEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        rawAssetEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== Helm =====
@@ -315,7 +381,13 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteHelmChart(Long id) {
-    helmChartEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        helmChartEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   // ===== Go =====
@@ -336,6 +408,12 @@ public class FormatMetadataCmdImpl implements FormatMetadataCmd {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteGoModule(Long id) {
-    goModuleEntityRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        goModuleEntityRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 }

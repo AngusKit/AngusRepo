@@ -99,8 +99,14 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
-    log.warn("Scan task deleted: id={}", id);
-    scanTaskRepo.deleteById(id);
+    new BizTemplate<Void>() {
+      @Override
+      protected Void process() {
+        log.warn("Scan task deleted: id={}", id);
+        scanTaskRepo.deleteById(id);
+        return null;
+      }
+    }.execute();
   }
 
   @Override
