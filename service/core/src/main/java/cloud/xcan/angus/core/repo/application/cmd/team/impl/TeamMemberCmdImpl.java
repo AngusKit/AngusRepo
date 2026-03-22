@@ -12,18 +12,18 @@ import cloud.xcan.angus.core.repo.domain.team.TeamInvitationRepo;
 import cloud.xcan.angus.core.repo.domain.team.TeamMember;
 import cloud.xcan.angus.core.repo.domain.team.TeamMemberRepo;
 import cloud.xcan.angus.core.repo.domain.team.UserRole;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class TeamMemberCmdImpl extends CommCmd<TeamMember, Long> implements TeamMemberCmd {
 
-  @Autowired(required = false)
+  @Resource
   private TeamMemberRepo teamMemberRepo;
 
-  @Autowired(required = false)
+  @Resource
   private TeamInvitationRepo teamInvitationRepo;
 
   @Override

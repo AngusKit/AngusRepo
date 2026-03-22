@@ -19,7 +19,7 @@ import cloud.xcan.angus.core.repo.domain.activity.ActivityRepo;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -29,8 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Biz
 public class ActivityCmdImpl extends CommCmd<Activity, Long> implements ActivityCmd {
 
-  // Inject ActivityRepo for database operations. 'required = false' allows for optional injection.
-  @Autowired(required = false)
+  // Inject ActivityRepo for database operations.
+  @Resource
   private ActivityRepo activityRepo;
 
   /**

@@ -10,20 +10,20 @@ import cloud.xcan.angus.core.repo.domain.upload.UploadChunkRepo;
 import cloud.xcan.angus.core.repo.domain.upload.UploadStatus;
 import cloud.xcan.angus.core.repo.domain.upload.UploadTask;
 import cloud.xcan.angus.core.repo.domain.upload.UploadTaskRepo;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class UploadCmdImpl extends CommCmd<UploadTask, Long> implements UploadCmd {
 
-  @Autowired(required = false)
+  @Resource
   private UploadTaskRepo uploadTaskRepo;
 
-  @Autowired(required = false)
+  @Resource
   private UploadChunkRepo uploadChunkRepo;
 
   @Override

@@ -5,22 +5,26 @@ import cloud.xcan.angus.core.biz.BizTemplate;
 import cloud.xcan.angus.core.biz.cmd.CommCmd;
 import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.security.ScanPolicyCmd;
+import cloud.xcan.angus.core.repo.application.query.security.ScanPolicyQuery;
 import cloud.xcan.angus.core.repo.domain.security.ScanPolicy;
 import cloud.xcan.angus.core.repo.domain.security.ScanPolicyRepo;
 import cloud.xcan.angus.remote.message.ProtocolException;
 import cloud.xcan.angus.remote.message.http.ResourceNotFound;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Biz
 public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements ScanPolicyCmd {
 
-  @Autowired(required = false)
+  @Resource
   private ScanPolicyRepo scanPolicyRepo;
+
+  @Resource
+  private ScanPolicyQuery scanPolicyQuery;
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -63,8 +67,7 @@ public class ScanPolicyCmdImpl extends CommCmd<ScanPolicy, String> implements Sc
 
       @Override
       protected void checkParams() {
-        existing = scanPolicyRepo.findById(policy.getId())
-            .orElseThrow(() -> ResourceNotFound.of(policy.getId(), "ScanPolicy"));
+        existing = scanPolicyQuery.findAndCheck(policy.getId());
         if (policy.getName() != null && !policy.getName().equals(existing.getName())) {
           if (scanPolicyRepo.existsByTenantIdAndNameAndRepositoryIdAndIdNot(
               existing.getTenantId(), policy.getName(), existing.getRepositoryId(), existing.getId())) {

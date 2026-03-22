@@ -29,50 +29,50 @@ import cloud.xcan.angus.core.repo.domain.format.entity.RawAssetEntity;
 import cloud.xcan.angus.core.repo.domain.format.entity.RawAssetEntityRepo;
 import cloud.xcan.angus.core.repo.domain.format.entity.RpmPackageEntity;
 import cloud.xcan.angus.core.repo.domain.format.entity.RpmPackageEntityRepo;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class FormatMetadataCmdImpl implements FormatMetadataCmd {
 
-  @Autowired(required = false)
+  @Resource
   private MavenMetadataEntityRepo mavenMetadataEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private DockerImageEntityRepo dockerImageEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private DockerBlobEntityRepo dockerBlobEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private NpmPackageEntityRepo npmPackageEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private NpmVersionEntityRepo npmVersionEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private NuGetPackageEntityRepo nuGetPackageEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private PyPIPackageEntityRepo pyPIPackageEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private PyPIFileEntityRepo pyPIFileEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private AptPackageEntityRepo aptPackageEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private RpmPackageEntityRepo rpmPackageEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private RawAssetEntityRepo rawAssetEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private HelmChartEntityRepo helmChartEntityRepo;
 
-  @Autowired(required = false)
+  @Resource
   private GoModuleEntityRepo goModuleEntityRepo;
 
   // ===== Maven =====

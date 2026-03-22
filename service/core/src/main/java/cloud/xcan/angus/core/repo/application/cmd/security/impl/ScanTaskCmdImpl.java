@@ -5,23 +5,26 @@ import cloud.xcan.angus.core.biz.BizTemplate;
 import cloud.xcan.angus.core.biz.cmd.CommCmd;
 import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.security.ScanTaskCmd;
+import cloud.xcan.angus.core.repo.application.query.security.ScanTaskQuery;
 import cloud.xcan.angus.core.repo.domain.security.ScanStatus;
 import cloud.xcan.angus.core.repo.domain.security.ScanTask;
 import cloud.xcan.angus.core.repo.domain.security.ScanTaskRepo;
 import cloud.xcan.angus.remote.message.ProtocolException;
-import cloud.xcan.angus.remote.message.http.ResourceNotFound;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Biz
 public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTaskCmd {
 
-  @Autowired(required = false)
+  @Resource
   private ScanTaskRepo scanTaskRepo;
+
+  @Resource
+  private ScanTaskQuery scanTaskQuery;
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -53,8 +56,7 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
 
       @Override
       protected void checkParams() {
-        existing = scanTaskRepo.findById(scanTask.getId())
-            .orElseThrow(() -> ResourceNotFound.of(scanTask.getId(), "ScanTask"));
+        existing = scanTaskQuery.findAndCheck(scanTask.getId());
       }
 
       @Override
@@ -77,8 +79,7 @@ public class ScanTaskCmdImpl extends CommCmd<ScanTask, String> implements ScanTa
 
       @Override
       protected void checkParams() {
-        existing = scanTaskRepo.findById(id)
-            .orElseThrow(() -> ResourceNotFound.of(id, "ScanTask"));
+        existing = scanTaskQuery.findAndCheck(id);
         if (!existing.isRunning()) {
           throw ProtocolException.of("扫描任务已完成，无法取消");
         }

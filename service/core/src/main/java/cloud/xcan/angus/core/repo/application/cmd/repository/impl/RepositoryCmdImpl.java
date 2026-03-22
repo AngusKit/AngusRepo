@@ -5,23 +5,26 @@ import cloud.xcan.angus.core.biz.BizTemplate;
 import cloud.xcan.angus.core.biz.cmd.CommCmd;
 import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.repository.RepositoryCmd;
+import cloud.xcan.angus.core.repo.application.query.repository.RepositoryQuery;
 import cloud.xcan.angus.core.repo.domain.repository.RepoEntity;
 import cloud.xcan.angus.core.repo.domain.repository.RepoEntityRepo;
 import cloud.xcan.angus.core.repo.domain.repository.RepositoryStatus;
 import cloud.xcan.angus.remote.message.ProtocolException;
-import cloud.xcan.angus.remote.message.http.ResourceNotFound;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Biz
 public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements RepositoryCmd {
 
-  @Autowired(required = false)
+  @Resource
   private RepoEntityRepo repoEntityRepo;
+
+  @Resource
+  private RepositoryQuery repositoryQuery;
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -64,8 +67,7 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
 
       @Override
       protected void checkParams() {
-        existing = repoEntityRepo.findById(repository.getId())
-            .orElseThrow(() -> ResourceNotFound.of(repository.getId(), "Repository"));
+        existing = repositoryQuery.findAndCheck(repository.getId());
       }
 
       @Override
@@ -91,8 +93,7 @@ public class RepositoryCmdImpl extends CommCmd<RepoEntity, Long> implements Repo
 
       @Override
       protected void checkParams() {
-        existing = repoEntityRepo.findById(id)
-            .orElseThrow(() -> ResourceNotFound.of(id, "Repository"));
+        existing = repositoryQuery.findAndCheck(id);
       }
 
       @Override

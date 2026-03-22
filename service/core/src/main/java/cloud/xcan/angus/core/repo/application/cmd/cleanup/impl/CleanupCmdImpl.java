@@ -5,6 +5,7 @@ import cloud.xcan.angus.core.biz.BizTemplate;
 import cloud.xcan.angus.core.biz.cmd.CommCmd;
 import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.cleanup.CleanupCmd;
+import cloud.xcan.angus.core.repo.application.query.cleanup.CleanupQuery;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupExecution;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupExecutionRepo;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupPolicy;
@@ -12,22 +13,25 @@ import cloud.xcan.angus.core.repo.domain.cleanup.CleanupPolicyRepo;
 import cloud.xcan.angus.core.repo.domain.cleanup.CleanupStatus;
 import cloud.xcan.angus.remote.message.ProtocolException;
 import cloud.xcan.angus.remote.message.http.ResourceNotFound;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Biz
 public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements CleanupCmd {
 
-  @Autowired(required = false)
+  @Resource
   private CleanupPolicyRepo cleanupPolicyRepo;
 
-  @Autowired(required = false)
+  @Resource
   private CleanupExecutionRepo cleanupExecutionRepo;
+
+  @Resource
+  private CleanupQuery cleanupQuery;
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -70,8 +74,7 @@ public class CleanupCmdImpl extends CommCmd<CleanupPolicy, String> implements Cl
 
       @Override
       protected void checkParams() {
-        existing = cleanupPolicyRepo.findById(policy.getId())
-            .orElseThrow(() -> ResourceNotFound.of(policy.getId(), "CleanupPolicy"));
+        existing = cleanupQuery.findPolicyAndCheck(policy.getId());
         if (policy.getName() != null && !policy.getName().equals(existing.getName())) {
           if (cleanupPolicyRepo.existsByTenantIdAndNameAndRepositoryIdAndIdNot(
               existing.getTenantId(), policy.getName(), existing.getRepositoryId(), existing.getId())) {

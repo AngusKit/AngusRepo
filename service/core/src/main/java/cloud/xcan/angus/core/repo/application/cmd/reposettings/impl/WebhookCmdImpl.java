@@ -9,17 +9,17 @@ import cloud.xcan.angus.core.repo.domain.reposettings.Webhook;
 import cloud.xcan.angus.core.repo.domain.reposettings.WebhookLog;
 import cloud.xcan.angus.core.repo.domain.reposettings.WebhookLogRepo;
 import cloud.xcan.angus.core.repo.domain.reposettings.WebhookRepo;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class WebhookCmdImpl extends CommCmd<Webhook, Long> implements WebhookCmd {
 
-  @Autowired(required = false)
+  @Resource
   private WebhookRepo webhookRepo;
 
-  @Autowired(required = false)
+  @Resource
   private WebhookLogRepo webhookLogRepo;
 
   @Override

@@ -7,12 +7,13 @@ import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.artifact.ArtifactCmd;
 import cloud.xcan.angus.core.repo.domain.artifact.Artifact;
 import cloud.xcan.angus.core.repo.domain.artifact.ArtifactRepo;
+import cloud.xcan.angus.core.repo.application.query.artifact.ArtifactQuery;
 import cloud.xcan.angus.core.repo.domain.artifact.ArtifactStar;
 import cloud.xcan.angus.core.repo.domain.artifact.ArtifactStarRepo;
 import cloud.xcan.angus.core.repo.domain.format.store.BlobStore;
 import cloud.xcan.angus.remote.message.ProtocolException;
-import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,21 +21,23 @@ import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Biz
 public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements ArtifactCmd {
 
-  @Autowired(required = false)
+  @Resource
   private ArtifactRepo artifactRepo;
 
-  @Autowired(required = false)
+  @Resource
   private ArtifactStarRepo artifactStarRepo;
 
-  @Autowired(required = false)
+  @Resource
   private BlobStore blobStore;
+
+  @Resource
+  private ArtifactQuery artifactQuery;
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -81,8 +84,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
 
       @Override
       protected void checkParams() {
-        existing = artifactRepo.findById(artifact.getId())
-            .orElseThrow(() -> ResourceNotFound.of(artifact.getId(), "Artifact"));
+        existing = artifactQuery.findAndCheck(artifact.getId());
       }
 
       @Override
@@ -119,8 +121,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
 
       @Override
       protected void checkParams() {
-        existing = artifactRepo.findById(id)
-            .orElseThrow(() -> ResourceNotFound.of(id, "Artifact"));
+        existing = artifactQuery.findAndCheck(id);
       }
 
       @Override
@@ -236,8 +237,7 @@ public class ArtifactCmdImpl extends CommCmd<Artifact, Long> implements Artifact
 
       @Override
       protected void checkParams() {
-        artifact = artifactRepo.findById(id)
-            .orElseThrow(() -> ResourceNotFound.of(id, "Artifact"));
+        artifact = artifactQuery.findAndCheck(id);
         tenantId = PrincipalContext.get().getTenantId().toString();
         repositoryId = artifact.getRepositoryId().toString();
         path = artifact.getPath() != null ? artifact.getPath() : artifact.getName();

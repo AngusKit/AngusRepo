@@ -5,24 +5,27 @@ import cloud.xcan.angus.core.biz.BizTemplate;
 import cloud.xcan.angus.core.biz.cmd.CommCmd;
 import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.notification.NotificationCmd;
+import cloud.xcan.angus.core.repo.application.query.notification.NotificationQuery;
 import cloud.xcan.angus.core.repo.domain.notification.Notification;
 import cloud.xcan.angus.core.repo.domain.notification.NotificationRepo;
-import cloud.xcan.angus.remote.message.http.ProtocolException;
 import cloud.xcan.angus.remote.message.http.ResourceNotFound;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Biz
 public class NotificationCmdImpl extends CommCmd<Notification, String> implements NotificationCmd {
 
-  @Autowired(required = false)
+  @Resource
   private NotificationRepo notificationRepo;
+
+  @Resource
+  private NotificationQuery notificationQuery;
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -51,8 +54,7 @@ public class NotificationCmdImpl extends CommCmd<Notification, String> implement
 
       @Override
       protected void checkParams() {
-        existing = notificationRepo.findById(notification.getId())
-            .orElseThrow(() -> ResourceNotFound.of(notification.getId(), "Notification"));
+        existing = notificationQuery.findAndCheck(notification.getId());
       }
 
       @Override

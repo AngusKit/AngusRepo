@@ -11,10 +11,10 @@ import cloud.xcan.angus.core.repo.domain.activitylog.ActivityCategory;
 import cloud.xcan.angus.core.repo.domain.activitylog.ActivityLog;
 import cloud.xcan.angus.core.repo.domain.activitylog.ActivityLogRepo;
 import cloud.xcan.angus.spec.principal.PrincipalContext;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Biz
 public class ActivityLogCmdImpl extends CommCmd<ActivityLog, String> implements ActivityLogCmd {
 
-  @Autowired(required = false)
+  @Resource
   private ActivityLogRepo activityLogRepo;
 
   @Override

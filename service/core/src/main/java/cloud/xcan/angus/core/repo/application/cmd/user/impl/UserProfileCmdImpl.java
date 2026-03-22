@@ -9,17 +9,17 @@ import cloud.xcan.angus.core.repo.domain.user.UserApiToken;
 import cloud.xcan.angus.core.repo.domain.user.UserApiTokenRepo;
 import cloud.xcan.angus.core.repo.domain.user.UserProfile;
 import cloud.xcan.angus.core.repo.domain.user.UserProfileRepo;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class UserProfileCmdImpl extends CommCmd<UserProfile, Long> implements UserProfileCmd {
 
-  @Autowired(required = false)
+  @Resource
   private UserProfileRepo userProfileRepo;
 
-  @Autowired(required = false)
+  @Resource
   private UserApiTokenRepo userApiTokenRepo;
 
   @Override

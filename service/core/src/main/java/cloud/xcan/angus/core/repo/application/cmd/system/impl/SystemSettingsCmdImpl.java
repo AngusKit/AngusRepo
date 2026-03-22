@@ -9,17 +9,17 @@ import cloud.xcan.angus.core.repo.domain.system.SystemLicense;
 import cloud.xcan.angus.core.repo.domain.system.SystemLicenseRepo;
 import cloud.xcan.angus.core.repo.domain.system.SystemSettings;
 import cloud.xcan.angus.core.repo.domain.system.SystemSettingsRepo;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class SystemSettingsCmdImpl extends CommCmd<SystemSettings, Long> implements SystemSettingsCmd {
 
-  @Autowired(required = false)
+  @Resource
   private SystemSettingsRepo systemSettingsRepo;
 
-  @Autowired(required = false)
+  @Resource
   private SystemLicenseRepo systemLicenseRepo;
 
   @Override

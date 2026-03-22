@@ -7,15 +7,15 @@ import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.access.AccessTokenCmd;
 import cloud.xcan.angus.core.repo.domain.access.AccessToken;
 import cloud.xcan.angus.core.repo.domain.access.AccessTokenRepo;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class AccessTokenCmdImpl extends CommCmd<AccessToken, Long> implements AccessTokenCmd {
 
-  @Autowired(required = false)
+  @Resource
   private AccessTokenRepo accessTokenRepo;
 
   @Override

@@ -7,14 +7,14 @@ import cloud.xcan.angus.core.jpa.repository.BaseRepository;
 import cloud.xcan.angus.core.repo.application.cmd.access.AccessRuleCmd;
 import cloud.xcan.angus.core.repo.domain.access.AccessRule;
 import cloud.xcan.angus.core.repo.domain.access.AccessRuleRepo;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Biz
 public class AccessRuleCmdImpl extends CommCmd<AccessRule, Long> implements AccessRuleCmd {
 
-  @Autowired(required = false)
+  @Resource
   private AccessRuleRepo accessRuleRepo;
 
   @Override
