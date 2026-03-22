@@ -48,13 +48,23 @@ public class ArtifactQueryImpl implements ArtifactQuery {
 
   @Override
   public Optional<Artifact> findById(Long id) {
-    return artifactRepo.findById(id);
+    return new BizTemplate<Optional<Artifact>>() {
+      @Override
+      protected Optional<Artifact> process() {
+        return artifactRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public Artifact findAndCheck(Long id) {
-    return artifactRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("制品不存在: " + id));
+    return new BizTemplate<Artifact>() {
+      @Override
+      protected Artifact process() {
+        return artifactRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("制品不存在: " + id));
+      }
+    }.execute();
   }
 
   @Override
@@ -89,11 +99,16 @@ public class ArtifactQueryImpl implements ArtifactQuery {
 
   @Override
   public List<Artifact> findVersions(Long id) {
-    Artifact artifact = findAndCheck(id);
-    return artifactRepo.findByRepositoryId(artifact.getRepositoryId())
-        .stream()
-        .filter(a -> a.getName().equals(artifact.getName()))
-        .toList();
+    return new BizTemplate<List<Artifact>>() {
+      @Override
+      protected List<Artifact> process() {
+        Artifact artifact = findAndCheck(id);
+        return artifactRepo.findByRepositoryId(artifact.getRepositoryId())
+            .stream()
+            .filter(a -> a.getName().equals(artifact.getName()))
+            .toList();
+      }
+    }.execute();
   }
 
   @Override

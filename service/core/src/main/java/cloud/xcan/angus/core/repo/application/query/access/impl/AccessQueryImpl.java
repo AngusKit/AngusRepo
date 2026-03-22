@@ -60,28 +60,43 @@ public class AccessQueryImpl implements AccessQuery {
 
   @Override
   public AccessRule findRuleAndCheck(Long id) {
-    return accessRuleRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("访问规则不存在: " + id));
+    return new BizTemplate<AccessRule>() {
+      @Override
+      protected AccessRule process() {
+        return accessRuleRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("访问规则不存在: " + id));
+      }
+    }.execute();
   }
 
   @Override
   public List<AccessToken> findTokensByRepositoryId(Long repositoryId) {
-    return accessTokenRepo.findByRepositoryId(repositoryId);
+    return new BizTemplate<List<AccessToken>>() {
+      @Override
+      protected List<AccessToken> process() {
+        return accessTokenRepo.findByRepositoryId(repositoryId);
+      }
+    }.execute();
   }
 
   @Override
   public boolean checkPermission(Long repositoryId, Long userId, String permission, String path) {
-    List<AccessRule> rules = accessRuleRepo.findByRepositoryIdAndEnabled(repositoryId, true);
-    for (AccessRule rule : rules) {
-      if (rule.getPermissions() != null
-          && rule.getPermissions().contains("\"" + permission + "\"")) {
-        if (path == null || rule.getPaths() == null
-            || rule.getPaths().contains("\"" + path + "\"")) {
-          return true;
+    return new BizTemplate<Boolean>() {
+      @Override
+      protected Boolean process() {
+        List<AccessRule> rules = accessRuleRepo.findByRepositoryIdAndEnabled(repositoryId, true);
+        for (AccessRule rule : rules) {
+          if (rule.getPermissions() != null
+              && rule.getPermissions().contains("\"" + permission + "\"")) {
+            if (path == null || rule.getPaths() == null
+                || rule.getPaths().contains("\"" + path + "\"")) {
+              return true;
+            }
+          }
         }
+        return false;
       }
-    }
-    return false;
+    }.execute();
   }
 
   @Override

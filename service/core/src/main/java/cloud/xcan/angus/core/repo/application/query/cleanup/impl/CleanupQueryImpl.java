@@ -57,8 +57,13 @@ public class CleanupQueryImpl implements CleanupQuery {
 
   @Override
   public CleanupPolicy findPolicyAndCheck(String id) {
-    return cleanupPolicyRepo.findByTenantIdAndId(PrincipalContext.getTenantId(), id)
-        .orElseThrow(() -> ResourceNotFound.of(id, "CleanupPolicy"));
+    return new BizTemplate<CleanupPolicy>() {
+      @Override
+      protected CleanupPolicy process() {
+        return cleanupPolicyRepo.findByTenantIdAndId(PrincipalContext.getTenantId(), id)
+            .orElseThrow(() -> ResourceNotFound.of(id, "CleanupPolicy"));
+      }
+    }.execute();
   }
 
   @Override
@@ -69,8 +74,13 @@ public class CleanupQueryImpl implements CleanupQuery {
 
   @Override
   public List<CleanupExecution> findExecutionsByPolicyId(String policyId) {
-    return cleanupExecutionRepo.findByTenantIdAndPolicyIdOrderByCreatedDateDesc(
-        PrincipalContext.getTenantId(), policyId);
+    return new BizTemplate<List<CleanupExecution>>() {
+      @Override
+      protected List<CleanupExecution> process() {
+        return cleanupExecutionRepo.findByTenantIdAndPolicyIdOrderByCreatedDateDesc(
+            PrincipalContext.getTenantId(), policyId);
+      }
+    }.execute();
   }
 
   @Override

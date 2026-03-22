@@ -1,6 +1,7 @@
 package cloud.xcan.angus.core.repo.application.query.system.impl;
 
 import cloud.xcan.angus.core.biz.Biz;
+import cloud.xcan.angus.core.biz.BizTemplate;
 import cloud.xcan.angus.core.repo.application.query.system.SystemSettingsQuery;
 import cloud.xcan.angus.core.repo.domain.system.SystemLicense;
 import cloud.xcan.angus.core.repo.domain.system.SystemLicenseRepo;
@@ -23,7 +24,12 @@ public class SystemSettingsQueryImpl implements SystemSettingsQuery {
 
   @Override
   public List<SystemSettings> findAll() {
-    return systemSettingsRepo.findAll();
+    return new BizTemplate<List<SystemSettings>>() {
+      @Override
+      protected List<SystemSettings> process() {
+        return systemSettingsRepo.findAll();
+      }
+    }.execute();
   }
 
   @Override
@@ -38,6 +44,11 @@ public class SystemSettingsQueryImpl implements SystemSettingsQuery {
 
   @Override
   public Optional<SystemLicense> findCurrentLicense() {
-    return systemLicenseRepo.findFirstByOrderByCreatedDateDesc();
+    return new BizTemplate<Optional<SystemLicense>>() {
+      @Override
+      protected Optional<SystemLicense> process() {
+        return systemLicenseRepo.findFirstByOrderByCreatedDateDesc();
+      }
+    }.execute();
   }
 }

@@ -32,13 +32,23 @@ public class RepoSettingsQueryImpl implements RepoSettingsQuery {
 
   @Override
   public Optional<RepositoryGlobalSettings> getSettings() {
-    return settingsRepo.findFirstByOrderByIdDesc();
+    return new BizTemplate<Optional<RepositoryGlobalSettings>>() {
+      @Override
+      protected Optional<RepositoryGlobalSettings> process() {
+        return settingsRepo.findFirstByOrderByIdDesc();
+      }
+    }.execute();
   }
 
   @Override
   public Webhook findWebhookById(Long id) {
-    return webhookRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("Webhook不存在: " + id));
+    return new BizTemplate<Webhook>() {
+      @Override
+      protected Webhook process() {
+        return webhookRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Webhook不存在: " + id));
+      }
+    }.execute();
   }
 
   @Override

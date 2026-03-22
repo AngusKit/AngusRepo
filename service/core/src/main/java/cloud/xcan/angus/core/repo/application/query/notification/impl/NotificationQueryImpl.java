@@ -56,8 +56,13 @@ public class NotificationQueryImpl implements NotificationQuery {
 
   @Override
   public Notification findAndCheck(String id) {
-    return notificationRepo.findById(id)
-        .orElseThrow(() -> ResourceNotFound.of(id, "Notification"));
+    return new BizTemplate<Notification>() {
+      @Override
+      protected Notification process() {
+        return notificationRepo.findById(id)
+            .orElseThrow(() -> ResourceNotFound.of(id, "Notification"));
+      }
+    }.execute();
   }
 
   @Override

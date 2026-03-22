@@ -51,13 +51,23 @@ public class TeamMemberQueryImpl implements TeamMemberQuery {
 
   @Override
   public Optional<TeamMember> findById(Long id) {
-    return teamMemberRepo.findById(id);
+    return new BizTemplate<Optional<TeamMember>>() {
+      @Override
+      protected Optional<TeamMember> process() {
+        return teamMemberRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public TeamMember findAndCheck(Long id) {
-    return teamMemberRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("成员不存在: " + id));
+    return new BizTemplate<TeamMember>() {
+      @Override
+      protected TeamMember process() {
+        return teamMemberRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("成员不存在: " + id));
+      }
+    }.execute();
   }
 
   @Override
@@ -79,6 +89,11 @@ public class TeamMemberQueryImpl implements TeamMemberQuery {
 
   @Override
   public Page<TeamInvitation> findInvitations(PageRequest pageable) {
-    return teamInvitationRepo.findAll(pageable);
+    return new BizTemplate<Page<TeamInvitation>>() {
+      @Override
+      protected Page<TeamInvitation> process() {
+        return teamInvitationRepo.findAll(pageable);
+      }
+    }.execute();
   }
 }

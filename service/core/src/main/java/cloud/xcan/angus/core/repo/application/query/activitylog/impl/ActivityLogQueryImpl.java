@@ -57,116 +57,131 @@ public class ActivityLogQueryImpl implements ActivityLogQuery {
 
   @Override
   public Optional<ActivityLog> findById(String id) {
-    String tenantId = PrincipalContext.get().getTenantId().toString();
-    return activityLogRepo.findByTenantIdAndId(tenantId, id);
+    return new BizTemplate<Optional<ActivityLog>>() {
+      @Override
+      protected Optional<ActivityLog> process() {
+        String tenantId = PrincipalContext.get().getTenantId().toString();
+        return activityLogRepo.findByTenantIdAndId(tenantId, id);
+      }
+    }.execute();
   }
 
   @Override
   public ActivityLogStatisticsVo getStatistics(LocalDateTime startDate, LocalDateTime endDate) {
-    String tenantId = PrincipalContext.get().getTenantId().toString();
-    List<ActivityLog> allLogs = activityLogRepo.findAll();
+    return new BizTemplate<ActivityLogStatisticsVo>() {
+      @Override
+      protected ActivityLogStatisticsVo process() {
+        String tenantId = PrincipalContext.get().getTenantId().toString();
+        List<ActivityLog> allLogs = activityLogRepo.findAll();
 
-    // 过滤租户
-    allLogs = allLogs.stream()
-        .filter(log -> tenantId.equals(log.getTenantId() != null ? log.getTenantId().toString() : null))
-        .collect(Collectors.toList());
+        // 过滤租户
+        allLogs = allLogs.stream()
+            .filter(log -> tenantId.equals(log.getTenantId() != null ? log.getTenantId().toString() : null))
+            .collect(Collectors.toList());
 
-    // 按时间范围过滤
-    if (startDate != null) {
-      allLogs = allLogs.stream()
-          .filter(log -> log.getTimestamp() != null && !log.getTimestamp().isBefore(startDate))
-          .collect(Collectors.toList());
-    }
-    if (endDate != null) {
-      allLogs = allLogs.stream()
-          .filter(log -> log.getTimestamp() != null && !log.getTimestamp().isAfter(endDate))
-          .collect(Collectors.toList());
-    }
+        // 按时间范围过滤
+        if (startDate != null) {
+          allLogs = allLogs.stream()
+              .filter(log -> log.getTimestamp() != null && !log.getTimestamp().isBefore(startDate))
+              .collect(Collectors.toList());
+        }
+        if (endDate != null) {
+          allLogs = allLogs.stream()
+              .filter(log -> log.getTimestamp() != null && !log.getTimestamp().isAfter(endDate))
+              .collect(Collectors.toList());
+        }
 
-    LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now();
 
-    ActivityLogStatisticsVo statistics = new ActivityLogStatisticsVo();
+        ActivityLogStatisticsVo statistics = new ActivityLogStatisticsVo();
 
-    // 总日志数
-    statistics.setTotalLogs((long) allLogs.size());
+        // 总日志数
+        statistics.setTotalLogs((long) allLogs.size());
 
-    // 今日日志数（简化实现）
-    statistics.setLogsToday(0L);
+        // 今日日志数（简化实现）
+        statistics.setLogsToday(0L);
 
-    // 本周日志数（简化实现）
-    statistics.setLogsThisWeek(0L);
+        // 本周日志数（简化实现）
+        statistics.setLogsThisWeek(0L);
 
-    // 本月日志数（简化实现）
-    statistics.setLogsThisMonth(0L);
+        // 本月日志数（简化实现）
+        statistics.setLogsThisMonth(0L);
 
-    // 操作类型分布
-    Map<ActivityAction, Long> actionDistribution = allLogs.stream()
-        .collect(Collectors.groupingBy(
-            log -> log.getAction() != null ? log.getAction() : ActivityAction.CREATE,
-            Collectors.counting()));
-    statistics.setActionDistribution(actionDistribution);
+        // 操作类型分布
+        Map<ActivityAction, Long> actionDistribution = allLogs.stream()
+            .collect(Collectors.groupingBy(
+                log -> log.getAction() != null ? log.getAction() : ActivityAction.CREATE,
+                Collectors.counting()));
+        statistics.setActionDistribution(actionDistribution);
 
-    // 分类分布
-    Map<ActivityCategory, Long> categoryDistribution = allLogs.stream()
-        .collect(Collectors.groupingBy(
-            log -> log.getCategory() != null ? log.getCategory() : ActivityCategory.SYSTEM,
-            Collectors.counting()));
-    statistics.setCategoryDistribution(categoryDistribution);
+        // 分类分布
+        Map<ActivityCategory, Long> categoryDistribution = allLogs.stream()
+            .collect(Collectors.groupingBy(
+                log -> log.getCategory() != null ? log.getCategory() : ActivityCategory.SYSTEM,
+                Collectors.counting()));
+        statistics.setCategoryDistribution(categoryDistribution);
 
-    // Top 10活跃用户
-    Map<String, Long> topUsers = allLogs.stream()
-        .collect(Collectors.groupingBy(
-            log -> log.getUser() != null ? log.getUser() : "Unknown",
-            Collectors.counting()))
-        .entrySet().stream()
-        .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
-        .limit(10)
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    statistics.setTopUsers(topUsers);
+        // Top 10活跃用户
+        Map<String, Long> topUsers = allLogs.stream()
+            .collect(Collectors.groupingBy(
+                log -> log.getUser() != null ? log.getUser() : "Unknown",
+                Collectors.counting()))
+            .entrySet().stream()
+            .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+            .limit(10)
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        statistics.setTopUsers(topUsers);
 
-    // Top 10活跃仓库
-    Map<String, Long> topRepositories = allLogs.stream()
-        .collect(Collectors.groupingBy(
-            log -> log.getRepository() != null ? log.getRepository() : "Unknown",
-            Collectors.counting()))
-        .entrySet().stream()
-        .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
-        .limit(10)
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    statistics.setTopRepositories(topRepositories);
+        // Top 10活跃仓库
+        Map<String, Long> topRepositories = allLogs.stream()
+            .collect(Collectors.groupingBy(
+                log -> log.getRepository() != null ? log.getRepository() : "Unknown",
+                Collectors.counting()))
+            .entrySet().stream()
+            .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+            .limit(10)
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        statistics.setTopRepositories(topRepositories);
 
-    // 活动趋势（最近30天）（简化实现）
-    List<ActivityTrendVo> activityTrend = new ArrayList<>();
-    for (int i = 29; i >= 0; i--) {
-      LocalDate date = today.minusDays(i);
-      ActivityTrendVo trendVo = new ActivityTrendVo();
-      trendVo.setDate(date.toString());
-      trendVo.setCount(0L);
-      trendVo.setActionBreakdown(Map.of());
-      activityTrend.add(trendVo);
-    }
-    statistics.setActivityTrend(activityTrend);
+        // 活动趋势（最近30天）（简化实现）
+        List<ActivityTrendVo> activityTrend = new ArrayList<>();
+        for (int i = 29; i >= 0; i--) {
+          LocalDate date = today.minusDays(i);
+          ActivityTrendVo trendVo = new ActivityTrendVo();
+          trendVo.setDate(date.toString());
+          trendVo.setCount(0L);
+          trendVo.setActionBreakdown(Map.of());
+          activityTrend.add(trendVo);
+        }
+        statistics.setActivityTrend(activityTrend);
 
-    return statistics;
+        return statistics;
+      }
+    }.execute();
   }
 
   @Override
   public ActivityUserListVo getUniqueUsers() {
-    String tenantId = PrincipalContext.get().getTenantId().toString();
-    List<ActivityLog> allLogs = activityLogRepo.findAll();
+    return new BizTemplate<ActivityUserListVo>() {
+      @Override
+      protected ActivityUserListVo process() {
+        String tenantId = PrincipalContext.get().getTenantId().toString();
+        List<ActivityLog> allLogs = activityLogRepo.findAll();
 
-    // 过滤租户并获取唯一用户
-    List<String> users = allLogs.stream()
-        .filter(log -> tenantId.equals(log.getTenantId() != null ? log.getTenantId().toString() : null))
-        .map(ActivityLog::getUser)
-        .filter(user -> user != null && !user.isEmpty())
-        .distinct()
-        .sorted()
-        .collect(Collectors.toList());
+        // 过滤租户并获取唯一用户
+        List<String> users = allLogs.stream()
+            .filter(log -> tenantId.equals(log.getTenantId() != null ? log.getTenantId().toString() : null))
+            .map(ActivityLog::getUser)
+            .filter(user -> user != null && !user.isEmpty())
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
 
-    ActivityUserListVo vo = new ActivityUserListVo();
-    vo.setUsers(users);
-    return vo;
+        ActivityUserListVo vo = new ActivityUserListVo();
+        vo.setUsers(users);
+        return vo;
+      }
+    }.execute();
   }
 
   @Override

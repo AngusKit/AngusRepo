@@ -33,13 +33,23 @@ public class UploadQueryImpl implements UploadQuery {
 
   @Override
   public Optional<UploadTask> findById(Long id) {
-    return uploadTaskRepo.findById(id);
+    return new BizTemplate<Optional<UploadTask>>() {
+      @Override
+      protected Optional<UploadTask> process() {
+        return uploadTaskRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public UploadTask findAndCheck(Long id) {
-    return uploadTaskRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("上传任务不存在: " + id));
+    return new BizTemplate<UploadTask>() {
+      @Override
+      protected UploadTask process() {
+        return uploadTaskRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("上传任务不存在: " + id));
+      }
+    }.execute();
   }
 
   @Override

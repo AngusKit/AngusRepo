@@ -1,6 +1,7 @@
 package cloud.xcan.angus.core.repo.application.query.user.impl;
 
 import cloud.xcan.angus.core.biz.Biz;
+import cloud.xcan.angus.core.biz.BizTemplate;
 import cloud.xcan.angus.core.repo.application.query.user.UserProfileQuery;
 import cloud.xcan.angus.core.repo.domain.user.UserApiToken;
 import cloud.xcan.angus.core.repo.domain.user.UserApiTokenRepo;
@@ -23,17 +24,32 @@ public class UserProfileQueryImpl implements UserProfileQuery {
 
   @Override
   public Optional<UserProfile> findById(Long id) {
-    return userProfileRepo.findById(id);
+    return new BizTemplate<Optional<UserProfile>>() {
+      @Override
+      protected Optional<UserProfile> process() {
+        return userProfileRepo.findById(id);
+      }
+    }.execute();
   }
 
   @Override
   public UserProfile findAndCheck(Long id) {
-    return userProfileRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("用户不存在: " + id));
+    return new BizTemplate<UserProfile>() {
+      @Override
+      protected UserProfile process() {
+        return userProfileRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("用户不存在: " + id));
+      }
+    }.execute();
   }
 
   @Override
   public List<UserApiToken> findTokensByUserId(Long userId) {
-    return userApiTokenRepo.findByUserId(userId);
+    return new BizTemplate<List<UserApiToken>>() {
+      @Override
+      protected List<UserApiToken> process() {
+        return userApiTokenRepo.findByUserId(userId);
+      }
+    }.execute();
   }
 }
