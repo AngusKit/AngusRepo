@@ -40,19 +40,41 @@ AngusRepo 在一个平台上统一托管 Maven、npm、Docker、PyPI 等 10 种�
 
 ## 免费获取社区版
 
+约 **270 MB**。本安装包是 **AngusGM + AngusRepo**。 至少 **2 核 / 4 GB** 内存、**100 GB** 磁盘（制品盘建议独立）。需 Docker Engine 与 Compose v2。
+
+本页路径与官网文档一致：Docker Compose、安装向导、**访问方式 2**（捆绑 Caddy）、HTTP `:80`（无证书）。
+
+1. 先把域名解析到本机（本机试用可写入 `/etc/hosts`）。向导里的 Public DNS name 填**后缀**（如 `example.com`），不要填 `gm.example.com`。
+
 ```bash
-curl -LO https://repo.anguskit.com/raw/raw-public/AngusKit/repo/AngusRepo-Community-1.0.0.zip
-unzip AngusRepo-Community-1.0.0.zip
-cd AngusRepo-1.0.0/docker
-cp env.example .env
-docker compose --profile mysql up -d
+127.0.0.1 gm.example.com repo.example.com
 ```
 
-- 最低配置：**2 核/4 GB**（推荐 4 核/8 GB）；磁盘 100 GB，建议使用独立制品盘
-- 安装完成后端口：AngusGM `8801`（登录入口）、AngusRepo `8804`（控制台 + 全部协议端点）
-- 只需要 AngusRepo？这份 zip 已包含 AngusRepo + AngusGM，无需其它产品。
+放行宿主机 **80**。应用端口由反代回源——不要用 `localhost:8801`。本机已有 Nginx/Caddy/IIS 占用 80 时先停掉。macOS + Docker Desktop 不要给 `./install.sh` 加 `sudo`。
 
-完整安装指南（主机 ZIP、Kubernetes/Helm、TLS、升级）：**[docs.anguskit.com/repo](https://www.anguskit.com/zh/docs/repo/latest/zh/manual/02-installation)**
+2. 下载、解压，在包根目录跑向导：
+
+```bash
+curl --fail --location --progress-bar -o AngusRepo-Community-1.0.0.zip \
+  https://repo.anguskit.com/raw/raw-public/AngusKit/repo/AngusRepo-Community-1.0.0.zip
+unzip AngusRepo-Community-1.0.0.zip
+cd AngusRepo-1.0.0
+./install.sh
+```
+
+按提示：Install mode `1`（Compose）→ Access **`2`**（捆绑反代，不要回车）→ Proxy `1`（Caddy）→ TLS **`4`**（HTTP `:80`，无证书）→ Database `1`（Compose 内 MySQL 8）→ Public DNS name = `example.com` → 设置管理员密码（默认用户 `admin`）。等到终端出现 `Install finished.`。
+
+3. 确认健康后再打开控制台：
+
+```bash
+./bin/angusctl.sh doctor
+```
+
+输出包含 `doctor: OK`。打开 `http://gm.example.com/` 登录，再打开 `http://repo.example.com/`。
+
+需要一次装齐？用 [AngusKit](https://github.com/AngusKit/AngusKit) 的 `AngusKit-Community-1.0.0.zip`。
+
+第一次跑通：**[repo 快速开始](https://www.anguskit.com/zh/docs/repo/get-started/quickstart)** · 完整安装（主机 ZIP、Helm 预览、TLS、离线）：**[安装文档](https://www.anguskit.com/zh/docs/repo/latest/zh/manual/02-installation)**
 
 ## 社区版 vs 团队版/企业版 vs SaaS
 
@@ -64,7 +86,7 @@ docker compose --profile mysql up -d
 | 制品存储 | 自管 | 自管或统一配额 | 按套餐 |
 | 安全门禁、SBOM、MCP | 不含 | 包含 | 按套餐 |
 
-社区版源码使用 GPL-3.0 协议，随社区版安装包一同分发。团队版与企业版为专有软件，受 **XCan Business License, Version 1.0** 约束，仅随付费订阅提供。
+社区版源码使用 GPL-3.0 协议，随社区版安装包一同分发。团队版与企业版为专有软件，受 **[XCan Business License, Version 1.0](https://www.anguskit.com/licenses/XCBL-1.0)**（XCBL-1.0）约束，仅随付费订阅提供。
 
 完整定价与功能对照：**[anguskit.com/pricing](https://www.anguskit.com/zh/pricing)**
 
@@ -89,4 +111,4 @@ docker compose --profile mysql up -d
 
 - 本仓库文档内容：见 [LICENSE](LICENSE)（GPL-3.0，与其描述的社区版源码保持一致）。
 - AngusRepo 社区版产品源码：GPL-3.0，随每个社区版安装包分发。
-- AngusRepo 团队版/企业版：专有软件，XCan Business License v1.0，仅随付费订阅提供。
+- AngusRepo 团队版/企业版：专有软件，[XCan Business License, Version 1.0](LICENSE-XCBL-1.0)（XCBL-1.0）— 详见 https://www.anguskit.com/licenses/XCBL-1.0，仅随付费订阅提供。
