@@ -21,7 +21,7 @@ Universal Artifact Management — the Ship product in [AngusKit](https://github.
 
 ## What is AngusRepo
 
-AngusRepo hosts 10 mainstream artifact formats (Maven, npm, Docker, PyPI, and more) on one platform, pulling publishing, caching, aggregation, and permissions onto a single control plane — so artifacts stay traceable and governable from build to release.
+AngusRepo hosts 28 mainstream artifact formats (Maven, npm, Docker, PyPI, and more) on one platform, pulling publishing, caching, aggregation, and permissions onto a single control plane — so artifacts stay traceable and governable from build to release.
 
 ## Key capabilities
 
@@ -35,7 +35,7 @@ AngusRepo hosts 10 mainstream artifact formats (Maven, npm, Docker, PyPI, and mo
 ## Screenshot
 
 <p align="center">
-  <img src="assets/screenshot-en.png" alt="AngusRepo console" width="100%" />
+  <img src="assets/screenshot-en.png" alt="AngusRepo console" width="0%" />
 </p>
 
 ## Get the Community Edition (free)
