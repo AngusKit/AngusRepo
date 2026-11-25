@@ -86,7 +86,7 @@ cd AngusRepo-1.0.0
 | 制品存储 | 自管 | 自管或统一配额 | 按套餐 |
 | 安全门禁、SBOM、MCP | 不含 | 包含 | 按套餐 |
 
-社区版源码使用 GPL-3.0 协议，随社区版安装包一同分发。团队版与企业版为专有软件，受 **[XCan Business License, Version 1.0](https://www.anguskit.com/licenses/XCBL-1.0)**（XCBL-1.0）约束，仅随付费订阅提供。
+社区版源码使用 GPL-3.0 协议，随社区版安装包一同分发。团队版与企业版为专有软件，受 **[XCan Business License, Version 1.0](https://www.anguskit.com/zh/licenses/XCBL-1.0)**（XCBL-1.0）约束，仅随付费订阅提供。
 
 完整定价与功能对照：**[anguskit.com/pricing](https://www.anguskit.com/zh/pricing)**
 
@@ -111,4 +111,4 @@ cd AngusRepo-1.0.0
 
 - 本仓库文档内容：见 [LICENSE](LICENSE)（GPL-3.0，与其描述的社区版源码保持一致）。
 - AngusRepo 社区版产品源码：GPL-3.0，随每个社区版安装包分发。
-- AngusRepo 团队版/企业版：专有软件，[XCan Business License, Version 1.0](LICENSE-XCBL-1.0)（XCBL-1.0）— 详见 https://www.anguskit.com/licenses/XCBL-1.0，仅随付费订阅提供。
+- AngusRepo 团队版/企业版：专有软件，[XCan Business License, Version 1.0](LICENSE-XCBL-1.0)（XCBL-1.0）— 详见 https://www.anguskit.com/zh/licenses/XCBL-1.0，仅随付费订阅提供。
